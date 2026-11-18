@@ -21,6 +21,10 @@ Thumbs.db
 !.vscode/settings.json
 !.vscode/tasks.json
 
+# Next.js standalone portfolio (already has its own repo)
+PORTOFOLIO-DAUS-main/
+m6/PORTOFOLIO-DAUS-main/
+
 # Environment variables
 .env
 .env.local

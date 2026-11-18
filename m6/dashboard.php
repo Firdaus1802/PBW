@@ -794,6 +794,71 @@ foreach ($kat_expenses as $ke) {
         }
 
 
+        /* ==================== AUTHENTIC APPLE iOS SLIDING SEGMENTED CONTROL ==================== */
+        .ios-segmented-control-slider-wrap {
+            position: relative;
+            display: flex;
+            background-color: var(--app-card-inner, #171923);
+            border: 1px solid var(--app-border, rgba(255, 255, 255, 0.1));
+            border-radius: 12px;
+            padding: 3px;
+            user-select: none;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .ios-segmented-slider {
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            left: 3px;
+            width: calc(50% - 3px);
+            background-color: var(--app-card-bg, #0E1017);
+            border-radius: 9px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+            transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .ios-segmented-tab-btn {
+            position: relative;
+            flex: 1;
+            z-index: 2;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            padding: 9px 14px;
+            font-size: 13.5px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--app-text-muted, #8E8E93);
+            transition: color 0.22s ease, transform 0.15s ease;
+            cursor: pointer;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: -0.2px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .ios-segmented-tab-btn:active {
+            transform: scale(0.96);
+        }
+
+        .ios-segmented-tab-btn.active.type-expense {
+            color: #FF453A !important;
+            font-weight: 700;
+        }
+
+        .ios-segmented-tab-btn.active.type-income {
+            color: #30D158 !important;
+            font-weight: 700;
+        }
+
+
         /* ==================== APPLE CINEMATIC ENTRANCE ANIMATIONS ==================== */
         @keyframes macosRevealFadeOut {
             0% { opacity: 1; pointer-events: all; }
