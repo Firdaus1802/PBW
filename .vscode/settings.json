@@ -1,0 +1,8 @@
+{
+  "code-runner.executorMap": {
+    "html": "cmd /c start msedge \"$fullFileName\""
+  },
+  "code-runner.runInTerminal": false,
+  "code-runner.saveFileBeforeRun": true
+}
+

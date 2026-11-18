@@ -1,0 +1,27 @@
+# Dependencies & Package Managers
+node_modules/
+vendor/
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# OS & Temporary
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.sqlite
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+
+# Environment variables
+.env
+.env.local
+.env.*.local

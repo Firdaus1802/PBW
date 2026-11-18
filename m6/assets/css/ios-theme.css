@@ -1,0 +1,879 @@
+/* assets/css/ios-theme.css */
+/* Authentic Apple iOS Design System (Dark Titanium & Light Cupertino) */
+/* Formal, Pure Cupertino, High Contrast, Jamet-Free, iPhone 15 Safe */
+
+:root, [data-theme="light"], [data-bs-theme="light"] {
+  /* Formal Cupertino Light Mode */
+  --boss-bg: #F2F2F7;
+  --boss-navbar: rgba(255, 255, 255, 0.88);
+  --boss-card: #FFFFFF;
+  --boss-card-inner: #F8F9FA;
+  --boss-border: rgba(0, 0, 0, 0.08);
+  --boss-border-active: rgba(0, 0, 0, 0.16);
+  --boss-text-primary: #1C1C1E;
+  --boss-text-secondary: #636366;
+  --boss-text-muted: #8E8E93;
+  --boss-blue: #007AFF;
+  --boss-green: #34C759;
+  --boss-red: #FF3B30;
+  --boss-input-bg: rgba(118, 118, 128, 0.12);
+  --boss-input-text: #1C1C1E;
+  --boss-icon-bg: rgba(0, 0, 0, 0.05);
+  --boss-icon-color: #1C1C1E;
+  --boss-badge-bg: rgba(0, 0, 0, 0.05);
+  --boss-badge-text: #1C1C1E;
+  --boss-badge-border: rgba(0, 0, 0, 0.08);
+  --boss-segmented-bg: rgba(118, 118, 128, 0.12);
+  --boss-segmented-active: #FFFFFF;
+  --boss-segmented-text: #8E8E93;
+  --boss-segmented-text-active: #000000;
+  --boss-hero-gradient: linear-gradient(145deg, #1C1D24 0%, #101115 100%);
+  --boss-stat-bg: rgba(255, 255, 255, 0.08);
+  --boss-btn-primary-bg: #1C1C1E;
+  --boss-btn-primary-text: #FFFFFF;
+  --boss-btn-secondary-bg: rgba(120, 120, 128, 0.12);
+  --boss-btn-secondary-text: #1C1C1E;
+  --boss-btn-secondary-border: transparent;
+  --boss-table-th-bg: #F8F9FA;
+  --boss-table-td-bg: #FFFFFF;
+  --boss-table-border: rgba(0, 0, 0, 0.06);
+  --boss-dropdown-bg: #FFFFFF;
+  --boss-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 14px rgba(0, 0, 0, 0.02);
+  --boss-radius-sm: 10px;
+  --boss-radius-md: 14px;
+  --boss-radius-lg: 18px;
+  --boss-radius-xl: 22px;
+
+  /* Tab Bar & Circle */
+  --ios-nav-bg: rgba(255, 255, 255, 0.88);
+  --ios-tab-bg: rgba(255, 255, 255, 0.92);
+  --ios-tab-border: rgba(0, 0, 0, 0.08);
+  --ios-btn-circle-bg: rgba(120, 120, 128, 0.12);
+  --ios-btn-circle-border: transparent;
+  --ios-btn-circle-color: #1C1C1E;
+  --ios-center-circle-bg: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+  --ios-center-circle-color: #FFFFFF;
+  --ios-center-circle-border: #F2F2F7;
+  --ios-center-circle-shadow: 0 8px 22px rgba(15, 23, 42, 0.25);
+  
+  --ios-spring: cubic-bezier(0.25, 1, 0.5, 1);
+  --ios-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"], [data-bs-theme="dark"] {
+  /* Formal Dark Titanium Mode */
+  --boss-bg: #0C0D12;
+  --boss-navbar: rgba(16, 18, 25, 0.88);
+  --boss-card: #181920;
+  --boss-card-inner: #20222B;
+  --boss-border: rgba(255, 255, 255, 0.08);
+  --boss-border-active: rgba(255, 255, 255, 0.18);
+  --boss-text-primary: #FFFFFF;
+  --boss-text-secondary: #CBD5E1;
+  --boss-text-muted: #8E8E93;
+  --boss-blue: #0A84FF;
+  --boss-green: #30D158;
+  --boss-red: #FF453A;
+  --boss-input-bg: rgba(255, 255, 255, 0.08);
+  --boss-input-text: #FFFFFF;
+  --boss-icon-bg: rgba(255, 255, 255, 0.08);
+  --boss-icon-color: #F8FAFC;
+  --boss-badge-bg: rgba(255, 255, 255, 0.08);
+  --boss-badge-text: #F1F5F9;
+  --boss-badge-border: rgba(255, 255, 255, 0.14);
+  --boss-segmented-bg: rgba(255, 255, 255, 0.08);
+  --boss-segmented-active: #2C2F40;
+  --boss-segmented-text: #8E8E93;
+  --boss-segmented-text-active: #FFFFFF;
+  --boss-hero-gradient: linear-gradient(145deg, #181920 0%, #0F1015 100%);
+  --boss-stat-bg: rgba(255, 255, 255, 0.06);
+  --boss-btn-primary-bg: #FFFFFF;
+  --boss-btn-primary-text: #090A0F;
+  --boss-btn-secondary-bg: rgba(255, 255, 255, 0.08);
+  --boss-btn-secondary-text: #F1F5F9;
+  --boss-btn-secondary-border: rgba(255, 255, 255, 0.12);
+  --boss-table-th-bg: #1A1D28;
+  --boss-table-td-bg: #181920;
+  --boss-table-border: rgba(255, 255, 255, 0.08);
+  --boss-dropdown-bg: #20222B;
+  --boss-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+  /* Tab Bar & Circle */
+  --ios-nav-bg: rgba(16, 18, 25, 0.88);
+  --ios-tab-bg: rgba(16, 18, 25, 0.92);
+  --ios-tab-border: rgba(255, 255, 255, 0.08);
+  --ios-btn-circle-bg: rgba(255, 255, 255, 0.08);
+  --ios-btn-circle-border: transparent;
+  --ios-btn-circle-color: #F8FAFC;
+  --ios-center-circle-bg: #FFFFFF;
+  --ios-center-circle-color: #090A0F;
+  --ios-center-circle-border: #0C0D12;
+  --ios-center-circle-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 255, 255, 0.15);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  background-color: var(--boss-bg);
+  color: var(--boss-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* HIGH-CONTRAST OVERRIDES */
+[data-theme="dark"] .text-secondary,
+[data-bs-theme="dark"] .text-secondary {
+  color: #CBD5E1 !important;
+}
+
+[data-theme="dark"] .text-muted,
+[data-bs-theme="dark"] .text-muted {
+  color: #8E8E93 !important;
+}
+
+[data-theme="light"] .text-secondary,
+[data-bs-theme="light"] .text-secondary {
+  color: #636366 !important;
+}
+
+[data-theme="light"] .text-muted,
+[data-bs-theme="light"] .text-muted {
+  color: #8E8E93 !important;
+}
+
+.table {
+  --bs-table-color: var(--boss-text-primary);
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--boss-table-border);
+  color: var(--boss-text-primary) !important;
+}
+
+.ios-app-shell {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--boss-bg);
+  position: relative;
+}
+
+.ios-main-content {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 18px 16px 40px;
+}
+
+/* Top Navbar (iPhone 15 Safe Area) */
+.ios-navbar {
+  position: sticky !important;
+  top: 0 !important;
+  background-color: var(--ios-nav-bg) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border-bottom: 0.5px solid var(--ios-tab-border) !important;
+  z-index: 1020 !important;
+  padding-top: max(env(safe-area-inset-top), 14px) !important;
+  padding-bottom: 10px !important;
+}
+
+/* Circular iOS Icon Buttons */
+.ios-circle-btn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  border-radius: 9999px !important;
+  aspect-ratio: 1 / 1 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: var(--ios-btn-circle-bg) !important;
+  border: none !important;
+  color: var(--ios-btn-circle-color) !important;
+  font-size: 15px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  outline: none !important;
+  text-decoration: none !important;
+  transition: transform 0.15s ease, background-color 0.15s ease !important;
+  -webkit-tap-highlight-color: transparent !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.ios-circle-btn:active {
+  transform: scale(0.88) !important;
+}
+
+.ios-circle-btn-primary {
+  background: #007AFF !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3) !important;
+}
+
+/* Tab Switching Keyframes (Authentic iOS Slide Animations - No "Pluk") */
+@keyframes iosSlideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes iosSlideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes iosTabEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.tab-view-panel {
+  display: none;
+}
+
+.tab-view-panel.active {
+  display: block;
+  animation: iosTabEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tab-view-panel.active.slide-right {
+  display: block;
+  animation: iosSlideInRight 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tab-view-panel.active.slide-left {
+  display: block;
+  animation: iosSlideInLeft 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Formal Apple Titanium Wallet Hero Card */
+.wallet-hero-card {
+  background: var(--boss-hero-gradient);
+  color: #FFFFFF !important;
+  border-radius: var(--boss-radius-xl);
+  padding: 22px 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Monochromatic Icon Box */
+.ios-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background-color: var(--boss-icon-bg);
+  color: var(--boss-icon-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  border: 1px solid var(--boss-border);
+}
+
+/* Cupertino Segmented Control (Legacy & Static) */
+.ios-segmented-control {
+  background-color: var(--boss-segmented-bg);
+  border-radius: 12px;
+  padding: 3px;
+  display: flex;
+  position: relative;
+  border: none;
+}
+
+.ios-segment-btn {
+  flex: 1;
+  text-align: center;
+  padding: 7px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--boss-segmented-text);
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s var(--ios-spring);
+  user-select: none;
+}
+
+.ios-segment-btn.active {
+  background-color: var(--boss-segmented-active);
+  color: var(--boss-segmented-text-active);
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+/* ==================== AUTHENTIC APPLE iOS SLIDING SEGMENTED CONTROL ==================== */
+/* Hardware-accelerated sliding physical pill backdrop - No more "pluk" */
+.ios-segmented-control-slider-wrap {
+  position: relative;
+  display: flex;
+  background-color: var(--boss-segmented-bg);
+  border-radius: 12px;
+  padding: 3px;
+  user-select: none;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.ios-segmented-slider {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  background-color: var(--boss-segmented-active);
+  border-radius: 9px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: transform 0.32s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+[data-theme="dark"] .ios-segmented-slider,
+[data-bs-theme="dark"] .ios-segmented-slider {
+  background-color: #2C2F40;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.ios-segmented-slider-3 {
+  width: calc(33.333% - 2px) !important;
+}
+
+.ios-segmented-tab-btn {
+  position: relative;
+  flex: 1;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--boss-text-muted);
+  transition: color 0.22s ease, transform 0.15s ease;
+  cursor: pointer;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.2px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ios-segmented-tab-btn:active {
+  transform: scale(0.96);
+}
+
+.ios-segmented-tab-btn.active {
+  color: var(--boss-text-primary);
+}
+
+.ios-segmented-tab-btn.active.type-expense {
+  color: #FF453A !important;
+}
+
+.ios-segmented-tab-btn.active.type-income {
+  color: #30D158 !important;
+}
+
+/* ==================== UNIFIED SMART ENTRY CARD (SATU KOTAK: VOICE & CAMERA) ==================== */
+.ios-smart-entry-card {
+  background-color: var(--boss-card);
+  border: 1px solid var(--boss-border);
+  border-radius: var(--boss-radius-lg);
+  box-shadow: var(--boss-shadow);
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+}
+
+.ios-smart-entry-box {
+  background-color: var(--boss-card-inner);
+  border: 1px solid var(--boss-border);
+  border-radius: 14px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.ios-smart-entry-half {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  background: transparent;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ios-smart-entry-half:active {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: scale(0.98);
+}
+
+[data-theme="dark"] .ios-smart-entry-half:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.ios-smart-entry-divider {
+  width: 1px;
+  background-color: var(--boss-border);
+  align-self: stretch;
+}
+
+.ios-smart-icon-badge {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ios-smart-entry-half:active .ios-smart-icon-badge {
+  transform: scale(1.12);
+}
+
+/* Hero Stat Badges (No Stark White Jamet Circles inside Dark Card) */
+.hero-stat-badge-income {
+  background: rgba(48, 209, 88, 0.16) !important;
+  color: #30D158 !important;
+  border: 1px solid rgba(48, 209, 88, 0.25) !important;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.hero-stat-badge-expense {
+  background: rgba(255, 69, 58, 0.16) !important;
+  color: #FF453A !important;
+  border: 1px solid rgba(255, 69, 58, 0.25) !important;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* Inset Grouped Table / Cards */
+.ios-card {
+  background-color: var(--boss-card);
+  border-radius: var(--boss-radius-lg);
+  border: 1px solid var(--boss-border);
+  box-shadow: var(--boss-shadow);
+}
+
+.ios-card-group {
+  background-color: var(--boss-card);
+  border-radius: var(--boss-radius-lg);
+  border: 1px solid var(--boss-border);
+  box-shadow: var(--boss-shadow);
+  overflow: hidden;
+}
+
+.ios-list-row {
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 0.5px solid var(--boss-border);
+  transition: background-color 0.15s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ios-list-row:last-child {
+  border-bottom: none;
+}
+
+.ios-list-row:active {
+  background-color: var(--boss-card-inner);
+}
+
+/* Search Bar Wrapper */
+.ios-search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.ios-search-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--boss-text-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.ios-input {
+  width: 100%;
+  background-color: var(--boss-input-bg);
+  border: none;
+  color: var(--boss-text-primary);
+  border-radius: 12px;
+  padding: 9px 14px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.ios-search-input {
+  padding-left: 36px;
+}
+
+/* Action Tiles */
+.ios-action-tile {
+  background-color: var(--boss-card) !important;
+  border: 1px solid var(--boss-border) !important;
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  transition: transform 0.15s ease, background-color 0.15s ease !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  outline: none !important;
+  width: 100% !important;
+  -webkit-tap-highlight-color: transparent !important;
+  box-shadow: var(--boss-shadow) !important;
+}
+
+.ios-action-tile:active {
+  transform: scale(0.96) !important;
+}
+
+.ios-action-tile-icon {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Badge Mono */
+.ios-badge-mono {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background-color: var(--boss-badge-bg);
+  color: var(--boss-text-secondary);
+  border: 1px solid var(--boss-border);
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* Amounts */
+.amount-income {
+  color: var(--boss-green) !important;
+}
+
+.amount-expense {
+  color: var(--boss-red) !important;
+}
+
+/* Desktop Tabs */
+.ios-desktop-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--boss-segmented-text);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ios-desktop-tab-btn.active {
+  background-color: var(--boss-segmented-active);
+  color: var(--boss-segmented-text-active);
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* Action Buttons */
+.btn-ios-primary {
+  background-color: var(--boss-btn-primary-bg) !important;
+  color: var(--boss-btn-primary-text) !important;
+  font-weight: 600 !important;
+  border-radius: 14px !important;
+  padding: 10px 18px !important;
+  border: none !important;
+  transition: transform 0.15s ease, opacity 0.15s ease !important;
+}
+
+.btn-ios-primary:active {
+  transform: scale(0.96) !important;
+}
+
+.btn-ios-secondary {
+  background-color: var(--boss-btn-secondary-bg) !important;
+  color: var(--boss-btn-secondary-text) !important;
+  border: 1px solid var(--boss-btn-secondary-border) !important;
+  font-weight: 500 !important;
+  border-radius: 14px !important;
+  padding: 10px 18px !important;
+  transition: transform 0.15s ease !important;
+}
+
+.btn-ios-secondary:active {
+  transform: scale(0.96) !important;
+}
+
+/* ==================== AUTHENTIC WHATSAPP & APPLE iOS FLOATING CAPSULE NAVBAR ==================== */
+.ios-capsule-navbar,
+.ios-tab-bar {
+  position: fixed !important;
+  bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+  left: 14px !important;
+  right: 14px !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+  height: 64px !important;
+  background: rgba(22, 23, 27, 0.92) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.25) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 5px 8px !important;
+  z-index: 1040 !important;
+  user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  transition: transform 0.25s ease, background 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Hidden on Desktop/Laptop - ONLY visible on Mobile / HP (screen < 768px) */
+@media (min-width: 768px) {
+  .ios-capsule-navbar,
+  .ios-tab-bar {
+    display: none !important;
+  }
+}
+
+[data-theme="light"] .ios-capsule-navbar,
+[data-bs-theme="light"] .ios-capsule-navbar,
+[data-theme="light"] .ios-tab-bar,
+[data-bs-theme="light"] .ios-tab-bar {
+  background: rgba(248, 249, 252, 0.94) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+.ios-main-content {
+  padding-bottom: calc(115px + max(env(safe-area-inset-bottom, 16px), 16px)) !important;
+}
+
+/* Capsule Nav Items */
+.ios-capsule-item,
+.ios-tab-item {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  padding: 6px 4px !important;
+  height: 52px !important;
+  border-radius: 9999px !important;
+  color: rgba(255, 255, 255, 0.68) !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: all 0.22s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  position: relative !important;
+}
+
+[data-theme="light"] .ios-capsule-item,
+[data-bs-theme="light"] .ios-capsule-item,
+[data-theme="light"] .ios-tab-item,
+[data-bs-theme="light"] .ios-tab-item {
+  color: rgba(0, 0, 0, 0.58) !important;
+}
+
+.ios-capsule-item:active,
+.ios-tab-item:active {
+  transform: scale(0.92) !important;
+}
+
+/* ACTIVE PILL CAPSULE HIGHLIGHT (Exact WhatsApp / iOS 18 dynamic capsule style) */
+.ios-capsule-item.active,
+.ios-tab-item.active {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="light"] .ios-capsule-item.active,
+[data-bs-theme="light"] .ios-capsule-item.active,
+[data-theme="light"] .ios-tab-item.active,
+[data-bs-theme="light"] .ios-tab-item.active {
+  background: rgba(0, 0, 0, 0.08) !important;
+  color: #000000 !important;
+}
+
+.capsule-icon-wrap {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 24px !important;
+  width: 28px !important;
+  margin-bottom: 2px !important;
+}
+
+.capsule-icon-wrap .tab-icon,
+.ios-capsule-item i,
+.ios-tab-item i {
+  font-size: 20px !important;
+  line-height: 1 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.ios-capsule-item.active .capsule-icon-wrap .tab-icon,
+.ios-capsule-item.active i,
+.ios-tab-item.active i {
+  transform: scale(1.08) !important;
+}
+
+.capsule-label,
+.ios-capsule-item span,
+.ios-tab-item span {
+  font-size: 10.5px !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.2px !important;
+  margin-top: 1px !important;
+}
+
+/* WhatsApp Style Green Notification Pill Badge */
+.capsule-badge {
+  position: absolute !important;
+  top: -4px !important;
+  right: -8px !important;
+  background-color: #25D366 !important;
+  color: #0B141A !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  min-width: 17px !important;
+  height: 17px !important;
+  border-radius: 9999px !important;
+  padding: 0 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+  border: 1.5px solid rgba(22, 23, 27, 0.95) !important;
+  pointer-events: none !important;
+}
+
+[data-theme="light"] .capsule-badge,
+[data-bs-theme="light"] .capsule-badge {
+  border-color: #FFFFFF !important;
+}
+
+/* User Circular Avatar for "Anda" tab */
+.capsule-avatar-circle {
+  width: 23px !important;
+  height: 23px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+  background: #007AFF !important;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.capsule-avatar-circle img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.capsule-avatar-circle .avatar-fallback {
+  color: #FFFFFF !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+}
+
+.ios-capsule-item.active .capsule-avatar-circle,
+.ios-tab-item.active .capsule-avatar-circle {
+  border-color: #25D366 !important;
+  box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.35) !important;
+  transform: scale(1.08) !important;
+}
+
+/* Modals */
+.ios-modal {
+  background-color: var(--boss-card) !important;
+  color: var(--boss-text-primary) !important;
+  border: 1px solid var(--boss-border) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3) !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dasar JavaScript</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #hasil {
+      background-color: #f1f5f9;
+      padding: 12px;
+      border-left: 5px solid #16a34a;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Variabel, Tipe Data, Operator, dan Kontrol Alur</h1>
+  <div id="hasil"></div>
+  <script>
+    function cetak(teks) {
+      document.getElementById("hasil").innerHTML += teks + "<br>";
+    }
+
+    let nama = "Andi";
+    const tahun = 2026;
+    let umur = 20;
+    umur = umur + 1;
+    cetak("1. Variabel: " + nama + ", umur " + umur + ", tahun " + tahun);
+
+    let teks = "Halo";
+    let angka = 3.14;
+    let benar = true;
+    let kosong = null;
+    let belumDiisi;
+    cetak("2. Tipe data: " + typeof teks + ", " + typeof angka + ", " +
+          typeof benar + ", " + typeof kosong + ", " + typeof belumDiisi);
+
+    let a = 10;
+    let b = 3;
+    cetak("3. Aritmatika: " + (a + b) + ", " + (a - b) + ", " + (a * b) + ", " +
+          (a / b).toFixed(2) + ", sisa bagi " + (a % b) + ", pangkat " + (a ** b));
+
+    cetak("4. Perbandingan: " + (a > b) + ", " + (a === 10) + ", " + (a !== b) + ", " +
+          ("5" == 5) + ", " + ("5" === 5));
+
+    cetak("5. Logika: " + (a > 5 && b < 5) + ", " + (a < 5 || b < 5) + ", " + !(a > b));
+
+    cetak(`6. Template literal: ${nama} berumur ${umur} tahun`);
+    const hobi = "membaca";
+    cetak(`Saya ${nama}, hobi ${hobi}`);
+
+    let nilai = 90;
+    let grade;
+    if (nilai >= 85) {
+      grade = "A";
+    } else if (nilai >= 70) {
+      grade = "B";
+    } else if (nilai >= 55) {
+      grade = "C";
+    } else {
+      grade = "D";
+    }
+    cetak("7. Nilai " + nilai + " mendapat grade " + grade);
+
+    let deret = "";
+    for (let i = 2; i <= 10; i += 2) {
+      deret += i + " ";
+    }
+    cetak("8. Perulangan for: " + deret);
+
+    let n = 3;
+    let mundur = "";
+    while (n > 0) {
+      mundur += n + " ";
+      n--;
+    }
+    cetak("9. Perulangan while: " + mundur + "Selesai!");
+  </script>
+</body>
+</html>

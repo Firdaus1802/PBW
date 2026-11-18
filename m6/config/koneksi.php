@@ -1,0 +1,180 @@
+<?php
+// config/koneksi.php - Konfigurasi Database & Helper Global
+// Sistem Pencatatan Kas & Pengeluaran Mahasiswa
+
+if (session_status() === PHP_SESSION_NONE) {
+    // Persistent Session Lifetime (30 Hari) agar sesi tidak hilang saat browser ditutup di HP
+    ini_set('session.cookie_lifetime', 60 * 60 * 24 * 30);
+    ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 30);
+    session_set_cookie_params([
+        'lifetime' => 60 * 60 * 24 * 30,
+        'path'     => '/',
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    session_start();
+}
+
+// Set Zona Waktu Resmi Indonesia (WIB / Asia/Jakarta)
+date_default_timezone_set('Asia/Jakarta');
+
+$db_host = getenv('DB_HOST') ?: '127.0.0.1';
+$db_port = getenv('DB_PORT') ?: '3306';
+$db_name = getenv('DB_NAME') ?: 'db_kas_mahasiswa';
+$db_user = getenv('DB_USER') ?: 'root';
+$db_pass = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
+
+$pdo = null;
+try {
+    $dsn = "mysql:host={$db_host};port={$db_port};dbname={$db_name};charset=utf8mb4";
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+        PDO::ATTR_TIMEOUT            => 2,
+    ];
+    $pdo = new PDO($dsn, $db_user, $db_pass, $options);
+    
+    // Sinkronisasi timezone MySQL ke WIB (UTC+7)
+    $pdo->exec("SET time_zone = '+07:00'");
+} catch (Throwable $e) {
+    // Fallback cerdas ke SQLite jika MySQL tidak aktif atau saat di-deploy ke Vercel Serverless
+    try {
+        $sqlite_file = sys_get_temp_dir() . '/db_kas_mahasiswa.sqlite';
+        $is_new = !file_exists($sqlite_file);
+        $pdo = new PDO("sqlite:" . $sqlite_file);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+        if ($is_new) {
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS users (
+                    id_user INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT UNIQUE,
+                    password TEXT,
+                    nama_lengkap TEXT
+                );
+                CREATE TABLE IF NOT EXISTS kategori (
+                    id_kategori INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nama_kategori TEXT,
+                    jenis TEXT,
+                    icon TEXT
+                );
+                CREATE TABLE IF NOT EXISTS transaksi (
+                    id_transaksi INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id_kategori INTEGER,
+                    tanggal TEXT,
+                    judul TEXT,
+                    jenis TEXT,
+                    jumlah REAL,
+                    catatan TEXT
+                );
+                CREATE TABLE IF NOT EXISTS riwayat_login (
+                    id_riwayat INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id_user INTEGER,
+                    waktu_login TEXT,
+                    ip_address TEXT,
+                    user_agent TEXT,
+                    status TEXT
+                );
+                INSERT INTO users (username, password, nama_lengkap) 
+                VALUES ('admin', '" . password_hash('admin123', PASSWORD_BCRYPT) . "', 'Firdaus Dhuha Prabowo');
+                
+                INSERT INTO kategori (nama_kategori, jenis, icon) VALUES 
+                ('Kiriman Ortu', 'Pemasukan', 'bi-wallet2'),
+                ('Gaji Freelance', 'Pemasukan', 'bi-laptop'),
+                ('Beasiswa', 'Pemasukan', 'bi-award'),
+                ('Makan & Minum', 'Pengeluaran', 'bi-cup-hot'),
+                ('Buku & Kuliah', 'Pengeluaran', 'bi-book'),
+                ('Belanja Bulanan', 'Pengeluaran', 'bi-cart'),
+                ('Transport & Bensin', 'Pengeluaran', 'bi-fuel-pump'),
+                ('Kos & Hunian', 'Pengeluaran', 'bi-house-door');
+
+                INSERT INTO transaksi (id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES 
+                (1, '" . date('Y-m-d') . "', 'Uang Saku Bulanan', 'Pemasukan', 2500000, 'Kiriman via transfer'),
+                (2, '" . date('Y-m-d') . "', 'Desain Web Portfolio', 'Pemasukan', 750000, 'Honor klien'),
+                (4, '" . date('Y-m-d') . "', 'Makan Siang Kampus', 'Pengeluaran', 25000, 'Kantin F8'),
+                (7, '" . date('Y-m-d') . "', 'Bensin Motor', 'Pengeluaran', 35000, 'Pertalite full'),
+                (5, '" . date('Y-m-d') . "', 'Print Makalah PBW', 'Pengeluaran', 15000, 'Fotokopi kampus');
+            ");
+        }
+    } catch (Throwable $sqle) {
+        die("Koneksi Database Gagal: " . $e->getMessage());
+    }
+}
+
+// Auto-Restore Session dari Cookie Remember Me (30 Hari) agar user tidak perlu login ulang di HP
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['dompetku_remember']) && $pdo) {
+    $remember_parts = explode(':', $_COOKIE['dompetku_remember'], 2);
+    if (count($remember_parts) === 2) {
+        $u_id = (int)$remember_parts[0];
+        $u_tok = $remember_parts[1];
+        try {
+            $stmt_auto = $pdo->prepare("SELECT id_user, username, nama_lengkap, password FROM users WHERE id_user = ?");
+            $stmt_auto->execute([$u_id]);
+            $u_auto = $stmt_auto->fetch();
+            if ($u_auto) {
+                $expected_tok = hash('sha256', $u_auto['id_user'] . $u_auto['password'] . 'dompetku_pbw_secret');
+                if (hash_equals($expected_tok, $u_tok)) {
+                    $_SESSION['user_id']      = $u_auto['id_user'];
+                    $_SESSION['username']     = $u_auto['username'];
+                    $_SESSION['nama_lengkap'] = $u_auto['nama_lengkap'];
+                }
+            }
+        } catch (Throwable $e) {
+            // Ignore silent error
+        }
+    }
+}
+
+/**
+ * Mendapatkan base URL dinamis aplikasi
+ */
+function base_url($path = '') {
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) ? "https://" : "http://";
+    $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
+    
+    $script_name = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+    if (strpos($script_name, '/m6/') !== false) {
+        $pos = strpos($script_name, '/m6/');
+        $sub = substr($script_name, 0, $pos + 3);
+        $base = $protocol . $host . $sub;
+    } else {
+        $base = $protocol . $host . '/m6';
+    }
+
+    return rtrim($base, '/') . '/' . ltrim($path, '/');
+}
+
+/**
+ * Sanitasi input data string untuk pencegahan XSS
+ */
+function sanitize($data) {
+    if (is_array($data)) {
+        return array_map('sanitize', $data);
+    }
+    return htmlspecialchars(trim($data ?? ''), ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Format angka ke format mata uang Rupiah
+ */
+function format_rupiah($angka) {
+    return 'Rp ' . number_format((float)$angka, 0, ',', '.');
+}
+
+/**
+ * Format tanggal ke format bahasa Indonesia
+ */
+function tgl_indo($tanggal) {
+    if (empty($tanggal) || $tanggal === '0000-00-00') return '-';
+    $bulan = [
+        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    $timestamp = strtotime($tanggal);
+    $hari = date('d', $timestamp);
+    $bln = (int)date('m', $timestamp);
+    $thn = date('Y', $timestamp);
+    return "{$hari} " . ($bulan[$bln] ?? '') . " {$thn}";
+}

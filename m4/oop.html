@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>OOP di JavaScript</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #hasil {
+      background-color: #f1f5f9;
+      padding: 12px;
+      border-left: 5px solid #2563eb;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Object-Oriented Programming</h1>
+  <div id="hasil"></div>
+  <script>
+    function cetak(teks) {
+      document.getElementById("hasil").innerHTML += teks + "<br>";
+    }
+
+    class Orang {
+      constructor(nama) {
+        this.nama = nama;
+      }
+      sapa() {
+        return "Halo, saya " + this.nama + ".";
+      }
+    }
+
+    class Mahasiswa extends Orang {
+      #ipk = 0;
+      constructor(nama, nim) {
+        super(nama);
+        this.nim = nim;
+      }
+      set ipk(nilai) {
+        if (nilai >= 0 && nilai <= 4) {
+          this.#ipk = nilai;
+        } else {
+          cetak("IPK " + nilai + " ditolak (harus 0 sampai 4).");
+        }
+      }
+      get ipk() {
+        return this.#ipk;
+      }
+      sapa() {
+        return "Halo, saya " + this.nama + " (NIM " + this.nim + ").";
+      }
+    }
+
+    class Dosen extends Orang {
+      constructor(nama, nidn) {
+        super(nama);
+        this.nidn = nidn;
+      }
+      sapa() {
+        return "Selamat pagi, saya Dosen " + this.nama + ".";
+      }
+    }
+
+    class Staf extends Orang {
+      constructor(nama, bagian) {
+        super(nama);
+        this.bagian = bagian;
+      }
+      sapa() {
+        return "Halo, saya Staf " + this.nama + " bagian " + this.bagian + ".";
+      }
+    }
+
+    const budi = new Orang("Budi");
+    const andi = new Mahasiswa("Andi", "2401001");
+    const sari = new Dosen("Sari", "0412345678");
+    const rudi = new Staf("Rudi", "Administrasi");
+
+    andi.ipk = 3.5;
+    andi.ipk = 3.9;
+    cetak("IPK Andi sekarang: " + andi.ipk);
+
+    const semua = [budi, andi, sari, rudi];
+    for (const o of semua) {
+      cetak(o.sapa());
+    }
+  </script>
+</body>
+</html>

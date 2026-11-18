@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tampil dan Sembunyi</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 640px; }
+    h2 { color: #1e3a8a; font-size: 1.1rem; margin-top: 24px; }
+    button { padding: 8px 12px; cursor: pointer; }
+    .tersembunyi { display: none; }
+    .faq-pertanyaan {
+      cursor: pointer;
+      background-color: #dbeafe;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 8px;
+      font-weight: bold;
+    }
+    .faq-jawaban {
+      display: none;
+      padding: 10px;
+      border-left: 4px solid #2563eb;
+    }
+    .faq-jawaban.buka { display: block; }
+  </style>
+</head>
+<body>
+  <h1>Tampil dan Sembunyi</h1>
+
+  <h2>1. Tombol Tampilkan / Sembunyikan</h2>
+  <button id="btn-toggle">Tampilkan Detail</button>
+  <p id="detail" style="display: none;">
+    Ini detail yang tadinya tersembunyi. Klik tombol lagi untuk menyembunyikannya.
+  </p>
+
+  <h2>2. Accordion FAQ</h2>
+  <div class="faq-pertanyaan">Apa itu JavaScript?</div>
+  <div class="faq-jawaban">Bahasa pemrograman yang berjalan di browser untuk membuat halaman web interaktif.</div>
+
+  <div class="faq-pertanyaan">Apakah JavaScript sama dengan Java?</div>
+  <div class="faq-jawaban">Bukan. Keduanya bahasa yang berbeda dan hanya kebetulan mirip namanya.</div>
+
+  <h2>3. Penghitung Karakter (event input)</h2>
+  <textarea id="komentar" rows="3" cols="40" maxlength="100"></textarea>
+  <p>Karakter: <span id="jumlah">0</span> / 100</p>
+
+  <h2>4. Penghitung Klik</h2>
+  <button id="btn-hitung">Klik: 0</button>
+  <button id="btn-reset-klik">Reset</button>
+
+  <script>
+    const btnToggle = document.getElementById("btn-toggle");
+    const detail = document.getElementById("detail");
+
+    btnToggle.addEventListener("click", function () {
+      if (detail.style.display === "none") {
+        detail.style.display = "block";
+        btnToggle.textContent = "Sembunyikan Detail";
+      } else {
+        detail.style.display = "none";
+        btnToggle.textContent = "Tampilkan Detail";
+      }
+    });
+
+    const semuaPertanyaan = document.querySelectorAll(".faq-pertanyaan");
+    const semuaJawaban = document.querySelectorAll(".faq-jawaban");
+
+    semuaPertanyaan.forEach(function (pertanyaan) {
+      pertanyaan.addEventListener("click", function () {
+        const jawaban = pertanyaan.nextElementSibling;
+        const sudahBuka = jawaban.classList.contains("buka");
+
+        semuaJawaban.forEach(function (j) {
+          j.classList.remove("buka");
+        });
+
+        if (!sudahBuka) {
+          jawaban.classList.add("buka");
+        }
+      });
+    });
+
+    const komentar = document.getElementById("komentar");
+    komentar.addEventListener("change", function () {
+      document.getElementById("jumlah").textContent = komentar.value.length;
+    });
+
+    let jumlahKlik = 0;
+    const btnHitung = document.getElementById("btn-hitung");
+    const btnResetKlik = document.getElementById("btn-reset-klik");
+
+    btnHitung.addEventListener("click", function () {
+      jumlahKlik++;
+      btnHitung.textContent = "Klik: " + jumlahKlik;
+    });
+
+    btnResetKlik.addEventListener("click", function () {
+      jumlahKlik = 0;
+      btnHitung.textContent = "Klik: " + jumlahKlik;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Function, Array, dan Object</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #hasil {
+      background-color: #f1f5f9;
+      padding: 12px;
+      border-left: 5px solid #7c3aed;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Function, Array, dan Object</h1>
+  <div id="hasil"></div>
+  <script>
+    function cetak(teks) {
+      document.getElementById("hasil").innerHTML += teks + "<br>";
+    }
+
+    function hitungLuas(panjang, lebar) {
+      return panjang * lebar;
+    }
+    cetak("1. Luas 5 x 4 = " + hitungLuas(5, 4));
+
+    function hitungKeliling(sisi) {
+      return 4 * sisi;
+    }
+    cetak("Keliling persegi (sisi 6) = " + hitungKeliling(6));
+
+    const kuadrat = (x) => x * x;
+    cetak("2. Kuadrat 7 = " + kuadrat(7));
+
+    function sapa(nama = "Teman") {
+      return "Halo, " + nama + "!";
+    }
+    cetak("3. " + sapa() + " / " + sapa("Sari"));
+
+    const buah = ["apel", "jeruk", "mangga"];
+    buah.push("pisang");
+    cetak("4. Array: " + buah.join(", ") + " (jumlah " + buah.length + ", item pertama " + buah[0] + ")");
+
+    const mahasiswa = {
+      nama: "Andi",
+      nim: "2401001",
+      nilai: [85, 90, 78],
+      rataRata: function () {
+        let total = 0;
+        for (const n of this.nilai) {
+          total += n;
+        }
+        return total / this.nilai.length;
+      },
+      infoLengkap: function () {
+        return this.nama + " - " + this.nim;
+      }
+    };
+    cetak("5. Object: " + mahasiswa.nama + " (" + mahasiswa.nim + "), rata-rata " + mahasiswa.rataRata().toFixed(1));
+    cetak("Info lengkap: " + mahasiswa.infoLengkap());
+
+    const daftar = [
+      { nama: "Andi", nilai: 85 },
+      { nama: "Budi", nilai: 60 },
+      { nama: "Citra", nilai: 92 },
+      { nama: "Dodi", nilai: 70 }
+    ];
+    const lulus = daftar.filter((m) => m.nilai >= 70);
+    const namaLulus = lulus.map((m) => m.nama);
+    cetak("6. Lulus (nilai >= 70): " + namaLulus.join(", "));
+
+    const semuaNilai = daftar.map((m) => m.nilai);
+    cetak("Semua nilai: " + semuaNilai.join(" | "));
+
+    daftar.forEach(function (m, indeks) {
+      cetak("&nbsp;&nbsp;&nbsp;" + (indeks + 1) + ". " + m.nama + " = " + m.nilai);
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mengubah Halaman dengan JavaScript</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    img { border-radius: 12px; display: block; margin: 8px 0; }
+    button { margin: 4px 4px 4px 0; padding: 8px 12px; cursor: pointer; }
+    .gelap { background-color: #0f172a; color: #e2e8f0; }
+    .gelap a { color: #93c5fd; }
+  </style>
+</head>
+<body>
+  <h1 id="judul">Judul Awal</h1>
+  <p id="isi">Ini paragraf awal.</p>
+  <img id="gambar" src="img/foto-contoh.png" alt="Foto contoh" width="120">
+  <p><a id="tautan" href="https://developer.mozilla.org/">Tautan awal</a></p>
+
+  <div>
+    <button id="btn-teks">Ubah Teks</button>
+    <button id="btn-html">Ubah HTML</button>
+    <button id="btn-gambar">Ganti Gambar</button>
+    <button id="btn-tautan">Ubah Tautan</button>
+    <button id="btn-gaya">Ubah Gaya</button>
+    <button id="btn-gelap">Mode Gelap</button>
+    <button id="btn-reset">Reset Judul</button>
+  </div>
+
+  <script>
+    const judul = document.getElementById("judul");
+    const isi = document.getElementById("isi");
+    const gambar = document.getElementById("gambar");
+    const tautan = document.getElementById("tautan");
+
+    document.getElementById("btn-teks").addEventListener("click", function () {
+      judul.textContent = "Judul Sudah Berubah!";
+    });
+
+    document.getElementById("btn-html").addEventListener("click", function () {
+      isi.textContent = "Paragraf ini memuat <strong>HTML tebal</strong> dan <em>miring</em>.";
+    });
+
+    document.getElementById("btn-gambar").addEventListener("click", function () {
+      gambar.src = "img/logo-contoh.png";
+      gambar.alt = "Logo contoh";
+      gambar.width = 200;
+    });
+
+    document.getElementById("btn-tautan").addEventListener("click", function () {
+      tautan.href = "https://www.w3.org/";
+      tautan.textContent = "Sekarang menuju W3C";
+      tautan.setAttribute("target", "_blank");
+    });
+
+    document.getElementById("btn-gaya").addEventListener("click", function () {
+      judul.style.color = "#dc2626";
+      judul.style.fontSize = "2.5rem";
+      isi.style.backgroundColor = "#fef08a";
+      isi.style.padding = "10px";
+    });
+
+    document.getElementById("btn-gelap").addEventListener("click", function () {
+      document.body.classList.toggle("gelap");
+    });
+
+    document.getElementById("btn-reset").addEventListener("click", function () {
+      judul.textContent = "Judul Awal";
+      judul.style.color = "";
+      judul.style.fontSize = "";
+    });
+  </script>
+</body>
+</html>

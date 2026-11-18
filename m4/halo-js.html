@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Halo JavaScript</title>
+  <!-- Script eksternal dipindahkan ke dalam head tanpa atribut defer -->
+  <script src="js/halo.js"></script>
+</head>
+<body>
+  <h1>Halo, JavaScript!</h1>
+  <p id="pesan">Pesan akan muncul di sini.</p>
+
+  <!-- Cara 1: JavaScript inline pada atribut event -->
+  <button onclick="document.getElementById('pesan').textContent = 'Tombol 1: JavaScript inline.'">
+    Tombol 1 (inline)
+  </button>
+
+  <!-- Memanggil function yang ada di file eksternal -->
+  <button onclick="sapa()">Tombol 2 (file eksternal)</button>
+
+  <!-- Cara 2: JavaScript internal -->
+  <script>
+    console.log("Script internal berjalan.");
+  </script>
+</body>
+</html>

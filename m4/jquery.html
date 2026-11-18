@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Belajar jQuery</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 640px; }
+    button { margin: 3px 3px 3px 0; padding: 8px 12px; cursor: pointer; }
+    .kotak {
+      width: 150px;
+      padding: 12px;
+      background-color: #bfdbfe;
+      border: 2px solid #2563eb;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+    li { padding: 6px; cursor: pointer; }
+    li.terpilih { background-color: #fef08a; font-weight: bold; }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <h1 id="judul">Belajar jQuery</h1>
+  <div>
+    <button id="btn-teks">Ubah Teks</button>
+    <button id="btn-gaya">Ubah Gaya</button>
+    <button id="btn-toggle">Toggle Paragraf</button>
+    <button id="btn-fade">Fade</button>
+    <button id="btn-geser">Slide Kotak</button>
+    <button id="btn-animasi">Animasi Lebar</button>
+    <button id="btn-tambah">Tambah Butir</button>
+  </div>
+
+  <p id="paragraf">Paragraf ini akan dimanipulasi dengan jQuery.</p>
+  <div id="kotak" class="kotak">Kotak animasi</div>
+
+  <p>Klik sebuah butir untuk menandainya:</p>
+  <ul id="daftar">
+    <li>Satu</li>
+    <li>Dua</li>
+    <li>Tiga</li>
+  </ul>
+
+  <script>
+    $(document).ready(function () {
+      document.getElementById("btn-teks").addEventListener("click", function () {
+        document.getElementById("judul").textContent = "Judul diubah dengan JavaScript murni";
+      });
+
+      $("#btn-gaya").click(function () {
+        $("#paragraf").css({
+          "color": "#1e3a8a",
+          "background-color": "#dbeafe",
+          "padding": "10px"
+        });
+      });
+
+      $("#btn-toggle").click(function () {
+        $("#paragraf").toggle();
+      });
+
+      $("#btn-fade").click(function () {
+        $("#paragraf").fadeToggle(500);
+      });
+
+      $("#btn-geser").click(function () {
+        $("#kotak").slideToggle(400);
+      });
+
+      $("#btn-animasi").click(function () {
+        $("#kotak").animate({ width: "320px" }, 600);
+      });
+
+      $("#btn-tambah").click(function () {
+        const nomor = $("#daftar li").length + 1;
+        $("#daftar").append("<li>Butir ke-" + nomor + "</li>");
+      });
+
+      $("#daftar li").click(function () {
+        $(this).toggleClass("terpilih");
+        $(this).css("background-color", "#bbf7d0");
+      });
+    });
+  </script>
+</body>
+</html>
