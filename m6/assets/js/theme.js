@@ -14,6 +14,7 @@ function toggleTheme() {
     localStorage.setItem('dompetku_theme', newTheme);
     
     updateThemeIcons(newTheme);
+    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: newTheme } }));
 }
 
 function updateThemeIcons(theme) {
@@ -26,9 +27,14 @@ function updateThemeIcons(theme) {
         }
     });
 
+    const modeText = document.getElementById('themeModeText');
+    if (modeText) {
+        modeText.innerText = (theme === 'dark') ? 'Mode Gelap' : 'Mode Terang';
+    }
+
     const metaTheme = document.getElementById('metaThemeColor');
     if (metaTheme) {
-        metaTheme.setAttribute('content', theme === 'dark' ? '#0B0C10' : '#F2F2F7');
+        metaTheme.setAttribute('content', theme === 'dark' ? '#090A0F' : '#F2F2F7');
     }
 }
 

@@ -42,7 +42,7 @@ $saldo = $total_masuk - $total_keluar;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- iOS Theme CSS -->
-    <link href="<?= base_url('assets/css/ios-theme.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
     <!-- Theme Toggle Helper Script -->
     <script src="<?= base_url('assets/js/theme.js') ?>"></script>
 

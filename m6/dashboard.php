@@ -1518,10 +1518,10 @@ foreach ($kat_expenses as $ke) {
                 <h5 class="modal-title fw-bold" id="modalTambahLabel" style="color: var(--app-text-primary);">
                     Catat Transaksi Baru
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             
-            <form action="<?= base_url('dashboard.php') ?>" method="POST" id="formCatatTransaksi">
+            <form action="dashboard.php" method="POST" id="formCatatTransaksi">
                 <div class="modal-body py-3">
 
                     <div class="mb-3 text-center">
@@ -1590,10 +1590,10 @@ foreach ($kat_expenses as $ke) {
                 <h5 class="modal-title fw-bold" id="modalEditLabel" style="color: var(--app-text-primary);">
                     Sunting Data Transaksi
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             
-            <form action="<?= base_url('dashboard.php') ?>" method="POST" id="formEditTransaksi">
+            <form action="dashboard.php" method="POST" id="formEditTransaksi">
                 <input type="hidden" name="id_transaksi" id="editIdTransaksi">
                 
                 <div class="modal-body py-3">
@@ -1664,9 +1664,9 @@ foreach ($kat_expenses as $ke) {
                 <h5 class="modal-title fw-bold" id="modalTambahKatLabel" style="color: var(--app-text-primary);">
                     Tambah Kategori Baru
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="<?= base_url('dashboard.php') ?>" method="POST">
+            <form action="dashboard.php" method="POST">
                 <div class="modal-body py-3">
                     <div class="mb-3 text-center">
                         <label class="form-label small fw-bold d-block mb-1" style="color: var(--app-text-secondary);">Jenis Kategori</label>

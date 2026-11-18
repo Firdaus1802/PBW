@@ -107,38 +107,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- iOS Theme CSS -->
-    <link href="<?= base_url('assets/css/ios-theme.css') ?>" rel="stylesheet">
+    <!-- iOS Theme CSS -->
+    <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
     <!-- Theme Toggle Helper Script -->
     <script src="<?= base_url('assets/js/theme.js') ?>"></script>
 
     <style>
+        :root, [data-theme="dark"], [data-bs-theme="dark"] {
+            --login-bg: radial-gradient(circle at 50% 15%, #161824 0%, #090A0F 100%);
+            --login-card-bg: rgba(22, 24, 34, 0.78);
+            --login-card-border: rgba(255, 255, 255, 0.12);
+            --login-card-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            --login-input-bg: rgba(255, 255, 255, 0.07);
+            --login-input-border: rgba(255, 255, 255, 0.11);
+            --login-input-text: #FFFFFF;
+            --login-label-color: #94A3B8;
+            --login-placeholder: #64748B;
+            --login-btn-primary-bg: #FFFFFF;
+            --login-btn-primary-color: #090A0F;
+            --login-btn-sec-bg: rgba(255, 255, 255, 0.07);
+            --login-btn-sec-color: #F1F5F9;
+            --login-btn-sec-border: rgba(255, 255, 255, 0.10);
+            --login-logo-bg: linear-gradient(145deg, #222533 0%, #12141C 100%);
+            --login-logo-color: #FFFFFF;
+            --login-logo-border: rgba(255, 255, 255, 0.16);
+            --login-logo-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        }
+
+        [data-theme="light"], [data-bs-theme="light"] {
+            --login-bg: radial-gradient(circle at 50% 15%, #FFFFFF 0%, #E8E9F0 100%);
+            --login-card-bg: rgba(255, 255, 255, 0.82);
+            --login-card-border: rgba(0, 0, 0, 0.08);
+            --login-card-shadow: 0 24px 50px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+            --login-input-bg: rgba(118, 118, 128, 0.09);
+            --login-input-border: rgba(0, 0, 0, 0.08);
+            --login-input-text: #1C1C1E;
+            --login-label-color: #3C3C43;
+            --login-placeholder: #8E8E93;
+            --login-btn-primary-bg: #1C1C1E;
+            --login-btn-primary-color: #FFFFFF;
+            --login-btn-sec-bg: rgba(118, 118, 128, 0.09);
+            --login-btn-sec-color: #1C1C1E;
+            --login-btn-sec-border: rgba(0, 0, 0, 0.07);
+            --login-logo-bg: linear-gradient(145deg, #1C1C1E 0%, #2C2C2E 100%);
+            --login-logo-color: #FFFFFF;
+            --login-logo-border: rgba(0, 0, 0, 0.08);
+            --login-logo-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+        }
+
         body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            background-color: var(--boss-bg);
+            padding: 24px 16px;
+            background: var(--login-bg);
+            transition: background 0.35s ease;
         }
 
         .login-card {
             width: 100%;
-            max-width: 440px;
-            background-color: var(--boss-card);
-            border: 1px solid var(--boss-border-active);
-            border-radius: var(--boss-radius-xl);
-            padding: 36px 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            max-width: 420px;
+            background: var(--login-card-bg);
+            backdrop-filter: blur(32px) saturate(190%);
+            -webkit-backdrop-filter: blur(32px) saturate(190%);
+            border: 1px solid var(--login-card-border);
+            border-radius: 28px;
+            padding: 34px 28px;
+            box-shadow: var(--login-card-shadow);
             position: relative;
             overflow: hidden;
             animation: iosLoginCardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-            transition: transform 0.4s ease, opacity 0.4s ease, filter 0.4s ease;
+            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         @keyframes iosLoginCardEntrance {
             0% {
                 opacity: 0;
-                transform: scale(0.95) translateY(18px);
+                transform: scale(0.94) translateY(20px);
                 filter: blur(8px);
             }
             100% {
@@ -151,9 +197,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .login-transition-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(10, 12, 17, 0.82);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            background: rgba(10, 12, 17, 0.85);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
             z-index: 99999;
             display: flex;
             flex-direction: column;
@@ -189,50 +235,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             50% { transform: scale(1.08); opacity: 0.88; }
         }
 
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: -70px;
-            right: -70px;
-            width: 180px;
-            height: 180px;
-            background: radial-gradient(circle, rgba(10, 132, 255, 0.15) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
         .app-logo-badge {
-            width: 68px;
-            height: 68px;
+            width: 66px;
+            height: 66px;
             border-radius: 20px;
-            background: var(--boss-hero-gradient);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: var(--login-logo-bg);
+            border: 1px solid var(--login-logo-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            color: #FFFFFF;
-            margin: 0 auto 18px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            font-size: 30px;
+            color: var(--login-logo-color);
+            margin: 0 auto 16px;
+            box-shadow: var(--login-logo-shadow);
+            transition: all 0.3s ease;
         }
 
         .input-group-ios {
-            background-color: var(--boss-input-bg);
-            border: 1px solid var(--boss-border);
-            border-radius: var(--boss-radius-sm);
+            background-color: var(--login-input-bg);
+            border: 1px solid var(--login-input-border);
+            border-radius: 14px;
             overflow: hidden;
             display: flex;
             align-items: center;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .input-group-ios:focus-within {
-            border-color: var(--boss-blue);
-            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.25);
+            border-color: #007AFF !important;
+            box-shadow: 0 0 0 3.5px rgba(0, 122, 255, 0.22) !important;
         }
 
         .input-group-ios .input-icon {
             padding: 0 14px;
-            color: var(--boss-text-muted);
+            color: var(--login-placeholder);
             font-size: 17px;
         }
 
@@ -240,14 +276,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: transparent;
             border: none;
             outline: none;
-            padding: 12px 14px 12px 0;
-            color: var(--boss-input-text);
+            padding: 13px 14px 13px 0;
+            color: var(--login-input-text);
             width: 100%;
-            font-size: 15px;
+            font-size: 14.5px;
+            font-weight: 500;
         }
 
         .input-group-ios input::placeholder {
-            color: var(--boss-text-muted);
+            color: var(--login-placeholder);
+        }
+
+        .btn-ios-login-primary {
+            background-color: var(--login-btn-primary-bg);
+            color: var(--login-btn-primary-color) !important;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 14.5px;
+            padding: 13px 20px;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-ios-login-primary:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .btn-ios-login-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-ios-login-secondary {
+            background-color: var(--login-btn-sec-bg);
+            color: var(--login-btn-sec-color) !important;
+            border: 1px solid var(--login-btn-sec-border);
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 11px 18px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .btn-ios-login-secondary:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .btn-ios-login-secondary:active {
+            transform: scale(0.98);
+        }
+
+        .login-label {
+            color: var(--login-label-color);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: -0.1px;
+            margin-bottom: 6px;
+            display: block;
         }
     </style>
 </head>
@@ -284,11 +373,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <!-- Form Login -->
-        <form action="<?= base_url('login.php') ?>" method="POST" id="loginForm">
+        <form action="login.php" method="POST" id="loginForm">
             <input type="hidden" name="client_is_mobile" id="clientIsMobile" value="0">
             
             <div class="mb-3">
-                <label class="form-label text-secondary small fw-medium">Username</label>
+                <label class="login-label">Username</label>
                 <div class="input-group-ios">
                     <span class="input-icon"><i class="bi bi-person-fill"></i></span>
                     <input type="text" name="username" id="inputUsername" placeholder="Masukkan username" required autofocus>
@@ -296,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="mb-4">
-                <label class="form-label text-secondary small fw-medium">Kata Sandi</label>
+                <label class="login-label">Kata Sandi</label>
                 <div class="input-group-ios">
                     <span class="input-icon"><i class="bi bi-lock-fill"></i></span>
                     <input type="password" name="password" id="inputPassword" placeholder="Masukkan password" required>
@@ -306,12 +395,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-ios-primary w-100 py-2 mb-3 fw-semibold">
+            <button type="submit" class="btn-ios-login-primary mb-3">
                 <i class="bi bi-box-arrow-in-right me-1"></i> Masuk ke DompetKu
             </button>
 
             <!-- Quick Demo 1-Click Login Button -->
-            <button type="button" class="btn btn-ios-secondary w-100 py-2 small fw-medium" onclick="autoFillDemoLogin()">
+            <button type="button" class="btn-ios-login-secondary" onclick="autoFillDemoLogin()">
                 <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Masuk Cepat Demo (Firdaus Dhuha)
             </button>
 

@@ -72,7 +72,7 @@ $kategori_list = $pdo->query("SELECT * FROM kategori ORDER BY jenis ASC, nama_ka
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- iOS Theme CSS -->
-    <link href="<?= base_url('assets/css/ios-theme.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
     <!-- Theme Toggle Helper Script -->
     <script src="<?= base_url('assets/js/theme.js') ?>"></script>
 </head>

@@ -24,33 +24,33 @@ if (!$is_mobile_device && !isset($_GET['mobile']) && !isset($_GET['view'])) {
 $alert_msg = '';
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] === 'added') {
-        $alert_msg = '<div class="alert alert-dark alert-dismissible fade show rounded-4 border-secondary text-light shadow-sm" style="background-color: var(--boss-card);" role="alert">
-            <i class="bi bi-check-circle-fill text-success me-2"></i> Transaksi berhasil dicatat ke dalam sistem!
+        $alert_msg = '<div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> Transaksi berhasil dicatat ke dalam sistem!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     } elseif ($_GET['msg'] === 'updated') {
-        $alert_msg = '<div class="alert alert-dark alert-dismissible fade show rounded-4 border-secondary text-light shadow-sm" style="background-color: var(--boss-card);" role="alert">
-            <i class="bi bi-check-circle-fill text-success me-2"></i> Transaksi berhasil diperbarui!
+        $alert_msg = '<div class="alert alert-info alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> Transaksi berhasil diperbarui!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     } elseif ($_GET['msg'] === 'deleted') {
-        $alert_msg = '<div class="alert alert-dark alert-dismissible fade show rounded-4 border-secondary text-light shadow-sm" style="background-color: var(--boss-card);" role="alert">
-            <i class="bi bi-trash-fill text-danger me-2"></i> Transaksi telah dihapus.
+        $alert_msg = '<div class="alert alert-danger alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+            <i class="bi bi-trash-fill me-2"></i> Transaksi telah dihapus.
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     } elseif ($_GET['msg'] === 'kat_added') {
-        $alert_msg = '<div class="alert alert-dark alert-dismissible fade show rounded-4 border-secondary text-light shadow-sm" style="background-color: var(--boss-card);" role="alert">
-            <i class="bi bi-check-circle-fill text-success me-2"></i> Kategori baru berhasil ditambahkan!
+        $alert_msg = '<div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> Kategori baru berhasil ditambahkan!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     } elseif ($_GET['msg'] === 'kat_deleted') {
-        $alert_msg = '<div class="alert alert-dark alert-dismissible fade show rounded-4 border-secondary text-light shadow-sm" style="background-color: var(--boss-card);" role="alert">
-            <i class="bi bi-trash-fill text-danger me-2"></i> Kategori berhasil dihapus.
+        $alert_msg = '<div class="alert alert-secondary alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+            <i class="bi bi-trash-fill me-2"></i> Kategori berhasil dihapus.
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     } elseif ($_GET['msg'] === 'kat_error') {
-        $alert_msg = '<div class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm" style="background-color: #2D241E; border-color: #78350F; color: #FCD34D;" role="alert">
-            <i class="bi bi-shield-exclamation me-2"></i> Kategori tidak dapat dihapus karena masih digunakan pada data transaksi. Hapus transaksi terkait terlebih dahulu demi integritas data.
+        $alert_msg = '<div class="alert alert-warning alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+            <i class="bi bi-shield-exclamation me-2"></i> Kategori tidak dapat dihapus karena masih digunakan pada data transaksi.
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     }
@@ -111,6 +111,7 @@ $sql = "SELECT t.*, k.nama_kategori, k.icon
         JOIN kategori k ON t.id_kategori = k.id_kategori 
         ORDER BY t.tanggal DESC, t.id_transaksi DESC";
 $daftar_transaksi = $pdo->query($sql)->fetchAll();
+$transaksi_list = $daftar_transaksi;
 
 // Ambil Seluruh Master Kategori beserta jumlah transaksi
 $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
@@ -800,7 +801,7 @@ foreach ($kat_expenses as $ke) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 
-                <form action="<?= base_url('index.php') ?>" method="POST" id="formCatatTransaksi">
+                <form action="index.php" method="POST" id="formCatatTransaksi">
                     <div class="modal-body py-3">
                         
                         <!-- Smart Input Triggers -->
@@ -886,7 +887,7 @@ foreach ($kat_expenses as $ke) {
                     <h5 class="modal-title fw-bold" id="modalTambahKatLabel" style="letter-spacing: -0.3px;">Tambah Kategori</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="<?= base_url('index.php') ?>" method="POST">
+                <form action="index.php" method="POST">
                     <div class="modal-body py-3">
                         <div class="mb-3 text-center">
                             <label class="form-label text-secondary small fw-medium d-block mb-1">Jenis Kategori</label>

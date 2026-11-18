@@ -66,7 +66,7 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- iOS Theme CSS -->
-    <link href="<?= base_url('assets/css/ios-theme.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
     <!-- Theme Toggle Helper Script -->
     <script src="<?= base_url('assets/js/theme.js') ?>"></script>
 
@@ -193,9 +193,9 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
             <div class="modal-content ios-modal p-2">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title fw-bold" id="modalTambahKatLabel" style="letter-spacing: -0.3px;">Tambah Kategori</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="<?= base_url('kategori.php') ?>" method="POST">
+                <form action="kategori.php" method="POST">
                     <div class="modal-body py-3">
                         
                         <div class="mb-3 text-center">
