@@ -1,9 +1,5 @@
 <?php
-// config/koneksi.php - Konfigurasi Database & Helper Global
-// Sistem Pencatatan Kas & Pengeluaran Mahasiswa
-
 if (session_status() === PHP_SESSION_NONE) {
-    // Persistent Session Lifetime (30 Hari) agar sesi tidak hilang saat browser ditutup di HP
     ini_set('session.cookie_lifetime', 60 * 60 * 24 * 30);
     ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 30);
     session_set_cookie_params([
@@ -15,7 +11,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Set Zona Waktu Resmi Indonesia (WIB / Asia/Jakarta)
 date_default_timezone_set('Asia/Jakarta');
 
 $db_host = getenv('DB_HOST') ?: '127.0.0.1';
@@ -34,11 +29,8 @@ try {
         PDO::ATTR_TIMEOUT            => 2,
     ];
     $pdo = new PDO($dsn, $db_user, $db_pass, $options);
-    
-    // Sinkronisasi timezone MySQL ke WIB (UTC+7)
     $pdo->exec("SET time_zone = '+07:00'");
 } catch (Throwable $e) {
-    // Fallback cerdas ke SQLite jika MySQL tidak aktif atau saat di-deploy ke Vercel Serverless
     try {
         $sqlite_file = sys_get_temp_dir() . '/db_kas_mahasiswa.sqlite';
         $is_new = !file_exists($sqlite_file);
@@ -103,7 +95,6 @@ try {
     }
 }
 
-// Auto-Restore Session dari Cookie Remember Me (30 Hari) agar user tidak perlu login ulang di HP
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['dompetku_remember']) && $pdo) {
     $remember_parts = explode(':', $_COOKIE['dompetku_remember'], 2);
     if (count($remember_parts) === 2) {
@@ -122,14 +113,10 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['dompetku_remember']) && $pdo
                 }
             }
         } catch (Throwable $e) {
-            // Ignore silent error
         }
     }
 }
 
-/**
- * Mendapatkan base URL dinamis aplikasi
- */
 function base_url($path = '') {
     $is_https = (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')
         || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
@@ -151,9 +138,6 @@ function base_url($path = '') {
     return rtrim($base, '/') . '/' . ltrim($path, '/');
 }
 
-/**
- * Sanitasi input data string untuk pencegahan XSS
- */
 function sanitize($data) {
     if (is_array($data)) {
         return array_map('sanitize', $data);
@@ -161,16 +145,10 @@ function sanitize($data) {
     return htmlspecialchars(trim($data ?? ''), ENT_QUOTES, 'UTF-8');
 }
 
-/**
- * Format angka ke format mata uang Rupiah
- */
 function format_rupiah($angka) {
     return 'Rp ' . number_format((float)$angka, 0, ',', '.');
 }
 
-/**
- * Format tanggal ke format bahasa Indonesia
- */
 function tgl_indo($tanggal) {
     if (empty($tanggal) || $tanggal === '0000-00-00') return '-';
     $bulan = [

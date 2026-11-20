@@ -1,9 +1,5 @@
-/* assets/css/ios-theme.css */
-/* Authentic Apple iOS Design System (Dark Titanium & Light Cupertino) */
-/* Formal, Pure Cupertino, High Contrast, Jamet-Free, iPhone 15 Safe */
-
 :root, [data-theme="light"], [data-bs-theme="light"] {
-  /* Formal Cupertino Light Mode */
+  
   --boss-bg: #F2F2F7;
   --boss-navbar: rgba(255, 255, 255, 0.88);
   --boss-card: #FFFFFF;
@@ -44,7 +40,7 @@
   --boss-radius-lg: 18px;
   --boss-radius-xl: 22px;
 
-  /* Tab Bar & Circle */
+  
   --ios-nav-bg: rgba(255, 255, 255, 0.88);
   --ios-tab-bg: rgba(255, 255, 255, 0.92);
   --ios-tab-border: rgba(0, 0, 0, 0.08);
@@ -61,7 +57,7 @@
 }
 
 [data-theme="dark"], [data-bs-theme="dark"] {
-  /* Formal Dark Titanium Mode */
+  
   --boss-bg: #0C0D12;
   --boss-navbar: rgba(16, 18, 25, 0.88);
   --boss-card: #181920;
@@ -98,7 +94,7 @@
   --boss-dropdown-bg: #20222B;
   --boss-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 
-  /* Tab Bar & Circle */
+  
   --ios-nav-bg: rgba(16, 18, 25, 0.88);
   --ios-tab-bg: rgba(16, 18, 25, 0.92);
   --ios-tab-border: rgba(255, 255, 255, 0.08);
@@ -127,7 +123,6 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-/* HIGH-CONTRAST OVERRIDES */
 [data-theme="dark"] .text-secondary,
 [data-bs-theme="dark"] .text-secondary {
   color: #CBD5E1 !important;
@@ -169,7 +164,6 @@ body {
   padding: 18px 16px 40px;
 }
 
-/* Top Navbar (iPhone 15 Safe Area) */
 .ios-navbar {
   position: sticky !important;
   top: 0 !important;
@@ -182,7 +176,6 @@ body {
   padding-bottom: 10px !important;
 }
 
-/* Circular iOS Icon Buttons */
 .ios-circle-btn {
   width: 36px !important;
   height: 36px !important;
@@ -222,7 +215,6 @@ body {
   box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3) !important;
 }
 
-/* Tab Switching Keyframes (Authentic iOS Slide Animations - No "Pluk") */
 @keyframes iosSlideInRight {
   0% {
     opacity: 0;
@@ -275,7 +267,6 @@ body {
   animation: iosSlideInLeft 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Formal Apple Titanium Wallet Hero Card */
 .wallet-hero-card {
   background: var(--boss-hero-gradient);
   color: #FFFFFF !important;
@@ -287,7 +278,6 @@ body {
   overflow: hidden;
 }
 
-/* Monochromatic Icon Box */
 .ios-icon-box {
   width: 38px;
   height: 38px;
@@ -302,7 +292,6 @@ body {
   border: 1px solid var(--boss-border);
 }
 
-/* Cupertino Segmented Control (Legacy & Static) */
 .ios-segmented-control {
   background-color: var(--boss-segmented-bg);
   border-radius: 12px;
@@ -334,8 +323,6 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
 }
 
-/* ==================== AUTHENTIC APPLE iOS SLIDING SEGMENTED CONTROL ==================== */
-/* Hardware-accelerated sliding physical pill backdrop - No more "pluk" */
 .ios-segmented-control-slider-wrap {
   position: relative;
   display: flex;
@@ -410,7 +397,6 @@ body {
   color: #30D158 !important;
 }
 
-/* ==================== UNIFIED SMART ENTRY CARD (SATU KOTAK: VOICE & CAMERA) ==================== */
 .ios-smart-entry-card {
   background-color: var(--boss-card);
   border: 1px solid var(--boss-border);
@@ -475,7 +461,6 @@ body {
   transform: scale(1.12);
 }
 
-/* Hero Stat Badges (No Stark White Jamet Circles inside Dark Card) */
 .hero-stat-badge-income {
   background: rgba(48, 209, 88, 0.16) !important;
   color: #30D158 !important;
@@ -504,7 +489,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Inset Grouped Table / Cards */
 .ios-card {
   background-color: var(--boss-card);
   border-radius: var(--boss-radius-lg);
@@ -539,7 +523,6 @@ body {
   background-color: var(--boss-card-inner);
 }
 
-/* Search Bar Wrapper */
 .ios-search-wrapper {
   position: relative;
   width: 100%;
@@ -571,7 +554,6 @@ body {
   padding-left: 36px;
 }
 
-/* Action Tiles */
 .ios-action-tile {
   background-color: var(--boss-card) !important;
   border: 1px solid var(--boss-border) !important;
@@ -604,7 +586,6 @@ body {
   flex-shrink: 0 !important;
 }
 
-/* Badge Mono */
 .ios-badge-mono {
   font-size: 11px;
   padding: 3px 8px;
@@ -616,7 +597,6 @@ body {
   display: inline-block;
 }
 
-/* Amounts */
 .amount-income {
   color: var(--boss-green) !important;
 }
@@ -625,7 +605,6 @@ body {
   color: var(--boss-red) !important;
 }
 
-/* Desktop Tabs */
 .ios-desktop-tab-btn {
   background: transparent;
   border: none;
@@ -645,7 +624,6 @@ body {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 
-/* Action Buttons */
 .btn-ios-primary {
   background-color: var(--boss-btn-primary-bg) !important;
   color: var(--boss-btn-primary-text) !important;
@@ -674,7 +652,6 @@ body {
   transform: scale(0.96) !important;
 }
 
-/* ==================== AUTHENTIC WHATSAPP & APPLE iOS FLOATING CAPSULE NAVBAR ==================== */
 .ios-capsule-navbar,
 .ios-tab-bar {
   position: fixed !important;
@@ -700,7 +677,6 @@ body {
   transition: transform 0.25s ease, background 0.3s ease, border-color 0.3s ease !important;
 }
 
-/* Hidden on Desktop/Laptop - ONLY visible on Mobile / HP (screen < 768px) */
 @media (min-width: 768px) {
   .ios-capsule-navbar,
   .ios-tab-bar {
@@ -721,7 +697,6 @@ body {
   padding-bottom: calc(115px + max(env(safe-area-inset-bottom, 16px), 16px)) !important;
 }
 
-/* Capsule Nav Items */
 .ios-capsule-item,
 .ios-tab-item {
   flex: 1 !important;
@@ -754,7 +729,6 @@ body {
   transform: scale(0.92) !important;
 }
 
-/* ACTIVE PILL CAPSULE HIGHLIGHT (Exact WhatsApp / iOS 18 dynamic capsule style) */
 .ios-capsule-item.active,
 .ios-tab-item.active {
   background: rgba(255, 255, 255, 0.16) !important;
@@ -804,7 +778,6 @@ body {
   margin-top: 1px !important;
 }
 
-/* WhatsApp Style Green Notification Pill Badge */
 .capsule-badge {
   position: absolute !important;
   top: -4px !important;
@@ -831,7 +804,6 @@ body {
   border-color: #FFFFFF !important;
 }
 
-/* User Circular Avatar for "Anda" tab */
 .capsule-avatar-circle {
   width: 23px !important;
   height: 23px !important;
@@ -865,7 +837,6 @@ body {
   transform: scale(1.08) !important;
 }
 
-/* Modals */
 .ios-modal {
   background-color: var(--boss-card) !important;
   color: var(--boss-text-primary) !important;

@@ -1,24 +1,19 @@
 <?php
-// export_excel.php - Export Data Transaksi & Arus Kas ke Microsoft Excel (.xls)
 require_once __DIR__ . '/config/koneksi.php';
 
-// Pastikan user sudah login
 if (!isset($_SESSION['user_id'])) {
     header("Location: " . base_url("login.php"));
     exit;
 }
 
-// Ambil data transaksi
 $sql = "SELECT t.*, k.nama_kategori 
         FROM transaksi t 
         JOIN kategori k ON t.id_kategori = k.id_kategori 
         ORDER BY t.tanggal ASC, t.id_transaksi ASC";
 $transaksi_list = $pdo->query($sql)->fetchAll();
 
-// Ambil data tagihan paylater
 $paylater_list = $pdo->query("SELECT * FROM kredit_paylater ORDER BY status ASC, jatuh_tempo ASC")->fetchAll();
 
-// Hitung total
 $total_masuk = 0;
 $total_keluar = 0;
 foreach ($transaksi_list as $t) {
@@ -30,7 +25,6 @@ foreach ($transaksi_list as $t) {
 }
 $saldo = $total_masuk - $total_keluar;
 
-// Set header Excel
 $filename = "Laporan_Kas_DompetKu_" . date('Ymd_His') . ".xls";
 header("Content-Type: application/vnd.ms-excel; charset=utf-8");
 header("Content-Disposition: attachment; filename=\"$filename\"");
@@ -63,7 +57,7 @@ header("Expires: 0");
 
     <br>
 
-    <!-- Ringkasan Keuangan -->
+    
     <table style="width: 50%;">
         <tr>
             <th colspan="2" style="background-color: #0A84FF;">RINGKASAN ARUS KAS</th>
@@ -84,7 +78,7 @@ header("Expires: 0");
 
     <br><br>
 
-    <!-- Rincian Transaksi -->
+    
     <div class="bold" style="font-size: 12pt;">A. RIWAYAT TRANSAKSI KAS</div>
     <table>
         <thead>
@@ -126,7 +120,7 @@ header("Expires: 0");
 
     <br><br>
 
-    <!-- Tanggungan Kredit / PayLater -->
+    
     <div class="bold" style="font-size: 12pt;">B. PENCATATAN TANGGUNGAN KREDIT & PAYLATER</div>
     <table>
         <thead>

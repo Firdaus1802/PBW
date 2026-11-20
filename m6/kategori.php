@@ -1,8 +1,6 @@
 <?php
-// kategori.php - Kelola Kategori (Dark & Light Mode + iOS Shell + APK Ready)
 require_once __DIR__ . '/config/koneksi.php';
 
-// Proteksi Login
 if (!isset($_SESSION['user_id'])) {
     header("Location: " . base_url("login.php"));
     exit;
@@ -10,7 +8,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $alert_msg = '';
 
-// Proses Tambah Kategori
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     $nama_kategori = sanitize($_POST['nama_kategori']);
     $jenis         = sanitize($_POST['jenis']);
@@ -28,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     }
 }
 
-// Proses Hapus Kategori
 if (isset($_GET['hapus'])) {
     $id_del = (int)$_GET['hapus'];
     if ($id_del > 0) {
@@ -44,7 +40,6 @@ if (isset($_GET['hapus'])) {
     }
 }
 
-// Ambil Daftar Kategori beserta Jumlah Transaksi Terkait
 $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
                               FROM kategori k 
                               LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori 
@@ -62,17 +57,15 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
     <link rel="manifest" href="<?= base_url('manifest.json') ?>">
     <link rel="apple-touch-icon" href="<?= base_url('assets/icons/app-icon.png') ?>">
     <title>Kelola Kategori - DompetKu</title>
-    <!-- Bootstrap 5 CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- iOS Theme CSS -->
+    
     <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
-    <!-- Theme Toggle Helper Script -->
+    
     <script src="<?= base_url('assets/js/theme.js') ?>"></script>
 
     <script>
-        // Jika dibuka di browser laptop/desktop (lebar >= 992px) dan bukan mode paksa mobile ?view=mobile,
-        // alihkan langsung ke Dashboard Admin Laptop bagian Master Kategori
         if (window.innerWidth >= 992 && !window.location.search.includes('view=mobile')) {
             window.location.replace('<?= base_url("dashboard.php#kategoriSection") ?>');
         }
@@ -82,7 +75,7 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
 
     <div class="ios-app-shell">
 
-        <!-- iOS Glass Navbar -->
+        
         <nav class="ios-navbar py-2 px-3 px-md-4 no-print">
             <div class="container-xl d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
@@ -95,7 +88,7 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
                     </div>
                 </div>
 
-                <!-- Desktop Nav Tabs (Hidden on Mobile) -->
+                
                 <div class="d-none d-md-flex align-items-center gap-1 p-1" style="background-color: var(--boss-segmented-bg); border-radius: 14px; border: 1px solid var(--boss-border);">
                     <a href="<?= base_url('index.php#dompet') ?>" class="ios-desktop-tab-btn">
                         <i class="bi bi-wallet2 me-1"></i> Dompet
@@ -128,7 +121,7 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
                 <span class="text-secondary small"><?= count($kategori_list) ?> Terdaftar</span>
             </div>
 
-            <!-- Inset Grouped Category Cards -->
+            
             <div class="ios-card-group">
                 <?php foreach ($kategori_list as $kat): 
                     $is_in = ($kat['jenis'] === 'Pemasukan');
@@ -167,7 +160,7 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
 
         </div>
 
-        <!-- ==================== FIXED AUTHENTIC IOS BOTTOM TAB BAR (MOBILE ONLY) ==================== -->
+        
         <nav class="ios-tab-bar d-flex d-md-none no-print">
             <a href="<?= base_url('index.php#dompet') ?>" class="ios-tab-item">
                 <i class="bi bi-wallet2 tab-icon"></i>
@@ -187,7 +180,7 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
 
     </div>
 
-    <!-- Modal Tambah Kategori -->
+    
     <div class="modal fade" id="modalTambahKat" tabindex="-1" aria-labelledby="modalTambahKatLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ios-modal p-2">
@@ -242,7 +235,7 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

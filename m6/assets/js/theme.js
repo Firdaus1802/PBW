@@ -1,4 +1,3 @@
-// assets/js/theme.js - Smooth iOS Dark/Light Mode Switcher with Persistence
 (function() {
     const savedTheme = localStorage.getItem('dompetku_theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);

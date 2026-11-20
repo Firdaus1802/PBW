@@ -1,18 +1,15 @@
 <?php
-// index.php - DompetKu: Authentic Responsive iOS & Web FinTech App with Auth, Dashboard, Voice & Receipt Scanner
 header("Cache-Control: no-cache, no-store, must-revalidate");
 header("Pragma: no-cache");
 header("Expires: 0");
 
 require_once __DIR__ . '/config/koneksi.php';
 
-// Proteksi Login Database
 if (!isset($_SESSION['user_id'])) {
     header("Location: " . base_url("login.php"));
     exit;
 }
 
-// Auto-deteksi: Jika dibuka di desktop / laptop (layar lebar), otomatis lempar ke dashboard.php
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $is_mobile_device = preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini)/i', $ua);
 if (!$is_mobile_device && !isset($_GET['mobile']) && !isset($_GET['view'])) {
@@ -20,7 +17,6 @@ if (!$is_mobile_device && !isset($_GET['mobile']) && !isset($_GET['view'])) {
     exit;
 }
 
-// Notifikasi pesan
 $alert_msg = '';
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] === 'added') {
@@ -56,7 +52,6 @@ if (isset($_GET['msg'])) {
     }
 }
 
-// 1. Tambah Transaksi (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) {
     $id_kategori = (int)$_POST['id_kategori'];
     $tanggal     = sanitize($_POST['tanggal']);
@@ -77,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) 
     }
 }
 
-// 2. Tambah Kategori (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     $nama_kategori = sanitize($_POST['nama_kategori']);
     $jenis         = sanitize($_POST['jenis']);
@@ -95,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     }
 }
 
-// Hitung Statistik Keuangan Kas
 $stmt_stat = $pdo->query("SELECT 
     COALESCE(SUM(CASE WHEN jenis = 'Pemasukan' THEN jumlah ELSE 0 END), 0) AS total_masuk,
     COALESCE(SUM(CASE WHEN jenis = 'Pengeluaran' THEN jumlah ELSE 0 END), 0) AS total_keluar
@@ -105,7 +98,6 @@ $total_masuk  = (float)$stat['total_masuk'];
 $total_keluar = (float)$stat['total_keluar'];
 $saldo_akhir  = $total_masuk - $total_keluar;
 
-// Ambil Seluruh Data Transaksi
 $sql = "SELECT t.*, k.nama_kategori, k.icon 
         FROM transaksi t 
         JOIN kategori k ON t.id_kategori = k.id_kategori 
@@ -113,14 +105,12 @@ $sql = "SELECT t.*, k.nama_kategori, k.icon
 $daftar_transaksi = $pdo->query($sql)->fetchAll();
 $transaksi_list = $daftar_transaksi;
 
-// Ambil Seluruh Master Kategori beserta jumlah transaksi
 $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
                               FROM kategori k 
                               LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori 
                               GROUP BY k.id_kategori 
                               ORDER BY k.jenis ASC, k.nama_kategori ASC")->fetchAll();
 
-// Data untuk Chart.js: Pengeluaran per Kategori
 $kat_expenses = $pdo->query("SELECT k.nama_kategori, COALESCE(SUM(t.jumlah), 0) AS total 
                              FROM kategori k 
                              JOIN transaksi t ON k.id_kategori = t.id_kategori 
@@ -145,26 +135,25 @@ foreach ($kat_expenses as $ke) {
     <link rel="manifest" href="<?= base_url('manifest.json') ?>">
     <link rel="apple-touch-icon" href="<?= base_url('assets/icons/app-icon.png') ?>">
     <title>DompetKu - CashFlow & Dashboard Mahasiswa</title>
-    <!-- Bootstrap 5 CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Chart.js via CDN -->
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- iOS Theme CSS with Cache-Buster -->
+    
     <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
-    <!-- Theme Controller Script -->
+    
     <script src="<?= base_url('assets/js/theme.js') ?>"></script>
 
     <script>
-        // Auto-redirect jika dibuka di browser Laptop/Desktop (layar >= 992px) dan bukan mode paksa mobile ?view=mobile
         if (window.innerWidth >= 992 && !window.location.search.includes('view=mobile')) {
             window.location.replace('<?= base_url("dashboard.php") ?>');
         }
     </script>
 
     <style>
-        /* Table Styles for Laporan Tab */
+        
         .rekap-table th {
             background-color: var(--boss-table-th-bg);
             color: var(--boss-text-secondary);
@@ -218,11 +207,11 @@ foreach ($kat_expenses as $ke) {
 
     <div class="ios-app-shell">
 
-        <!-- Top Header Navigation (Authentic iOS Glass with Dynamic Island Padding) -->
+        
         <nav class="ios-navbar px-3 px-md-4">
             <div class="container-xl d-flex align-items-center justify-content-between">
                 
-                <!-- Logo & Brand Profile (Authentic iOS Monogram) -->
+                
                 <div class="d-flex align-items-center gap-2">
                     <div class="ios-icon-box" style="width: 38px; height: 38px; border-radius: 12px; background: var(--ios-center-circle-bg); color: var(--ios-center-circle-color); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                         <i class="bi bi-wallet2" style="font-size: 19px;"></i>
@@ -233,7 +222,7 @@ foreach ($kat_expenses as $ke) {
                     </div>
                 </div>
 
-                <!-- Desktop Navigation Tabs (Hidden on Mobile) -->
+                
                 <div class="d-none d-md-flex align-items-center gap-1 p-1" style="background-color: var(--boss-segmented-bg); border-radius: 14px; border: 1px solid var(--boss-border);">
                     <button type="button" class="ios-desktop-tab-btn active" id="deskTabDompet" onclick="switchIosTab('dompet')">
                         <i class="bi bi-wallet2 me-1"></i> Dompet
@@ -249,23 +238,23 @@ foreach ($kat_expenses as $ke) {
                     </button>
                 </div>
 
-                <!-- Right Action Buttons (Clean Authentic iOS Circular Controls - NO SQUARE BOXES) -->
+                
                 <div class="d-flex align-items-center gap-2">
                     
-                    <!-- Hidden Receipt Input for Camera / OCR -->
+                    
                     <input type="file" id="receiptFileInput" style="display:none;" accept="image/*" onchange="processReceipt(this)">
 
-                    <!-- Theme Mode Switcher (Circular Pill) -->
+                    
                     <button type="button" onclick="toggleTheme()" class="ios-circle-btn" title="Ganti Mode Terang / Gelap">
                         <i class="theme-toggle-icon"></i>
                     </button>
 
-                    <!-- Add Button (Primary Circular Pill) -->
+                    
                     <button type="button" class="ios-circle-btn ios-circle-btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah" title="Catat Transaksi Manual">
                         <i class="bi bi-plus-lg"></i>
                     </button>
 
-                    <!-- Logout Button (Subtle Circular Pill) -->
+                    
                     <a href="<?= base_url('logout.php') ?>" class="ios-circle-btn" title="Keluar dari Sesi" onclick="return confirm('Keluar dari sesi DompetKu?');">
                         <i class="bi bi-box-arrow-right"></i>
                     </a>
@@ -278,15 +267,15 @@ foreach ($kat_expenses as $ke) {
             
             <?= $alert_msg ?>
 
-            <!-- ==================== TAB 1: DOMPET (HERO CARD & TRANSAKSI) ==================== -->
+            
             <div id="tabViewDompet" class="tab-view-panel active">
                 
                 <div class="row g-4">
                     
-                    <!-- Left Column (Desktop: col-md-5 col-lg-4, Mobile: col-12) -->
+                    
                     <div class="col-12 col-md-5 col-lg-4">
                         
-                        <!-- Titanium Wallet Hero Card -->
+                        
                         <div class="wallet-hero-card mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span class="text-white-50 small fw-medium text-uppercase" style="letter-spacing: 0.8px; font-size: 10.5px;">Sisa Saldo Kas</span>
@@ -326,7 +315,7 @@ foreach ($kat_expenses as $ke) {
                             </div>
                         </div>
 
-                        <!-- Pencatatan Cepat (SATU KOTAK: Suara & Pindai Struk) -->
+                        
                         <div class="ios-smart-entry-card mb-3">
                             <div class="d-flex align-items-center justify-content-between mb-2 px-1">
                                 <div class="d-flex align-items-center gap-1">
@@ -337,7 +326,7 @@ foreach ($kat_expenses as $ke) {
                             </div>
 
                             <div class="ios-smart-entry-box">
-                                <!-- Left: Input Suara -->
+                                
                                 <div class="ios-smart-entry-half" onclick="startVoiceInput()" title="Bicara untuk mencatat transaksi">
                                     <div class="ios-smart-icon-badge" style="background: rgba(88, 86, 214, 0.12); color: #5856D6;">
                                         <i class="bi bi-mic-fill" id="smartVoiceMicIcon"></i>
@@ -348,10 +337,10 @@ foreach ($kat_expenses as $ke) {
                                     </div>
                                 </div>
 
-                                <!-- Vertical Divider -->
+                                
                                 <div class="ios-smart-entry-divider"></div>
 
-                                <!-- Right: Foto Struk -->
+                                
                                 <div class="ios-smart-entry-half" onclick="triggerReceiptScan()" title="Pindai foto struk pembayaran">
                                     <div class="ios-smart-icon-badge" style="background: rgba(0, 122, 255, 0.12); color: #007AFF;">
                                         <i class="bi bi-camera-fill"></i>
@@ -364,7 +353,7 @@ foreach ($kat_expenses as $ke) {
                             </div>
                         </div>
 
-                        <!-- Desktop Financial Summary Card -->
+                        
                         <div class="ios-card p-3 d-none d-md-block">
                             <h6 class="fw-bold mb-3" style="font-size: 13.5px; letter-spacing: -0.2px;">Statistik Kas Mahasiswa</h6>
                             <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
@@ -383,10 +372,10 @@ foreach ($kat_expenses as $ke) {
 
                     </div>
 
-                    <!-- Right Column (Desktop: col-md-7 col-lg-8, Mobile: col-12) -->
+                    
                     <div class="col-12 col-md-7 col-lg-8">
                         
-                        <!-- Filter & Search Controls in Row with Smooth Hardware-Accelerated Sliding Pill -->
+                        
                         <div class="row g-2 mb-3">
                             <div class="col-12 col-sm-6">
                                 <div class="ios-segmented-control-slider-wrap" id="filterSegmentedWrap">
@@ -404,7 +393,7 @@ foreach ($kat_expenses as $ke) {
                             </div>
                         </div>
 
-                        <!-- Header List -->
+                        
                         <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                             <h6 class="text-secondary fw-semibold text-uppercase mb-0" style="font-size: 11px; letter-spacing: 0.8px;">
                                 Catatan Transaksi (<span id="totalVisibleTrx"><?= count($daftar_transaksi) ?></span>)
@@ -412,7 +401,7 @@ foreach ($kat_expenses as $ke) {
                             <small class="text-secondary" style="font-size: 11px;">Ketuk titik tiga untuk opsi</small>
                         </div>
 
-                        <!-- Transaction Inset Grouped List -->
+                        
                         <div class="ios-card-group mb-4" id="transactionListContainer">
                             <?php if (empty($daftar_transaksi)): ?>
                                 <div class="p-4 text-center text-secondary small">Belum ada transaksi tercatat.</div>
@@ -486,7 +475,7 @@ foreach ($kat_expenses as $ke) {
 
             </div>
 
-            <!-- ==================== TAB 2: KATEGORI (MANAJEMEN KATEGORI) ==================== -->
+            
             <div id="tabViewKategori" class="tab-view-panel">
                 
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -537,7 +526,7 @@ foreach ($kat_expenses as $ke) {
 
             </div>
 
-            <!-- ==================== TAB 4: LAPORAN (REKAP KEUANGAN & EXCEL EXPORT) ==================== -->
+            
             <div id="tabViewLaporan" class="tab-view-panel">
                 
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 no-print">
@@ -558,7 +547,7 @@ foreach ($kat_expenses as $ke) {
                     </div>
                 </div>
 
-                <!-- Summary Stat Cards in 3 Columns -->
+                
                 <div class="row g-3 mb-4">
                     <div class="col-12 col-md-4">
                         <div class="ios-card p-3 text-center">
@@ -580,7 +569,7 @@ foreach ($kat_expenses as $ke) {
                     </div>
                 </div>
 
-                <!-- Printable Table View -->
+                
                 <div class="table-responsive rounded-4 overflow-hidden border mb-4" style="border-color: var(--boss-table-border) !important;">
                     <table class="table rekap-table align-middle mb-0">
                         <thead>
@@ -632,7 +621,7 @@ foreach ($kat_expenses as $ke) {
                     </table>
                 </div>
 
-                <!-- Footer Sign -->
+                
                 <div class="p-3 text-center text-secondary small border-top border-secondary border-opacity-10">
                     <p class="mb-1">Penanggung Jawab: <strong style="color: var(--boss-text-primary);"><?= htmlspecialchars($_SESSION['nama_lengkap']) ?></strong></p>
                     <small style="font-size: 10.5px;">Waktu Rekap: <?= date('d/m/Y H:i:s') ?> WIB • DompetKu (PBW)</small>
@@ -640,7 +629,7 @@ foreach ($kat_expenses as $ke) {
 
             </div>
 
-            <!-- ==================== TAB 4: AKUN (PROFIL MAHASISWA & PENGATURAN) ==================== -->
+            
             <div id="tabViewAkun" class="tab-view-panel">
                 
                 <div class="mb-4">
@@ -648,7 +637,7 @@ foreach ($kat_expenses as $ke) {
                     <small class="text-secondary">Informasi identitas mahasiswa dan preferensi sistem</small>
                 </div>
 
-                <!-- Profile Monogram Card -->
+                
                 <div class="ios-card p-4 mb-4 text-center">
                     <div class="mx-auto mb-3" style="width: 68px; height: 68px; border-radius: 20px; background: var(--boss-hero-gradient); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; box-shadow: 0 8px 20px rgba(0,0,0,0.18);">
                         FD
@@ -662,7 +651,7 @@ foreach ($kat_expenses as $ke) {
                     </span>
                 </div>
 
-                <!-- Inset Grouped Section 1: Ringkasan Finansial -->
+                
                 <div class="mb-2 px-1">
                     <span class="fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.6px; color: var(--boss-text-muted);">Ringkasan Kas Pribadi</span>
                 </div>
@@ -685,7 +674,7 @@ foreach ($kat_expenses as $ke) {
                     </div>
                 </div>
 
-                <!-- Inset Grouped Section 2: Preferensi & Akses Cepat -->
+                
                 <div class="mb-2 px-1">
                     <span class="fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.6px; color: var(--boss-text-muted);">Preferensi & Fitur</span>
                 </div>
@@ -730,7 +719,7 @@ foreach ($kat_expenses as $ke) {
                     </a>
                 </div>
 
-                <!-- Inset Grouped Section 3: Sesi Keluar -->
+                
                 <div class="mb-4">
                     <a href="<?= base_url('logout.php') ?>" class="btn btn-outline-danger w-100 py-3 rounded-4 fw-semibold d-flex align-items-center justify-content-center gap-2" onclick="return confirm('Keluar dari sesi akun DompetKu?');">
                         <i class="bi bi-box-arrow-right"></i>
@@ -742,9 +731,9 @@ foreach ($kat_expenses as $ke) {
 
         </div>
 
-        <!-- ==================== AUTHENTIC WHATSAPP & APPLE iOS 18 FLOATING CAPSULE NAVBAR ==================== -->
+        
         <nav class="ios-capsule-navbar no-print" id="bottomCapsuleNavbar">
-            <!-- 1. DOMPET -->
+            
             <button type="button" class="ios-capsule-item active" id="tabBtnDompet" onclick="switchIosTab('dompet')">
                 <div class="capsule-icon-wrap">
                     <i class="bi bi-wallet2 tab-icon"></i>
@@ -752,7 +741,7 @@ foreach ($kat_expenses as $ke) {
                 <span class="capsule-label">Dompet</span>
             </button>
 
-            <!-- 2. KATEGORI with WhatsApp Green Pill Badge -->
+            
             <button type="button" class="ios-capsule-item" id="tabBtnKategori" onclick="switchIosTab('kategori')">
                 <div class="capsule-icon-wrap">
                     <i class="bi bi-tags tab-icon"></i>
@@ -761,7 +750,7 @@ foreach ($kat_expenses as $ke) {
                 <span class="capsule-label">Kategori</span>
             </button>
 
-            <!-- 3. CATAT (+) (Center Action Modal Trigger) -->
+            
             <button type="button" class="ios-capsule-item" id="tabBtnCatat" data-bs-toggle="modal" data-bs-target="#modalTambah" title="Catat Transaksi Cepat">
                 <div class="capsule-icon-wrap">
                     <i class="bi bi-plus-lg tab-icon"></i>
@@ -769,7 +758,7 @@ foreach ($kat_expenses as $ke) {
                 <span class="capsule-label">Catat</span>
             </button>
 
-            <!-- 4. LAPORAN with WhatsApp Green Pill Badge -->
+            
             <button type="button" class="ios-capsule-item" id="tabBtnLaporan" onclick="switchIosTab('laporan')">
                 <div class="capsule-icon-wrap">
                     <i class="bi bi-file-earmark-text tab-icon"></i>
@@ -778,7 +767,7 @@ foreach ($kat_expenses as $ke) {
                 <span class="capsule-label">Laporan</span>
             </button>
 
-            <!-- 5. ANDA (Circular Student Profile Photo) -->
+            
             <button type="button" class="ios-capsule-item" id="tabBtnAkun" onclick="switchIosTab('akun')">
                 <div class="capsule-icon-wrap">
                     <div class="capsule-avatar-circle">
@@ -792,7 +781,7 @@ foreach ($kat_expenses as $ke) {
 
     </div>
 
-    <!-- ==================== MODAL TAMBAH TRANSAKSI (iOS Sheet) ==================== -->
+    
     <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="modalTambahLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ios-modal p-2">
@@ -804,7 +793,7 @@ foreach ($kat_expenses as $ke) {
                 <form action="index.php" method="POST" id="formCatatTransaksi">
                     <div class="modal-body py-3">
                         
-                        <!-- Smart Input Triggers -->
+                        
                         <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded-3" style="background-color: var(--boss-stat-bg); border: 1px solid var(--boss-border);">
                             <span class="text-secondary small fw-medium">Pilihan Cepat:</span>
                             <div class="d-flex align-items-center gap-2">
@@ -817,7 +806,7 @@ foreach ($kat_expenses as $ke) {
                             </div>
                         </div>
 
-                        <!-- Smooth Hardware-Accelerated Sliding Segmented Control (No "Pluk") -->
+                        
                         <div class="mb-3 text-center">
                             <label class="form-label text-secondary small fw-medium d-block mb-1">Jenis Transaksi</label>
                             <div class="ios-segmented-control-slider-wrap" id="modalJenisSegmentedWrap">
@@ -879,7 +868,7 @@ foreach ($kat_expenses as $ke) {
         </div>
     </div>
 
-    <!-- ==================== MODAL TAMBAH KATEGORI (iOS Sheet) ==================== -->
+    
     <div class="modal fade" id="modalTambahKat" tabindex="-1" aria-labelledby="modalTambahKatLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ios-modal p-2">
@@ -932,7 +921,7 @@ foreach ($kat_expenses as $ke) {
         </div>
     </div>
 
-    <!-- ==================== MODAL SCAN STRUK (RECEIPT SCANNER) ==================== -->
+    
     <div class="modal fade" id="modalScanStruk" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ios-modal p-2">
@@ -976,15 +965,13 @@ foreach ($kat_expenses as $ke) {
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Track index for directional sliding animations (Left vs Right)
         let currentTabIndex = 0;
         const tabIndices = { 'dompet': 0, 'kategori': 1, 'laporan': 2, 'akun': 3 };
 
-        // Butter-Smooth Tab Switching with Directional Slide Transitions (No "Pluk")
         function switchIosTab(tabName) {
             const panels = document.querySelectorAll('.tab-view-panel');
             const mobileBtns = document.querySelectorAll('.ios-tab-item, .ios-capsule-item');
@@ -1022,7 +1009,6 @@ foreach ($kat_expenses as $ke) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Hardware-Accelerated Sliding Segmented Control for Modal
         function selectModalJenis(jenis) {
             const slider = document.getElementById('modalJenisSlider');
             const btnExp = document.getElementById('btnModalPengeluaran');
@@ -1043,7 +1029,6 @@ foreach ($kat_expenses as $ke) {
             filterKategoriDropdown(jenis);
         }
 
-        // Instant Filter Jenis Transaksi with Sliding Pill
         let activeFilterJenis = 'Semua';
 
         function setInstantFilter(jenis, idx = 0) {
@@ -1066,7 +1051,6 @@ foreach ($kat_expenses as $ke) {
             filterTransaksiLive();
         }
 
-        // Real-Time Search & Filter
         function filterTransaksiLive() {
             const query = (document.getElementById('instantSearchInput').value || '').toLowerCase().trim();
             const items = document.querySelectorAll('.trx-card-item');
@@ -1091,7 +1075,6 @@ foreach ($kat_expenses as $ke) {
             if (countEl) countEl.innerText = count;
         }
 
-        // Filter Kategori Dropdown in Modal
         function filterKategoriDropdown(jenisTerpilih) {
             const select = document.getElementById('selectKategori');
             const options = select.querySelectorAll('option');
@@ -1111,7 +1094,6 @@ foreach ($kat_expenses as $ke) {
             });
         }
 
-        // ==================== FITUR 1: FOTO STRUK AUTO CATAT ====================
         function triggerReceiptScan() {
             document.getElementById('receiptFileInput').click();
         }
@@ -1139,7 +1121,6 @@ foreach ($kat_expenses as $ke) {
                 previewImg.src = e.target.result;
                 previewImg.style.display = 'inline-block';
 
-                // Simulasi Analisis OCR Cerdas Mahasiswa
                 setTimeout(() => {
                     statusText.style.display = 'none';
                     resultBox.style.display = 'block';
@@ -1164,12 +1145,10 @@ foreach ($kat_expenses as $ke) {
         function applyReceiptToForm() {
             if (!parsedReceiptData) return;
 
-            // Tutup modal struk
             const scanModalEl = document.getElementById('modalScanStruk');
             const scanModal = bootstrap.Modal.getInstance(scanModalEl);
             if (scanModal) scanModal.hide();
 
-            // Isi form modal catat
             selectModalJenis('Pengeluaran');
 
             document.getElementById('inputJudul').value = parsedReceiptData.judul;
@@ -1177,14 +1156,12 @@ foreach ($kat_expenses as $ke) {
             document.getElementById('selectKategori').value = parsedReceiptData.id_kat;
             document.getElementById('inputCatatan').value = 'Diisi otomatis dari pemindaian foto struk.';
 
-            // Buka modal catat transaksi
             setTimeout(() => {
                 const addModal = new bootstrap.Modal(document.getElementById('modalTambah'));
                 addModal.show();
             }, 300);
         }
 
-        // ==================== FITUR 2: VOICE INPUT (WEB SPEECH RECOGNITION) ====================
         let isListening = false;
         function startVoiceInput() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1205,7 +1182,6 @@ foreach ($kat_expenses as $ke) {
             if (navMic) navMic.classList.add('mic-pulse');
             isListening = true;
 
-            // Tampilkan notifikasi mikrofon
             const toastEl = document.createElement('div');
             toastEl.id = 'voiceToast';
             toastEl.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 p-3 rounded-4 shadow-lg text-white d-flex align-items-center gap-2';
@@ -1222,13 +1198,11 @@ foreach ($kat_expenses as $ke) {
                 const tEl = document.getElementById('voiceToast');
                 if (tEl) tEl.remove();
 
-                // Parsing angka dari suara
                 let detectedNum = 0;
                 const numMatch = transcript.match(/\d+/g);
                 if (numMatch) {
                     detectedNum = parseInt(numMatch.join(''), 10);
                 } else {
-                    // Cek kata kunci nominal umum bahasa indonesia
                     if (transcript.includes('sepuluh ribu')) detectedNum = 10000;
                     else if (transcript.includes('lima belas ribu')) detectedNum = 15000;
                     else if (transcript.includes('dua puluh ribu')) detectedNum = 20000;
@@ -1239,11 +1213,9 @@ foreach ($kat_expenses as $ke) {
                     else detectedNum = 25000;
                 }
 
-                // Bersihkan judul
                 let cleanJudul = transcript.replace(/\d+/g, '').replace(/(ribu|ratus|juta|rupiah)/gi, '').trim();
                 if (cleanJudul.length < 3) cleanJudul = 'Pengeluaran Suara: ' + transcript;
 
-                // Terapkan ke form
                 selectModalJenis('Pengeluaran');
                 document.getElementById('inputJudul').value = cleanJudul.charAt(0).toUpperCase() + cleanJudul.slice(1);
                 document.getElementById('inputJumlah').value = detectedNum;
@@ -1269,16 +1241,13 @@ foreach ($kat_expenses as $ke) {
             };
         }
 
-        // ==================== CHART.JS INITIALIZATION ====================
         document.addEventListener('DOMContentLoaded', () => {
             filterKategoriDropdown('Pengeluaran');
 
-            // Handle Hash on Load (Default on Mobile: #dompet, no dashboard on phone)
             let hash = window.location.hash.replace('#', '') || 'dompet';
             if (hash === 'dashboard') hash = 'dompet';
             switchIosTab(hash);
 
-            // Chart 1: Cashflow Bar Chart
             const ctxCashflow = document.getElementById('chartCashflow');
             if (ctxCashflow) {
                 new Chart(ctxCashflow, {
@@ -1317,7 +1286,6 @@ foreach ($kat_expenses as $ke) {
                 });
             }
 
-            // Chart 2: Category Expense Doughnut Chart
             const ctxCategory = document.getElementById('chartCategory');
             if (ctxCategory) {
                 new Chart(ctxCategory, {
@@ -1345,7 +1313,6 @@ foreach ($kat_expenses as $ke) {
                 });
             }
 
-            // Live Real-Time Indonesian Clock (WIB)
             function updateLiveClock() {
                 const el = document.getElementById('liveClockWidget');
                 if (!el) return;

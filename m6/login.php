@@ -1,12 +1,9 @@
 <?php
-// login.php - Autentikasi Pengguna DompetKu (Database-backed Login dengan Bcrypt)
 require_once __DIR__ . '/config/koneksi.php';
 
-// Deteksi jenis perangkat pengguna
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $is_mobile_device = preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini)/i', $ua);
 
-// Auto-login jika memiliki cookie Remember Me yang valid (30 Hari)
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['dompetku_remember'])) {
     $cookie_data = explode(':', $_COOKIE['dompetku_remember']);
     if (count($cookie_data) === 2) {
@@ -32,12 +29,10 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['dompetku_remember'])) {
                 }
             }
         } catch (PDOException $e) {
-            // Abaikan dan lanjutkan ke form login
         }
     }
 }
 
-// Jika sudah login, langsung arahkan sesuai perangkat
 if (isset($_SESSION['user_id'])) {
     if ($is_mobile_device) {
         header("Location: " . base_url("index.php"));
@@ -69,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username']     = $user['username'];
                 $_SESSION['nama_lengkap'] = $user['nama_lengkap'];
 
-                // Set Cookie Remember Me 30 Hari agar sesi tetap aktif dan tidak perlu login ulang di HP
                 $remember_token = hash('sha256', $user['id_user'] . $user['password'] . 'dompetku_pbw_secret');
                 setcookie('dompetku_remember', $user['id_user'] . ':' . $remember_token, time() + (86400 * 30), '/', '', false, true);
                 
@@ -97,62 +91,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#0C0D12" id="metaThemeColor">
+    <meta name="theme-color" content="#000000" id="metaThemeColor">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="<?= base_url('manifest.json') ?>">
     <link rel="apple-touch-icon" href="<?= base_url('assets/icons/app-icon.png') ?>">
     <title>Masuk - DompetKu</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- iOS Theme CSS -->
-    <!-- iOS Theme CSS -->
     <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
-    <!-- Theme Toggle Helper Script -->
     <script src="<?= base_url('assets/js/theme.js') ?>"></script>
 
     <style>
         :root, [data-theme="dark"], [data-bs-theme="dark"] {
-            --login-bg: radial-gradient(circle at 50% 15%, #161824 0%, #090A0F 100%);
-            --login-card-bg: rgba(22, 24, 34, 0.78);
-            --login-card-border: rgba(255, 255, 255, 0.12);
-            --login-card-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-            --login-input-bg: rgba(255, 255, 255, 0.07);
-            --login-input-border: rgba(255, 255, 255, 0.11);
-            --login-input-text: #FFFFFF;
-            --login-label-color: #94A3B8;
-            --login-placeholder: #64748B;
-            --login-btn-primary-bg: #FFFFFF;
-            --login-btn-primary-color: #090A0F;
-            --login-btn-sec-bg: rgba(255, 255, 255, 0.07);
-            --login-btn-sec-color: #F1F5F9;
-            --login-btn-sec-border: rgba(255, 255, 255, 0.10);
-            --login-logo-bg: linear-gradient(145deg, #222533 0%, #12141C 100%);
-            --login-logo-color: #FFFFFF;
-            --login-logo-border: rgba(255, 255, 255, 0.16);
-            --login-logo-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+            --ios-page-bg: #000000;
+            --ios-card-bg: rgba(28, 28, 30, 0.75);
+            --ios-card-border: rgba(255, 255, 255, 0.14);
+            --ios-card-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            --ios-grouped-bg: rgba(255, 255, 255, 0.08);
+            --ios-divider: rgba(255, 255, 255, 0.1);
+            --ios-text: #FFFFFF;
+            --ios-subtext: #8E8E93;
+            --ios-placeholder: #636366;
+            --ios-accent: #0A84FF;
+            --ios-btn-tint-bg: rgba(10, 132, 255, 0.16);
+            --ios-btn-tint-color: #0A84FF;
+            --ios-circle-btn-bg: rgba(255, 255, 255, 0.1);
+            --ios-circle-btn-color: #FFFFFF;
+            --ios-grabber: rgba(255, 255, 255, 0.25);
         }
 
         [data-theme="light"], [data-bs-theme="light"] {
-            --login-bg: radial-gradient(circle at 50% 15%, #FFFFFF 0%, #E8E9F0 100%);
-            --login-card-bg: rgba(255, 255, 255, 0.82);
-            --login-card-border: rgba(0, 0, 0, 0.08);
-            --login-card-shadow: 0 24px 50px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.85);
-            --login-input-bg: rgba(118, 118, 128, 0.09);
-            --login-input-border: rgba(0, 0, 0, 0.08);
-            --login-input-text: #1C1C1E;
-            --login-label-color: #3C3C43;
-            --login-placeholder: #8E8E93;
-            --login-btn-primary-bg: #1C1C1E;
-            --login-btn-primary-color: #FFFFFF;
-            --login-btn-sec-bg: rgba(118, 118, 128, 0.09);
-            --login-btn-sec-color: #1C1C1E;
-            --login-btn-sec-border: rgba(0, 0, 0, 0.07);
-            --login-logo-bg: linear-gradient(145deg, #1C1C1E 0%, #2C2C2E 100%);
-            --login-logo-color: #FFFFFF;
-            --login-logo-border: rgba(0, 0, 0, 0.08);
-            --login-logo-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+            --ios-page-bg: #F2F2F7;
+            --ios-card-bg: rgba(255, 255, 255, 0.85);
+            --ios-card-border: rgba(0, 0, 0, 0.08);
+            --ios-card-shadow: 0 20px 50px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            --ios-grouped-bg: rgba(118, 118, 128, 0.12);
+            --ios-divider: rgba(60, 60, 67, 0.18);
+            --ios-text: #000000;
+            --ios-subtext: #8E8E93;
+            --ios-placeholder: #8E8E93;
+            --ios-accent: #007AFF;
+            --ios-btn-tint-bg: rgba(0, 122, 255, 0.12);
+            --ios-btn-tint-color: #007AFF;
+            --ios-circle-btn-bg: rgba(118, 118, 128, 0.12);
+            --ios-circle-btn-color: #000000;
+            --ios-grabber: rgba(60, 60, 67, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -161,43 +150,235 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             align-items: center;
             justify-content: center;
             padding: 24px 16px;
-            background: var(--login-bg);
-            transition: background 0.35s ease;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            background: var(--login-card-bg);
-            backdrop-filter: blur(32px) saturate(190%);
-            -webkit-backdrop-filter: blur(32px) saturate(190%);
-            border: 1px solid var(--login-card-border);
-            border-radius: 28px;
-            padding: 34px 28px;
-            box-shadow: var(--login-card-shadow);
+            background-color: var(--ios-page-bg);
+            color: var(--ios-text);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
             position: relative;
-            overflow: hidden;
-            animation: iosLoginCardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            overflow-x: hidden;
         }
 
-        @keyframes iosLoginCardEntrance {
+        body::before {
+            content: '';
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ios-login-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--ios-card-bg);
+            backdrop-filter: blur(40px) saturate(190%);
+            -webkit-backdrop-filter: blur(40px) saturate(190%);
+            border: 0.5px solid var(--ios-card-border);
+            border-radius: 32px;
+            padding: 26px 24px 26px;
+            box-shadow: var(--ios-card-shadow);
+            position: relative;
+            z-index: 1;
+            animation: iosCardAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+        }
+
+        @keyframes iosCardAppear {
             0% {
                 opacity: 0;
-                transform: scale(0.94) translateY(20px);
-                filter: blur(8px);
+                transform: scale(0.95) translateY(16px);
             }
             100% {
                 opacity: 1;
                 transform: scale(1) translateY(0);
-                filter: blur(0);
             }
         }
 
-        .login-transition-overlay {
+        .ios-sheet-grabber {
+            width: 36px;
+            height: 5px;
+            border-radius: 9999px;
+            background: var(--ios-grabber);
+            margin: 0 auto 16px;
+            transition: background 0.3s ease;
+        }
+
+        .ios-theme-circle-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--ios-circle-btn-bg);
+            border: none;
+            color: var(--ios-circle-btn-color);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.2s ease;
+            outline: none;
+        }
+
+        .ios-theme-circle-btn:active {
+            transform: scale(0.9);
+        }
+
+        .ios-app-icon-squircle {
+            width: 72px;
+            height: 72px;
+            border-radius: 22.37%;
+            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 14px;
+            box-shadow: 0 10px 24px rgba(0, 122, 255, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.45);
+        }
+
+        .ios-app-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            margin-bottom: 2px;
+            color: var(--ios-text);
+        }
+
+        .ios-app-subtitle {
+            font-size: 13px;
+            color: var(--ios-subtext);
+            margin-bottom: 0;
+        }
+
+        .ios-grouped-cells {
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--ios-grouped-bg);
+            margin-bottom: 20px;
+            border: 0.5px solid transparent;
+            transition: background 0.25s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .ios-grouped-cells:focus-within {
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.25);
+            border-color: var(--ios-accent);
+        }
+
+        .ios-cell {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            min-height: 48px;
+        }
+
+        .ios-cell-icon {
+            font-size: 18px;
+            color: var(--ios-subtext);
+            width: 24px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ios-cell input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 15px;
+            color: var(--ios-text);
+            font-family: inherit;
+        }
+
+        .ios-cell input::placeholder {
+            color: var(--ios-placeholder);
+        }
+
+        .ios-cell-divider {
+            height: 0.5px;
+            background: var(--ios-divider);
+            margin-left: 52px;
+        }
+
+        .ios-eye-btn {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--ios-subtext);
+            padding: 4px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .ios-btn-primary {
+            background: var(--ios-accent);
+            color: #FFFFFF !important;
+            border: none;
+            border-radius: 14px;
+            height: 48px;
+            width: 100%;
+            font-size: 15.5px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3);
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        .ios-btn-primary:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+
+        .ios-btn-tinted {
+            background: var(--ios-btn-tint-bg);
+            color: var(--ios-btn-tint-color) !important;
+            border: none;
+            border-radius: 14px;
+            height: 44px;
+            width: 100%;
+            font-size: 13.5px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        .ios-btn-tinted:active {
+            transform: scale(0.97);
+            opacity: 0.85;
+        }
+
+        .ios-footnote {
+            font-size: 11.5px;
+            color: var(--ios-subtext);
+            text-align: center;
+            margin-top: 20px;
+            letter-spacing: -0.1px;
+        }
+
+        .ios-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(10, 12, 17, 0.85);
+            background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(28px) saturate(180%);
             -webkit-backdrop-filter: blur(28px) saturate(180%);
             z-index: 99999;
@@ -207,157 +388,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .login-transition-overlay.show {
+        .ios-overlay.show {
             opacity: 1;
             pointer-events: all;
-        }
-
-        .login-pulse-badge {
-            width: 72px;
-            height: 72px;
-            border-radius: 22px;
-            background: #FFFFFF;
-            color: #0F172A;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
-            margin-bottom: 20px;
-            animation: loginAppPulse 1.2s ease-in-out infinite;
-        }
-
-        @keyframes loginAppPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.08); opacity: 0.88; }
-        }
-
-        .app-logo-badge {
-            width: 66px;
-            height: 66px;
-            border-radius: 20px;
-            background: var(--login-logo-bg);
-            border: 1px solid var(--login-logo-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            color: var(--login-logo-color);
-            margin: 0 auto 16px;
-            box-shadow: var(--login-logo-shadow);
-            transition: all 0.3s ease;
-        }
-
-        .input-group-ios {
-            background-color: var(--login-input-bg);
-            border: 1px solid var(--login-input-border);
-            border-radius: 14px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            transition: all 0.2s ease;
-        }
-
-        .input-group-ios:focus-within {
-            border-color: #007AFF !important;
-            box-shadow: 0 0 0 3.5px rgba(0, 122, 255, 0.22) !important;
-        }
-
-        .input-group-ios .input-icon {
-            padding: 0 14px;
-            color: var(--login-placeholder);
-            font-size: 17px;
-        }
-
-        .input-group-ios input {
-            background: transparent;
-            border: none;
-            outline: none;
-            padding: 13px 14px 13px 0;
-            color: var(--login-input-text);
-            width: 100%;
-            font-size: 14.5px;
-            font-weight: 500;
-        }
-
-        .input-group-ios input::placeholder {
-            color: var(--login-placeholder);
-        }
-
-        .btn-ios-login-primary {
-            background-color: var(--login-btn-primary-bg);
-            color: var(--login-btn-primary-color) !important;
-            border: none;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 14.5px;
-            padding: 13px 20px;
-            width: 100%;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-ios-login-primary:hover {
-            opacity: 0.92;
-            transform: translateY(-1px);
-        }
-
-        .btn-ios-login-primary:active {
-            transform: scale(0.98);
-        }
-
-        .btn-ios-login-secondary {
-            background-color: var(--login-btn-sec-bg);
-            color: var(--login-btn-sec-color) !important;
-            border: 1px solid var(--login-btn-sec-border);
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 13px;
-            padding: 11px 18px;
-            width: 100%;
-            transition: all 0.2s ease;
-        }
-
-        .btn-ios-login-secondary:hover {
-            opacity: 0.92;
-            transform: translateY(-1px);
-        }
-
-        .btn-ios-login-secondary:active {
-            transform: scale(0.98);
-        }
-
-        .login-label {
-            color: var(--login-label-color);
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: -0.1px;
-            margin-bottom: 6px;
-            display: block;
         }
     </style>
 </head>
 <body>
 
-    <div class="login-card">
-        
-        <!-- Header Mode Switcher -->
-        <div class="d-flex justify-content-end mb-2">
-            <button onclick="toggleTheme()" class="btn btn-ios-secondary btn-sm py-1 px-2 d-flex align-items-center" title="Mode Terang / Gelap">
+    <div class="ios-login-card">
+        <div class="ios-sheet-grabber"></div>
+
+        <div class="d-flex justify-content-end mb-1">
+            <button type="button" onclick="toggleTheme()" class="ios-theme-circle-btn" title="Mode Tampilan">
                 <i class="theme-toggle-icon fs-6"></i>
             </button>
         </div>
 
-        <!-- App Brand -->
         <div class="text-center mb-4">
-            <div class="app-logo-badge">
+            <div class="ios-app-icon-squircle">
                 <i class="bi bi-wallet2"></i>
             </div>
-            <h4 class="fw-bold mb-1" style="letter-spacing: -0.5px; color: var(--boss-text-primary);">DompetKu</h4>
-            <p class="text-secondary small mb-0">Sistem Kas & Pencatatan Mahasiswa (PBW)</p>
+            <h4 class="ios-app-title">DompetKu</h4>
+            <p class="ios-app-subtitle">Sistem Kas Mahasiswa Gunadarma</p>
         </div>
 
         <?php if (!empty($error_msg)): ?>
@@ -372,61 +428,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <!-- Form Login -->
         <form action="login.php" method="POST" id="loginForm">
             <input type="hidden" name="client_is_mobile" id="clientIsMobile" value="0">
-            
-            <div class="mb-3">
-                <label class="login-label">Username</label>
-                <div class="input-group-ios">
-                    <span class="input-icon"><i class="bi bi-person-fill"></i></span>
-                    <input type="text" name="username" id="inputUsername" placeholder="Masukkan username" required autofocus>
-                </div>
-            </div>
 
-            <div class="mb-4">
-                <label class="login-label">Kata Sandi</label>
-                <div class="input-group-ios">
-                    <span class="input-icon"><i class="bi bi-lock-fill"></i></span>
-                    <input type="password" name="password" id="inputPassword" placeholder="Masukkan password" required>
-                    <button type="button" class="btn btn-sm text-secondary border-0 pe-3" onclick="togglePassVisibility()" tabindex="-1">
+            <div class="ios-grouped-cells">
+                <div class="ios-cell">
+                    <div class="ios-cell-icon"><i class="bi bi-person"></i></div>
+                    <input type="text" name="username" id="inputUsername" placeholder="Username" required autofocus>
+                </div>
+                <div class="ios-cell-divider"></div>
+                <div class="ios-cell">
+                    <div class="ios-cell-icon"><i class="bi bi-lock"></i></div>
+                    <input type="password" name="password" id="inputPassword" placeholder="Kata Sandi" required>
+                    <button type="button" class="ios-eye-btn" onclick="togglePassVisibility()" tabindex="-1">
                         <i class="bi bi-eye" id="toggleEyeIcon"></i>
                     </button>
                 </div>
             </div>
 
-            <button type="submit" class="btn-ios-login-primary mb-3">
-                <i class="bi bi-box-arrow-in-right me-1"></i> Masuk ke DompetKu
+            <button type="submit" class="ios-btn-primary">
+                <i class="bi bi-arrow-right-circle-fill"></i> Masuk
             </button>
 
-            <!-- Quick Demo 1-Click Login Button -->
-            <button type="button" class="btn-ios-login-secondary" onclick="autoFillDemoLogin()">
-                <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Masuk Cepat Demo (Firdaus Dhuha)
+            <button type="button" class="ios-btn-tinted" onclick="autoFillDemoLogin()">
+                <i class="bi bi-lightning-charge-fill"></i> Akses Cepat Demo
             </button>
-
         </form>
 
-        <div class="mt-4 pt-3 border-top border-secondary border-opacity-10 text-center text-secondary small" style="font-size: 11px;">
-            Terhubung ke Database MySQL • Password Hash Bcrypt
+        <div class="ios-footnote">
+            Database MySQL & SQLite • Bcrypt Hash
         </div>
-
     </div>
 
-    <!-- Login Verification Transition Overlay -->
-    <div id="loginTransitionOverlay" class="login-transition-overlay">
+    <div id="loginTransitionOverlay" class="ios-overlay">
         <div class="text-center px-4">
-            <div class="login-pulse-badge mx-auto">
+            <div class="ios-app-icon-squircle mx-auto mb-3" style="width: 64px; height: 64px; font-size: 28px;">
                 <i class="bi bi-wallet2"></i>
             </div>
-            <h5 class="fw-bold text-white mb-1" style="letter-spacing: -0.3px;">Memverifikasi Sesi...</h5>
-            <p class="text-white text-opacity-75 small mb-3">Menyiapkan Dashboard Finansial Mahasiswa Gunadarma</p>
+            <h5 class="fw-bold text-white mb-1">Memverifikasi Sesi...</h5>
+            <p class="text-white text-opacity-75 small mb-3">Menyiapkan Dashboard DompetKu</p>
             <div class="spinner-border text-white text-opacity-75" style="width: 2rem; height: 2rem; border-width: 2.5px;" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -444,11 +490,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function triggerLoginTransition() {
             const overlay = document.getElementById('loginTransitionOverlay');
-            const card = document.querySelector('.login-card');
+            const card = document.querySelector('.ios-login-card');
             if (card) {
                 card.style.transform = 'scale(0.96)';
                 card.style.opacity = '0.7';
-                card.style.filter = 'blur(6px)';
             }
             if (overlay) {
                 overlay.classList.add('show');

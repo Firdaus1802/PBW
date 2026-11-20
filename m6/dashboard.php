@@ -1,15 +1,11 @@
 <?php
-// dashboard.php - Dedicated Desktop Dashboard (Apple iOS / macOS Pro Design System)
-// Mendukung Mode Gelap (Dark Titanium) & Mode Terang (Cupertino Light), Fullset PBW Gunadarma
 require_once __DIR__ . '/config/koneksi.php';
 
-// Proteksi Login
 if (!isset($_SESSION['user_id'])) {
     header("Location: " . base_url("login.php"));
     exit;
 }
 
-// Auto-deteksi perangkat: Jika diakses lewat browser HP (smartphone), otomatis lempar ke index.php
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $is_mobile_device = preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini)/i', $ua);
 if ($is_mobile_device && !isset($_GET['desktop'])) {
@@ -17,7 +13,6 @@ if ($is_mobile_device && !isset($_GET['desktop'])) {
     exit;
 }
 
-// Notifikasi pesan
 $alert_msg = '';
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] === 'added') {
@@ -53,7 +48,6 @@ if (isset($_GET['msg'])) {
     }
 }
 
-// 1. Tambah Transaksi (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) {
     $id_kategori = (int)$_POST['id_kategori'];
     $tanggal     = sanitize($_POST['tanggal']);
@@ -74,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) 
     }
 }
 
-// 2. Sunting Transaksi (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) {
     $id_trx      = (int)$_POST['id_transaksi'];
     $id_kategori = (int)$_POST['id_kategori'];
@@ -96,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) 
     }
 }
 
-// 3. Hapus Transaksi (GET)
 if (isset($_GET['hapus_trx'])) {
     $id_trx_del = (int)$_GET['hapus_trx'];
     if ($id_trx_del > 0) {
@@ -107,7 +99,6 @@ if (isset($_GET['hapus_trx'])) {
     }
 }
 
-// 4. Tambah Kategori (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     $nama_kategori = sanitize($_POST['nama_kategori']);
     $jenis         = sanitize($_POST['jenis']);
@@ -125,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     }
 }
 
-// 8. Hapus Kategori (GET)
 if (isset($_GET['hapus_kat'])) {
     $id_kat = (int)$_GET['hapus_kat'];
     if ($id_kat > 0) {
@@ -141,7 +131,6 @@ if (isset($_GET['hapus_kat'])) {
     }
 }
 
-// Statistik Kas
 $stmt_stat = $pdo->query("SELECT 
     COALESCE(SUM(CASE WHEN jenis = 'Pemasukan' THEN jumlah ELSE 0 END), 0) AS total_masuk,
     COALESCE(SUM(CASE WHEN jenis = 'Pengeluaran' THEN jumlah ELSE 0 END), 0) AS total_keluar
@@ -151,10 +140,8 @@ $total_masuk  = (float)$stat['total_masuk'];
 $total_keluar = (float)$stat['total_keluar'];
 $saldo_akhir  = $total_masuk - $total_keluar;
 
-// Rasio Akumulasi Kas
 $rasio_simpan = ($total_masuk > 0) ? max(0, min(100, round(($saldo_akhir / $total_masuk) * 100))) : 0;
 
-// Data Transaksi
 $sql_trx = "SELECT t.*, k.nama_kategori, k.icon 
             FROM transaksi t 
             JOIN kategori k ON t.id_kategori = k.id_kategori 
@@ -162,14 +149,12 @@ $sql_trx = "SELECT t.*, k.nama_kategori, k.icon
 $daftar_transaksi = $pdo->query($sql_trx)->fetchAll();
 $transaksi_list = $daftar_transaksi; // Alias for compatibility
 
-// Data Master Kategori
 $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
                               FROM kategori k 
                               LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori 
                               GROUP BY k.id_kategori 
                               ORDER BY k.jenis ASC, k.nama_kategori ASC")->fetchAll();
 
-// Data Donut Chart & Rekapitulasi Beban per Kategori
 $kat_expenses = $pdo->query("SELECT 
                                 k.id_kategori,
                                 k.nama_kategori, 
@@ -196,27 +181,26 @@ foreach ($kat_expenses as $ke) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DompetKu Pro Dashboard — Universitas Gunadarma</title>
-    <!-- Bootstrap 5.3.3 CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Authentic iOS Theme CSS -->
+    
     <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
-    <!-- Chart.js via CDN -->
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Theme Script Persistence -->
+    
     <script src="<?= base_url('assets/js/theme.js') ?>"></script>
 
     <script>
-        // Auto-redirect jika resolusi layar adalah smartphone (< 992px)
         if (window.innerWidth < 992 && !window.location.search.includes('desktop=1')) {
             window.location.replace("<?= base_url('index.php') ?>");
         }
     </script>
 
     <style>
-        /* ==================== APPLE PRO / LUXURY SLATE DESIGN TOKENS ==================== */
-        /* Elegant Monochrome & Slate with Subtle Muted Tones (No Jamet, No Generic Blue-White) */
+        
+        
         :root, [data-theme="dark"], [data-bs-theme="dark"] {
             --app-bg: #090A0F;
             --app-sidebar-bg: #0E1017;
@@ -235,7 +219,7 @@ foreach ($kat_expenses as $ke) {
             --app-table-border: rgba(255, 255, 255, 0.06);
             --app-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
             
-            /* Executive Hero Card Tokens (Dark Titanium) */
+            
             --app-hero-bg: #141620;
             --app-hero-border: rgba(255, 255, 255, 0.10);
             --app-hero-text: #F8FAFC;
@@ -245,7 +229,7 @@ foreach ($kat_expenses as $ke) {
             --app-hero-btn-color: #090A0F;
             --app-hero-btn-border: transparent;
             
-            /* Primary Button & Active Nav */
+            
             --app-btn-primary-bg: #FFFFFF;
             --app-btn-primary-text: #090A0F;
             --app-nav-active-bg: rgba(255, 255, 255, 0.10);
@@ -254,7 +238,7 @@ foreach ($kat_expenses as $ke) {
             --app-brand-icon-bg: #1C1E2A;
             --app-brand-icon-color: #F8FAFC;
             
-            /* Subdued, Mature Financial Accents */
+            
             --ios-green: #10B981;
             --ios-red: #F43F5E;
             --ios-orange: #F59E0B;
@@ -262,7 +246,7 @@ foreach ($kat_expenses as $ke) {
         }
 
         [data-theme="light"], [data-bs-theme="light"] {
-            --app-bg: #F8F9FA; /* Soft warm oyster gray, high-end and gentle on eyes */
+            --app-bg: #F8F9FA; 
             --app-sidebar-bg: #FFFFFF;
             --app-topbar-bg: rgba(255, 255, 255, 0.90);
             --app-card-bg: #FFFFFF;
@@ -279,7 +263,7 @@ foreach ($kat_expenses as $ke) {
             --app-table-border: #E9ECEF;
             --app-shadow: 0 4px 18px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
             
-            /* Executive Hero Card Tokens (Clean Porcelain) */
+            
             --app-hero-bg: #FFFFFF;
             --app-hero-border: #E9ECEF;
             --app-hero-text: #1A1D20;
@@ -289,7 +273,7 @@ foreach ($kat_expenses as $ke) {
             --app-hero-btn-color: #FFFFFF;
             --app-hero-btn-border: transparent;
             
-            /* Primary Button & Active Nav */
+            
             --app-btn-primary-bg: #1A1D20;
             --app-btn-primary-text: #FFFFFF;
             --app-nav-active-bg: #1A1D20;
@@ -298,7 +282,7 @@ foreach ($kat_expenses as $ke) {
             --app-brand-icon-bg: #1A1D20;
             --app-brand-icon-color: #FFFFFF;
             
-            /* Subdued, Mature Financial Accents */
+            
             --ios-green: #059669;
             --ios-red: #E11D48;
             --ios-orange: #D97706;
@@ -325,7 +309,7 @@ foreach ($kat_expenses as $ke) {
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Zero window-level scrollbar - pure native app feel */
+            overflow: hidden; 
             background-color: var(--app-bg);
             color: var(--app-text-primary);
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
@@ -340,7 +324,7 @@ foreach ($kat_expenses as $ke) {
             background-color: var(--app-bg);
         }
 
-        /* ==================== APPLE macOS SIDEBAR (PINNED & STATIONARY) ==================== */
+        
         .macos-sidebar {
             width: 260px;
             height: 100vh;
@@ -436,7 +420,7 @@ foreach ($kat_expenses as $ke) {
             flex-shrink: 0;
         }
 
-        /* ==================== RIGHT VIEWPORT WRAPPER ==================== */
+        
         .macos-main-viewport {
             flex: 1;
             height: 100vh;
@@ -447,7 +431,7 @@ foreach ($kat_expenses as $ke) {
             position: relative;
         }
 
-        /* ==================== APPLE macOS TOPBAR (PINNED) ==================== */
+        
         .macos-topbar {
             height: 64px;
             flex-shrink: 0;
@@ -480,7 +464,7 @@ foreach ($kat_expenses as $ke) {
             width: 320px;
         }
 
-        /* ==================== INDEPENDENT RIGHT SCROLL CONTAINER ==================== */
+        
         .macos-content-area {
             flex: 1;
             height: calc(100vh - 64px);
@@ -505,7 +489,7 @@ foreach ($kat_expenses as $ke) {
             background: rgba(142, 142, 147, 0.5);
         }
 
-        /* ==================== APPLE iOS STAT CARDS ==================== */
+        
         .ios-kpi-card {
             background-color: var(--app-card-bg);
             border: 1px solid var(--app-border);
@@ -538,7 +522,7 @@ foreach ($kat_expenses as $ke) {
             transition: all 0.2s ease;
         }
 
-        /* ==================== APPLE HERO CARD (ADAPTIVE TO LIGHT/DARK) ==================== */
+        
         .ios-hero-banner {
             background: var(--app-hero-bg);
             border-radius: 20px;
@@ -589,7 +573,7 @@ foreach ($kat_expenses as $ke) {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* ==================== CONTENT CARDS ==================== */
+        
         .ios-section-card {
             background-color: var(--app-card-bg);
             border: 1px solid var(--app-border);
@@ -615,7 +599,7 @@ foreach ($kat_expenses as $ke) {
             color: var(--app-text-primary);
         }
 
-        /* ==================== HIGH-CONTRAST TABLES ==================== */
+        
         .table-ios {
             margin-bottom: 0;
             color: var(--app-text-primary);
@@ -668,7 +652,7 @@ foreach ($kat_expenses as $ke) {
             letter-spacing: -0.2px;
         }
 
-        /* ==================== BUTTONS ==================== */
+        
         .btn-ios-primary {
             background-color: var(--app-btn-primary-bg);
             color: var(--app-btn-primary-text) !important;
@@ -702,7 +686,7 @@ foreach ($kat_expenses as $ke) {
             border-color: var(--app-border-hover);
         }
 
-        /* Modal Styles */
+        
         .modal-ios-content {
             background-color: var(--app-card-bg);
             border: 1px solid var(--app-border);
@@ -729,7 +713,7 @@ foreach ($kat_expenses as $ke) {
             color: var(--app-text-primary);
         }
 
-        /* ==================== AUTHENTIC APPLE iOS SLIDING SEGMENTED CONTROL ==================== */
+        
         .ios-segmented-control-slider-wrap {
             position: relative;
             display: flex;
@@ -793,8 +777,7 @@ foreach ($kat_expenses as $ke) {
             font-weight: 700;
         }
 
-
-        /* ==================== AUTHENTIC APPLE iOS SLIDING SEGMENTED CONTROL ==================== */
+        
         .ios-segmented-control-slider-wrap {
             position: relative;
             display: flex;
@@ -858,8 +841,7 @@ foreach ($kat_expenses as $ke) {
             font-weight: 700;
         }
 
-
-        /* ==================== APPLE CINEMATIC ENTRANCE ANIMATIONS ==================== */
+        
         @keyframes macosRevealFadeOut {
             0% { opacity: 1; pointer-events: all; }
             100% { opacity: 0; pointer-events: none; visibility: hidden; }
@@ -953,7 +935,6 @@ foreach ($kat_expenses as $ke) {
 </head>
 <body>
 
-<!-- Native macOS Reveal Overlay (Dissolves Smoothly on Load) -->
 <div class="macos-reveal-overlay">
     <div class="macos-reveal-spinner">
         <i class="bi bi-wallet2"></i>
@@ -962,10 +943,10 @@ foreach ($kat_expenses as $ke) {
 
 <div class="macos-app-layout">
 
-    <!-- ==================== APPLE macOS SIDEBAR ==================== -->
+    
     <div class="macos-sidebar d-none d-lg-flex">
         
-        <!-- Brand Header -->
+        
         <div class="brand-header">
             <div class="brand-icon">
                 <i class="bi bi-wallet2"></i>
@@ -976,7 +957,7 @@ foreach ($kat_expenses as $ke) {
             </div>
         </div>
 
-        <!-- Navigation Links -->
+        
         <div class="my-3 flex-grow-1">
             <div class="sidebar-heading">Menu Utama</div>
             
@@ -1005,7 +986,7 @@ foreach ($kat_expenses as $ke) {
             </a>
         </div>
 
-        <!-- Bottom Student Info Card -->
+        
         <div class="sidebar-footer-card">
             <div class="d-flex align-items-center gap-2">
                 <div class="rounded-circle bg-primary bg-opacity-20 text-primary d-flex align-items-center justify-content-center fw-bold" style="width: 34px; height: 34px; font-size: 13px;">
@@ -1022,37 +1003,37 @@ foreach ($kat_expenses as $ke) {
 
     </div>
 
-    <!-- ==================== MAIN CONTENT WRAPPER ==================== -->
+    
     <div class="macos-main-viewport">
 
-        <!-- Topbar Header -->
+        
         <div class="macos-topbar">
             
-            <!-- Left Search Input -->
+            
             <div class="position-relative">
                 <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary" style="font-size: 13px;"></i>
                 <input type="text" id="topSearchInput" class="topbar-search-input" placeholder="Cari transaksi kas..." onkeyup="filterAdminTransaksi()">
             </div>
 
-            <!-- Right Controls -->
+            
             <div class="d-flex align-items-center gap-3">
                 
-                <!-- Live Realtime WIB Clock Pill -->
+                
                 <span class="badge border px-3 py-2 fw-semibold d-none d-md-flex align-items-center gap-2" id="wibClockBadge" style="background-color: var(--app-card-inner); border-color: var(--app-border) !important; color: var(--app-text-secondary); font-size: 12px;">
                     <span class="rounded-circle bg-success" style="width: 7px; height: 7px; display: inline-block;"></span>
                     <span id="liveTimeText"><?= tgl_indo(date('Y-m-d')) ?> • <?= date('H:i:s') ?> WIB</span>
                 </span>
 
-                <!-- THEME TOGGLE BUTTON (DARK TITANIUM & CUPERTINO LIGHT) -->
+                
                 <button type="button" onclick="toggleTheme()" class="btn btn-ios-secondary py-1 px-3 d-flex align-items-center gap-2" title="Ganti Mode Terang / Gelap">
                     <i class="theme-toggle-icon fs-6"></i>
                     <span class="d-none d-sm-inline small fw-semibold" id="themeModeText">Mode Tampilan</span>
                 </button>
 
-                <!-- Divider -->
+                
                 <div style="width: 1px; height: 26px; background-color: var(--app-border);"></div>
 
-                <!-- User Profile & Logout -->
+                
                 <div class="d-flex align-items-center gap-2">
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small" style="color: var(--app-text-primary); line-height: 1.1;">
@@ -1070,14 +1051,14 @@ foreach ($kat_expenses as $ke) {
 
         </div>
 
-        <!-- Main Body Content Area -->
+        
         <div class="macos-content-area">
             
             <div id="overviewSection" class="scroll-target mb-4">
                 
                 <?= $alert_msg ?>
 
-                <!-- Page Title & Top Actions -->
+                
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                     <div>
                         <h4 class="fw-bold mb-1" style="letter-spacing: -0.5px; color: var(--app-text-primary);">
@@ -1100,10 +1081,10 @@ foreach ($kat_expenses as $ke) {
                     </div>
                 </div>
 
-                <!-- ==================== 4 APPLE iOS STAT CARDS ==================== -->
+                
                 <div class="row g-3 mb-4">
 
-                    <!-- 1. TOTAL PEMASUKAN -->
+                    
                     <div class="col-sm-6 col-xl-3">
                         <div class="ios-kpi-card">
                             <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1121,7 +1102,7 @@ foreach ($kat_expenses as $ke) {
                         </div>
                     </div>
 
-                    <!-- 2. TOTAL PENGELUARAN -->
+                    
                     <div class="col-sm-6 col-xl-3">
                         <div class="ios-kpi-card">
                             <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1139,7 +1120,7 @@ foreach ($kat_expenses as $ke) {
                         </div>
                     </div>
 
-                    <!-- 3. SALDO KAS FISIK -->
+                    
                     <div class="col-sm-6 col-xl-3">
                         <div class="ios-kpi-card">
                             <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1157,7 +1138,7 @@ foreach ($kat_expenses as $ke) {
                         </div>
                     </div>
 
-                    <!-- 4. TOTAL MUTASI TRANSAKSI -->
+                    
                     <div class="col-sm-6 col-xl-3">
                         <div class="ios-kpi-card">
                             <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1177,7 +1158,7 @@ foreach ($kat_expenses as $ke) {
 
                 </div>
 
-                <!-- ==================== RINGKASAN ARUS KAS FORMAL ==================== -->
+                
                 <div class="ios-hero-banner mb-4">
                     <div class="row align-items-center g-3">
                         <div class="col-12 col-md-8">
@@ -1205,10 +1186,10 @@ foreach ($kat_expenses as $ke) {
 
             </div>
 
-            <!-- ==================== 2 CHARTS ROW (APPLE FINTECH STYLE) ==================== -->
+            
             <div class="row g-4 mb-4">
 
-                <!-- Left: Line Chart (Arus Kas) -->
+                
                 <div class="col-12 col-lg-8">
                     <div class="ios-section-card h-100 mb-0">
                         <div class="ios-card-header">
@@ -1224,7 +1205,7 @@ foreach ($kat_expenses as $ke) {
                     </div>
                 </div>
 
-                <!-- Right: Donut Chart (Proporsi Pengeluaran) -->
+                
                 <div class="col-12 col-lg-4">
                     <div class="ios-section-card h-100 mb-0">
                         <div class="ios-card-header">
@@ -1255,7 +1236,7 @@ foreach ($kat_expenses as $ke) {
 
             </div>
 
-            <!-- ==================== SECTION 1: RIWAYAT TRANSAKSI KAS ==================== -->
+            
             <div id="transaksiSection" class="ios-section-card mb-4">
                 <div class="ios-card-header">
                     <div>
@@ -1329,7 +1310,7 @@ foreach ($kat_expenses as $ke) {
                 </div>
             </div>
 
-            <!-- ==================== SECTION 2: MASTER KATEGORI ==================== -->
+            
             <div id="kategoriSection" class="ios-section-card mb-4">
                 <div class="ios-card-header">
                     <div>
@@ -1375,7 +1356,7 @@ foreach ($kat_expenses as $ke) {
                 </div>
             </div>
 
-            <!-- ==================== SECTION 4: REKAP LAPORAN KAS (EXECUTIVE SUMMARY & BREAKDOWN) ==================== -->
+            
             <div id="laporanSection" class="ios-section-card mb-4">
                 <div class="ios-card-header">
                     <div>
@@ -1396,7 +1377,7 @@ foreach ($kat_expenses as $ke) {
                 </div>
 
                 <div class="p-4">
-                    <!-- Ringkasan Eksekutif 5 Indikator Finansial -->
+                    
                     <div class="row g-3 mb-4">
                         <div class="col-6 col-md">
                             <div class="p-3 rounded-3" style="background-color: var(--app-card-inner); border: 1px solid var(--app-border);">
@@ -1430,7 +1411,7 @@ foreach ($kat_expenses as $ke) {
                         </div>
                     </div>
 
-                    <!-- Tabel Rekapitulasi Beban per Kategori (Aggregated Breakdown) -->
+                    
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <span class="fw-bold small text-uppercase" style="color: var(--app-text-secondary); letter-spacing: 0.5px;">
                             Distribusi Pengeluaran Berdasarkan Kategori
@@ -1510,7 +1491,6 @@ foreach ($kat_expenses as $ke) {
 
 </div>
 
-<!-- ==================== MODAL TAMBAH TRANSAKSI ==================== -->
 <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="modalTambahLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-ios-content p-3">
@@ -1582,7 +1562,6 @@ foreach ($kat_expenses as $ke) {
     </div>
 </div>
 
-<!-- ==================== MODAL SUN TING / EDIT TRANSAKSI ==================== -->
 <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-ios-content p-3">
@@ -1656,7 +1635,6 @@ foreach ($kat_expenses as $ke) {
     </div>
 </div>
 
-<!-- ==================== MODAL TAMBAH KATEGORI ==================== -->
 <div class="modal fade" id="modalTambahKat" tabindex="-1" aria-labelledby="modalTambahKatLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-ios-content p-3">
@@ -1711,11 +1689,9 @@ foreach ($kat_expenses as $ke) {
     </div>
 </div>
 
-<!-- Bootstrap 5 JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Real-Time Search Transaksi
     function filterAdminTransaksi() {
         const query = (document.getElementById('topSearchInput').value || '').toLowerCase().trim();
         const rows = document.querySelectorAll('.admin-trx-row');
@@ -1730,7 +1706,6 @@ foreach ($kat_expenses as $ke) {
         });
     }
 
-    // Sliding Segmented Control Toggle untuk Modal Catat Transaksi
     function selectDeskModalJenis(jenis) {
         const slider = document.getElementById('modalDeskJenisSlider');
         const btnExp = document.getElementById('btnModalDeskPengeluaran');
@@ -1751,7 +1726,6 @@ foreach ($kat_expenses as $ke) {
         filterKategoriDropdown(jenis);
     }
 
-    // Filter Kategori Dropdown Tambah
     function filterKategoriDropdown(jenisTerpilih) {
         const select = document.getElementById('selectKategori');
         const options = select.querySelectorAll('option');
@@ -1771,7 +1745,6 @@ foreach ($kat_expenses as $ke) {
         });
     }
 
-    // Modal Edit Transaksi
     function openEditModal(trx) {
         if (!trx) return;
         document.getElementById('editIdTransaksi').value = trx.id_transaksi;
@@ -1805,7 +1778,6 @@ foreach ($kat_expenses as $ke) {
         });
     }
 
-    // Real-Time WIB Clock
     function updateWibClock() {
         const now = new Date();
         const options = { 
@@ -1825,7 +1797,6 @@ foreach ($kat_expenses as $ke) {
     }
     setInterval(updateWibClock, 1000);
 
-    // ==================== APPLE macOS KINETIC SMOOTH SCROLL ENGINE ====================
     let isKineticScrolling = false;
 
     function smoothScrollToTarget(container, targetY, duration = 460) {
@@ -1834,7 +1805,6 @@ foreach ($kat_expenses as $ke) {
         const diff = targetY - startY;
         const startTime = performance.now();
 
-        // Authentic Apple Quartic Ease-Out curve (rapid acceleration, silky-soft landing)
         function easeOutQuart(t) {
             return 1 - Math.pow(1 - t, 4);
         }
@@ -1856,7 +1826,6 @@ foreach ($kat_expenses as $ke) {
         requestAnimationFrame(step);
     }
 
-    // Sidebar Smooth Navigation - Left stays stationary, only the right pane smoothly scrolls!
     document.querySelectorAll('.macos-sidebar .nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -1870,7 +1839,6 @@ foreach ($kat_expenses as $ke) {
                     document.querySelectorAll('.macos-sidebar .nav-link').forEach(l => l.classList.remove('active'));
                     this.classList.add('active');
 
-                    // Smoothly scroll only the right content container with Apple physics
                     const targetTop = Math.max(0, targetEl.offsetTop - 15);
                     smoothScrollToTarget(contentArea, targetTop, 460);
 
@@ -1880,7 +1848,6 @@ foreach ($kat_expenses as $ke) {
         });
     });
 
-    // Auto-sync active link while scrolling the right panel
     const rightContentArea = document.querySelector('.macos-content-area');
     const navSections = ['overviewSection', 'transaksiSection', 'kategoriSection', 'laporanSection'];
     
@@ -1909,7 +1876,6 @@ foreach ($kat_expenses as $ke) {
         }, { passive: true });
     }
 
-    // ==================== INTERACTIVE CHART.JS (APPLE iOS / macOS STYLE) ====================
     let cashflowChart = null;
     let categoryChart = null;
 
@@ -1921,7 +1887,6 @@ foreach ($kat_expenses as $ke) {
         Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         Chart.defaults.color = textColor;
 
-        // 1. Line Chart Arus Kas
         const ctxLine = document.getElementById('chartCashflowIos');
         if (ctxLine) {
             if (cashflowChart) cashflowChart.destroy();
@@ -1988,7 +1953,6 @@ foreach ($kat_expenses as $ke) {
             });
         }
 
-        // 2. Donut Chart Proporsi Pengeluaran
         const ctxDonut = document.getElementById('chartCategoryIos');
         if (ctxDonut) {
             if (categoryChart) categoryChart.destroy();
@@ -2035,12 +1999,10 @@ foreach ($kat_expenses as $ke) {
         }
     }
 
-    // Inisialisasi Chart saat halaman siap
     document.addEventListener('DOMContentLoaded', () => {
         renderCharts();
     });
 
-    // Observer untuk re-render chart saat theme di-toggle
     const observer = new MutationObserver(() => {
         renderCharts();
     });
