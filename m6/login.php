@@ -415,14 +415,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-3">
                     <label class="form-label-custom">Username</label>
                     <div class="auth-input-group">
-                        <input type="text" name="username" id="inputUsername" placeholder="Masukkan username" required autofocus>
+                        <input type="text" name="username" id="inputUsername" placeholder="Masukkan username" autocomplete="username" required autofocus>
                     </div>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label-custom">Kata Sandi</label>
                     <div class="auth-input-group">
-                        <input type="password" name="password" id="inputPassword" placeholder="Masukkan kata sandi" required>
+                        <input type="password" name="password" id="inputPassword" placeholder="Masukkan kata sandi" autocomplete="current-password" required>
                         <button type="button" class="auth-eye-btn" onclick="togglePassVisibility()" tabindex="-1">
                             <i class="bi bi-eye" id="toggleEyeIcon"></i>
                         </button>
@@ -432,11 +432,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn-auth-primary">
                     <span>Masuk ke Sistem</span>
                     <i class="bi bi-arrow-right"></i>
-                </button>
-
-                <button type="button" class="btn-auth-secondary" onclick="autoFillDemoLogin()">
-                    <i class="bi bi-person-check"></i>
-                    <span>Akses Cepat Demo</span>
                 </button>
             </form>
 
@@ -476,18 +471,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (overlay) {
                 overlay.classList.add('show');
             }
-        }
-
-        function autoFillDemoLogin() {
-            document.getElementById('inputUsername').value = 'admin';
-            document.getElementById('inputPassword').value = 'admin123';
-            if (document.getElementById('clientIsMobile')) {
-                document.getElementById('clientIsMobile').value = (window.innerWidth < 992) ? '1' : '0';
-            }
-            triggerLoginTransition();
-            setTimeout(function() {
-                document.getElementById('loginForm').submit();
-            }, 300);
         }
 
         document.getElementById('loginForm').addEventListener('submit', function() {
