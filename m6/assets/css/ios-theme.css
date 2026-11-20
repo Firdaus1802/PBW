@@ -9,7 +9,7 @@
   --boss-text-primary: #1C1C1E;
   --boss-text-secondary: #636366;
   --boss-text-muted: #8E8E93;
-  --boss-blue: #007AFF;
+  --boss-blue: #1C1C1E;
   --boss-green: #34C759;
   --boss-red: #FF3B30;
   --boss-input-bg: rgba(118, 118, 128, 0.12);
@@ -67,7 +67,7 @@
   --boss-text-primary: #FFFFFF;
   --boss-text-secondary: #CBD5E1;
   --boss-text-muted: #8E8E93;
-  --boss-blue: #0A84FF;
+  --boss-blue: #FFFFFF;
   --boss-green: #30D158;
   --boss-red: #FF453A;
   --boss-input-bg: rgba(255, 255, 255, 0.08);
@@ -209,10 +209,17 @@ body {
 }
 
 .ios-circle-btn-primary {
-  background: #007AFF !important;
-  color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #090A0F !important;
   border: none !important;
-  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="light"] .ios-circle-btn-primary,
+[data-bs-theme="light"] .ios-circle-btn-primary {
+  background: #1C1C1E !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
 @keyframes iosSlideInRight {
@@ -813,7 +820,7 @@ body {
   align-items: center !important;
   justify-content: center !important;
   border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
-  background: #007AFF !important;
+  background: #1C1E2A !important;
   transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
@@ -847,4 +854,456 @@ body {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.artosku-hero-banner {
+  background: linear-gradient(180deg, #356846 0%, #295337 100%);
+  color: #FFFFFF !important;
+  border-radius: 26px;
+  padding: 20px 20px 16px 20px;
+  box-shadow: 0 12px 32px rgba(41, 83, 55, 0.28);
+  position: relative;
+  overflow: hidden;
+}
+
+.artosku-hero-banner * {
+  color: #FFFFFF;
+}
+
+.artosku-greeting-text {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.artosku-icon-btn {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.artosku-icon-btn:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.artosku-bell-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 7px;
+  height: 7px;
+  background-color: #FF453A;
+  border-radius: 50%;
+  border: 1.5px solid #356846;
+}
+
+.artosku-capsule-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.artosku-capsule-row::-webkit-scrollbar {
+  display: none;
+}
+
+.artosku-capsule-pill {
+  border: none;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.artosku-capsule-pill.active {
+  background: #FFFFFF !important;
+  color: #295337 !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.artosku-capsule-pill:active {
+  transform: scale(0.94);
+}
+
+.artosku-sub-label {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.artosku-main-balance {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+}
+
+.artosku-eye-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.artosku-eye-btn:hover,
+.artosku-eye-btn:active {
+  color: #FFFFFF;
+}
+
+.artosku-trend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.artosku-piggy-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.artosku-piggy-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.artosku-subcard {
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.artosku-subcard:active {
+  transform: scale(0.96);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.artosku-subcard-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.artosku-subcard-title {
+  display: block;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-weight: 500;
+}
+
+.artosku-subcard-val {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+
+.artosku-subcard-val.text-income {
+  color: #5BFFA0 !important;
+}
+
+.artosku-subcard-val.text-expense {
+  color: #FFA59E !important;
+}
+
+.artosku-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.artosku-dot.active {
+  width: 16px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+}
+
+.artosku-action-box {
+  background: var(--boss-card);
+  border: 1px solid var(--boss-border);
+  border-radius: 20px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.artosku-action-tile {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 14px;
+  transition: background 0.15s ease;
+}
+
+.artosku-action-tile:active {
+  background: var(--boss-card-inner);
+}
+
+.artosku-action-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.artosku-action-icon.ai-bot-icon {
+  background: rgba(53, 104, 70, 0.14);
+  color: #356846;
+}
+
+[data-theme="dark"] .artosku-action-icon.ai-bot-icon {
+  background: rgba(53, 104, 70, 0.25);
+  color: #6CE296;
+}
+
+.artosku-action-icon.scan-icon {
+  background: var(--boss-stat-bg);
+  color: var(--boss-text-primary);
+}
+
+.artosku-action-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--boss-text-primary);
+  line-height: 1.2;
+}
+
+.artosku-action-sub {
+  font-size: 10px;
+  color: var(--boss-text-secondary);
+}
+
+.artosku-ai-switch {
+  width: 26px;
+  height: 14px;
+  background: #356846;
+  border-radius: 9999px;
+  position: relative;
+  display: inline-block;
+}
+
+.artosku-ai-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  background: #FFFFFF;
+  border-radius: 50%;
+}
+
+.artosku-ai-status {
+  font-size: 9.5px;
+  color: #356846;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .artosku-ai-status {
+  color: #6CE296;
+}
+
+.artosku-action-divider {
+  width: 1px;
+  height: 38px;
+  background: var(--boss-border);
+  margin: 0 4px;
+}
+
+.ios-capsule-fab {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #356846 0%, #274E34 100%) !important;
+  color: #FFFFFF !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 8px 22px rgba(53, 104, 70, 0.45) !important;
+  transform: translateY(-14px) !important;
+  border: 3.5px solid var(--boss-bg) !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease !important;
+  flex: 0 0 52px !important;
+  cursor: pointer !important;
+}
+
+.ios-capsule-fab:active {
+  transform: translateY(-10px) scale(0.92) !important;
+}
+
+.ios-capsule-fab i {
+  font-size: 24px !important;
+  color: #FFFFFF !important;
+}
+
+.artosku-modal-sheet {
+  border-radius: 28px !important;
+  border: 1px solid var(--boss-border) !important;
+  background: var(--boss-card) !important;
+}
+
+.artosku-modal-header {
+  background: linear-gradient(180deg, #356846 0%, #2A5437 100%);
+  color: #FFFFFF;
+  padding: 10px 16px 0 16px;
+}
+
+.artosku-sheet-grabber {
+  width: 38px;
+  height: 4.5px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 9999px;
+  margin: 4px auto 14px auto;
+}
+
+.artosku-modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.artosku-modal-close:hover,
+.artosku-modal-close:active {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.artosku-modal-badge {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.artosku-quick-badge-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.artosku-quick-badge-btn:active {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.artosku-amount-input-box {
+  background: var(--boss-input-bg);
+  border: 1.5px solid var(--boss-border-active);
+  border-radius: 18px;
+  padding: 12px 16px;
+}
+
+.artosku-rp-prefix {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--boss-text-muted);
+  margin-right: 8px;
+}
+
+.artosku-amount-input {
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--boss-text-primary);
+  width: 100%;
+  outline: none;
+  letter-spacing: -0.5px;
+}
+
+.artosku-amount-input::placeholder {
+  color: var(--boss-text-muted);
+}
+
+.artosku-btn-submit {
+  background: #356846;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 16px;
+  padding: 13px;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(53, 104, 70, 0.35);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.artosku-btn-submit:active {
+  transform: scale(0.98);
+  background: #2B5539;
 }

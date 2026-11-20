@@ -276,78 +276,132 @@ foreach ($kat_expenses as $ke) {
                     <div class="col-12 col-md-5 col-lg-4">
                         
                         
-                        <div class="wallet-hero-card mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="text-white-50 small fw-medium text-uppercase" style="letter-spacing: 0.8px; font-size: 10.5px;">Sisa Saldo Kas</span>
-                                <span class="ios-badge-mono px-3 py-1 bg-white bg-opacity-10 text-white border-0" id="liveClockWidget">
-                                    <?= tgl_indo(date('Y-m-d')) ?> • <?= date('H:i:s') ?> WIB
-                                </span>
+                        <div class="artosku-hero-banner mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="artosku-greeting-text">Hi, <?= htmlspecialchars(explode(' ', trim($_SESSION['nama_lengkap'] ?? 'Ketua'))[0]) ?> 👋</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="artosku-icon-btn" onclick="toggleTheme()" title="Ganti Mode Tampilan">
+                                        <i class="theme-toggle-icon"></i>
+                                    </button>
+                                    <div class="artosku-icon-btn position-relative" title="Sesi Terautentikasi">
+                                        <i class="bi bi-bell-fill"></i>
+                                        <span class="artosku-bell-dot"></span>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <h1 class="display-6 fw-bold text-white mb-3" style="letter-spacing: -1px;">
-                                <?= format_rupiah($saldo_akhir) ?>
-                            </h1>
 
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <div class="p-2 px-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.08);">
-                                        <div class="d-flex align-items-center gap-2 text-white-50" style="font-size: 11px;">
-                                            <div class="hero-stat-badge-income">
-                                                <i class="bi bi-arrow-down-left"></i>
-                                            </div>
-                                            <span>Pemasukan</span>
+                            <div class="artosku-capsule-row mb-3">
+                                <button type="button" class="artosku-capsule-pill" onclick="filterByBulanIni()">
+                                    <?= date('F Y') ?>
+                                </button>
+                                <button type="button" class="artosku-capsule-pill active" id="pillTotalSaldo" onclick="showHeroView('saldo')">
+                                    Total Saldo
+                                </button>
+                                <button type="button" class="artosku-capsule-pill" id="pillWidget" onclick="showHeroView('widget')">
+                                    Widget
+                                </button>
+                            </div>
+
+                            <div id="artoskuBalanceSec">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <span class="artosku-sub-label">Total kekayaan / Saldo kas</span>
+                                        <div class="d-flex align-items-center gap-2 mt-1">
+                                            <h1 class="artosku-main-balance mb-0" id="mainBalanceDisplay">
+                                                <?= format_rupiah($saldo_akhir) ?>
+                                            </h1>
+                                            <button type="button" class="artosku-eye-btn" onclick="toggleBalanceVisibility()" title="Sembunyikan / Tampilkan Saldo">
+                                                <i class="bi bi-eye-fill" id="toggleBalanceEye"></i>
+                                            </button>
                                         </div>
-                                        <div class="fw-bold mt-1" style="font-size: 14px; color: #30D158;">+ <?= format_rupiah($total_masuk) ?></div>
+                                        <div class="artosku-trend-badge mt-1">
+                                            <i class="bi bi-arrow-up-right"></i>
+                                            <span>+<?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 100 ?>% surplus kas aktif</span>
+                                        </div>
+                                    </div>
+                                    <div class="artosku-piggy-badge">
+                                        <div class="artosku-piggy-circle">
+                                            <i class="bi bi-piggy-bank-fill"></i>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="col-6">
-                                    <div class="p-2 px-3 rounded-3" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.08);">
-                                        <div class="d-flex align-items-center gap-2 text-white-50" style="font-size: 11px;">
-                                            <div class="hero-stat-badge-expense">
-                                                <i class="bi bi-arrow-up-right"></i>
+                                <div class="row g-2 artosku-subcards-row mb-2">
+                                    <div class="col-6">
+                                        <div class="artosku-subcard" onclick="setInstantFilter('Pemasukan', 1)">
+                                            <div class="artosku-subcard-icon">
+                                                <i class="bi bi-wallet2 text-white"></i>
                                             </div>
-                                            <span>Pengeluaran</span>
+                                            <div>
+                                                <span class="artosku-subcard-title">Wallet / Masuk</span>
+                                                <strong class="artosku-subcard-val text-income">+ <?= format_rupiah($total_masuk) ?></strong>
+                                            </div>
                                         </div>
-                                        <div class="fw-bold mt-1" style="font-size: 14px; color: #FF453A;">- <?= format_rupiah($total_keluar) ?></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="artosku-subcard" onclick="setInstantFilter('Pengeluaran', 2)">
+                                            <div class="artosku-subcard-icon">
+                                                <i class="bi bi-gem text-white"></i>
+                                            </div>
+                                            <div>
+                                                <span class="artosku-subcard-title">Aset / Keluar</span>
+                                                <strong class="artosku-subcard-val text-expense">- <?= format_rupiah($total_keluar) ?></strong>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div id="artoskuWidgetSec" style="display: none;" class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="artosku-sub-label">Grafik Arus Kas Bulanan</span>
+                                    <span class="badge bg-white bg-opacity-20 text-white" style="font-size: 10px;"><?= tgl_indo(date('Y-m-d')) ?></span>
+                                </div>
+                                <div style="height: 120px; position: relative;">
+                                    <canvas id="chartCashflowHero"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-center gap-1 mt-2">
+                                <span class="artosku-dot active" id="dotHero1"></span>
+                                <span class="artosku-dot" id="dotHero2"></span>
+                                <span class="artosku-dot" id="dotHero3"></span>
                             </div>
                         </div>
 
-                        
-                        <div class="ios-smart-entry-card mb-3">
-                            <div class="d-flex align-items-center justify-content-between mb-2 px-1">
-                                <div class="d-flex align-items-center gap-1">
-                                    <i class="bi bi-lightning-charge text-primary" style="font-size: 12px;"></i>
-                                    <span class="fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.6px; color: var(--boss-text-muted);">Pencatatan Cepat</span>
-                                </div>
-                                <span class="badge bg-secondary bg-opacity-10 text-secondary fw-semibold" style="font-size: 10px; border-radius: 6px;">Fitur Instan</span>
-                            </div>
-
-                            <div class="ios-smart-entry-box">
-                                
-                                <div class="ios-smart-entry-half" onclick="startVoiceInput()" title="Bicara untuk mencatat transaksi">
-                                    <div class="ios-smart-icon-badge" style="background: rgba(88, 86, 214, 0.12); color: #5856D6;">
-                                        <i class="bi bi-mic-fill" id="smartVoiceMicIcon"></i>
-                                    </div>
-                                    <div class="text-start">
-                                        <div class="fw-bold" style="color: var(--boss-text-primary); font-size: 13.5px; line-height: 1.2;">Input Suara</div>
-                                        <small class="text-secondary" style="font-size: 10.5px;">Dikte transaksi</small>
+                        <div class="artosku-action-box mb-3">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-7 pe-2">
+                                    <div class="artosku-action-tile" onclick="startVoiceInput()" title="Bicara untuk mencatat transaksi">
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <div class="artosku-action-icon ai-bot-icon">
+                                                <i class="bi bi-robot" id="smartVoiceMicIcon"></i>
+                                            </div>
+                                            <div>
+                                                <div class="artosku-action-title">Mode AI</div>
+                                                <span class="artosku-action-sub">Aktif — cukup ngomong</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1 mt-1">
+                                            <span class="artosku-ai-switch"></span>
+                                            <span class="artosku-ai-status">AI Aktif</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                
-                                <div class="ios-smart-entry-divider"></div>
+                                <div class="col-auto">
+                                    <div class="artosku-action-divider"></div>
+                                </div>
 
-                                
-                                <div class="ios-smart-entry-half" onclick="triggerReceiptScan()" title="Pindai foto struk pembayaran">
-                                    <div class="ios-smart-icon-badge" style="background: rgba(0, 122, 255, 0.12); color: #007AFF;">
-                                        <i class="bi bi-camera-fill"></i>
-                                    </div>
-                                    <div class="text-start">
-                                        <div class="fw-bold" style="color: var(--boss-text-primary); font-size: 13.5px; line-height: 1.2;">Foto Struk</div>
-                                        <small class="text-secondary" style="font-size: 10.5px;">Pindai bukti bayar</small>
+                                <div class="col ps-2 text-center">
+                                    <div class="artosku-action-tile" onclick="triggerReceiptScan()" title="Pindai foto struk pembayaran">
+                                        <div class="artosku-action-icon scan-icon mx-auto mb-1">
+                                            <i class="bi bi-qr-code-scan"></i>
+                                        </div>
+                                        <div class="artosku-action-title" style="font-size: 12.5px;">Scan</div>
+                                        <span class="artosku-action-sub">Foto Struk</span>
                                     </div>
                                 </div>
                             </div>
@@ -751,11 +805,8 @@ foreach ($kat_expenses as $ke) {
             </button>
 
             
-            <button type="button" class="ios-capsule-item" id="tabBtnCatat" data-bs-toggle="modal" data-bs-target="#modalTambah" title="Catat Transaksi Cepat">
-                <div class="capsule-icon-wrap">
-                    <i class="bi bi-plus-lg tab-icon"></i>
-                </div>
-                <span class="capsule-label">Catat</span>
+            <button type="button" class="ios-capsule-fab" id="tabBtnCatat" data-bs-toggle="modal" data-bs-target="#modalTambah" title="Catat Transaksi Cepat">
+                <i class="bi bi-plus-lg"></i>
             </button>
 
             
@@ -784,31 +835,37 @@ foreach ($kat_expenses as $ke) {
     
     <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="modalTambahLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content ios-modal p-2">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold" id="modalTambahLabel" style="letter-spacing: -0.3px;">Catat Transaksi Baru</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content artosku-modal-sheet p-0 overflow-hidden">
+                <div class="artosku-modal-header">
+                    <div class="artosku-sheet-grabber"></div>
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                        <div>
+                            <h5 class="fw-bold text-white mb-0" id="modalTambahLabel">Tambah Transaksi</h5>
+                            <small class="text-white-50" style="font-size: 11px;">Pencatatan Keuangan Terintegrasi</small>
+                        </div>
+                        <button type="button" class="artosku-modal-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between px-2 pb-3">
+                        <span class="artosku-modal-badge">
+                            <i class="bi bi-calendar3 me-1"></i> <?= tgl_indo(date('Y-m-d')) ?>
+                        </span>
+                        <div class="d-flex align-items-center gap-1">
+                            <button type="button" class="artosku-quick-badge-btn" onclick="startVoiceInput()" title="Input Suara">
+                                <i class="bi bi-mic-fill"></i> Suara
+                            </button>
+                            <button type="button" class="artosku-quick-badge-btn" onclick="triggerReceiptScan()" title="Scan Struk">
+                                <i class="bi bi-camera-fill"></i> 1 struk
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 
                 <form action="index.php" method="POST" id="formCatatTransaksi">
-                    <div class="modal-body py-3">
-                        
-                        
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded-3" style="background-color: var(--boss-stat-bg); border: 1px solid var(--boss-border);">
-                            <span class="text-secondary small fw-medium">Pilihan Cepat:</span>
-                            <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-ios-secondary btn-sm py-1 px-2 d-flex align-items-center gap-1" onclick="startVoiceInput()">
-                                    <i class="bi bi-mic-fill" style="color: #5856D6;"></i> <span style="font-size: 11.5px;">Bicara</span>
-                                </button>
-                                <button type="button" class="btn btn-ios-secondary btn-sm py-1 px-2 d-flex align-items-center gap-1" onclick="triggerReceiptScan()">
-                                    <i class="bi bi-camera-fill text-primary"></i> <span style="font-size: 11.5px;">Foto Struk</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        
+                    <div class="modal-body p-3 p-md-4">
                         <div class="mb-3 text-center">
-                            <label class="form-label text-secondary small fw-medium d-block mb-1">Jenis Transaksi</label>
                             <div class="ios-segmented-control-slider-wrap" id="modalJenisSegmentedWrap">
                                 <div class="ios-segmented-slider" id="modalJenisSlider"></div>
                                 <button type="button" class="ios-segmented-tab-btn active type-expense" id="btnModalPengeluaran" onclick="selectModalJenis('Pengeluaran')">
@@ -821,12 +878,17 @@ foreach ($kat_expenses as $ke) {
                             <input type="hidden" name="jenis" id="hiddenInputJenis" value="Pengeluaran">
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label text-secondary small fw-medium">Nominal (Rp) <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text border-0 fw-bold text-secondary" style="background-color: var(--boss-input-bg); color: var(--boss-text-muted);">Rp</span>
-                                <input type="number" name="jumlah" id="inputJumlah" class="ios-input" placeholder="Contoh: 25000" min="100" step="100" required>
+                        <div class="artosku-amount-input-box mb-3">
+                            <span class="text-secondary small fw-medium d-block mb-1">Nominal Transaksi (Rp) <span class="text-danger">*</span></span>
+                            <div class="d-flex align-items-center">
+                                <span class="artosku-rp-prefix">Rp</span>
+                                <input type="number" name="jumlah" id="inputJumlah" class="artosku-amount-input" placeholder="0" min="100" step="100" required>
                             </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small fw-medium">Nama Transaksi / Pengeluaran <span class="text-danger">*</span></label>
+                            <input type="text" name="judul" id="inputJudul" class="ios-input" placeholder="Contoh: Makan Siang / Kiriman Ortu" required>
                         </div>
 
                         <div class="mb-3">
@@ -842,25 +904,20 @@ foreach ($kat_expenses as $ke) {
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-secondary small fw-medium">Keterangan / Judul <span class="text-danger">*</span></label>
-                            <input type="text" name="judul" id="inputJudul" class="ios-input" placeholder="Contoh: Makan Siang / Kiriman Ortu" required>
-                        </div>
-
-                        <div class="mb-3">
                             <label class="form-label text-secondary small fw-medium">Tanggal Transaksi <span class="text-danger">*</span></label>
                             <input type="date" name="tanggal" id="inputTanggal" class="ios-input" value="<?= date('Y-m-d') ?>" required>
                         </div>
 
-                        <div class="mb-2">
-                            <label class="form-label text-secondary small fw-medium">Catatan Tambahan (Opsional)</label>
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small fw-medium">Catatan / Detail Item (Opsional)</label>
                             <textarea name="catatan" id="inputCatatan" class="ios-input" rows="2" placeholder="Detail pengeluaran..."></textarea>
                         </div>
 
-                    </div>
-                    <div class="modal-footer border-0 pt-0">
-                        <button type="button" class="btn btn-ios-secondary w-100 mb-1" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" name="tambah_transaksi" class="btn btn-ios-primary w-100">
-                            Simpan Transaksi
+                        <button type="submit" name="tambah_transaksi" class="artosku-btn-submit w-100">
+                            Simpan Transaksi →
+                        </button>
+                        <button type="button" class="btn btn-link text-secondary text-decoration-none w-100 mt-2 small" data-bs-dismiss="modal">
+                            Batal
                         </button>
                     </div>
                 </form>
@@ -1007,6 +1064,89 @@ foreach ($kat_expenses as $ke) {
 
             window.location.hash = tabName;
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let isBalanceHidden = false;
+        const realBalanceText = '<?= format_rupiah($saldo_akhir) ?>';
+        function toggleBalanceVisibility() {
+            const el = document.getElementById('mainBalanceDisplay');
+            const eye = document.getElementById('toggleBalanceEye');
+            if (!el || !eye) return;
+            isBalanceHidden = !isBalanceHidden;
+            if (isBalanceHidden) {
+                el.innerText = 'Rp ••••••••';
+                eye.className = 'bi bi-eye-slash-fill';
+            } else {
+                el.innerText = realBalanceText;
+                eye.className = 'bi bi-eye-fill';
+            }
+        }
+
+        let chartCashflowHeroInstance = null;
+        function showHeroView(view) {
+            const pSaldo = document.getElementById('pillTotalSaldo');
+            const pWidget = document.getElementById('pillWidget');
+            const secSaldo = document.getElementById('artoskuBalanceSec');
+            const secWidget = document.getElementById('artoskuWidgetSec');
+            const dot1 = document.getElementById('dotHero1');
+            const dot2 = document.getElementById('dotHero2');
+
+            if (view === 'widget') {
+                if (pSaldo) pSaldo.classList.remove('active');
+                if (pWidget) pWidget.classList.add('active');
+                if (secSaldo) secSaldo.style.display = 'none';
+                if (secWidget) secWidget.style.display = 'block';
+                if (dot1) dot1.classList.remove('active');
+                if (dot2) dot2.classList.add('active');
+                initHeroWidgetChart();
+            } else {
+                if (pWidget) pWidget.classList.remove('active');
+                if (pSaldo) pSaldo.classList.add('active');
+                if (secWidget) secWidget.style.display = 'none';
+                if (secSaldo) secSaldo.style.display = 'block';
+                if (dot2) dot2.classList.remove('active');
+                if (dot1) dot1.classList.add('active');
+            }
+        }
+
+        function initHeroWidgetChart() {
+            const ctx = document.getElementById('chartCashflowHero');
+            if (!ctx || chartCashflowHeroInstance) return;
+            chartCashflowHeroInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Masuk', 'Keluar', 'Sisa'],
+                    datasets: [{
+                        data: [<?= $total_masuk ?>, <?= $total_keluar ?>, <?= $saldo_akhir ?>],
+                        backgroundColor: [
+                            'rgba(91, 255, 160, 0.95)',
+                            'rgba(255, 165, 158, 0.95)',
+                            'rgba(255, 255, 255, 0.95)'
+                        ],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { display: false, beginAtZero: true },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: 'rgba(255,255,255,0.85)', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function filterByBulanIni() {
+            const searchInput = document.getElementById('instantSearchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                setInstantFilter('Semua', 0);
+            }
         }
 
         function selectModalJenis(jenis) {

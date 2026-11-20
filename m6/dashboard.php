@@ -147,7 +147,7 @@ $sql_trx = "SELECT t.*, k.nama_kategori, k.icon
             JOIN kategori k ON t.id_kategori = k.id_kategori 
             ORDER BY t.tanggal DESC, t.id_transaksi DESC";
 $daftar_transaksi = $pdo->query($sql_trx)->fetchAll();
-$transaksi_list = $daftar_transaksi; // Alias for compatibility
+$transaksi_list = $daftar_transaksi;
 
 $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
                               FROM kategori k 
@@ -1853,7 +1853,7 @@ foreach ($kat_expenses as $ke) {
     
     if (rightContentArea) {
         rightContentArea.addEventListener('scroll', () => {
-            if (isKineticScrolling) return; // Prevent jitter while auto-scrolling
+            if (isKineticScrolling) return;
 
             let current = 'overviewSection';
             const scrollPos = rightContentArea.scrollTop + 80;
