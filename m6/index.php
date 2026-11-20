@@ -313,29 +313,27 @@ foreach ($kat_expenses as $ke) {
                 
                 <div class="artosku-hero-banner mb-3" id="iosHeroHeader">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="artosku-greeting-text">Hi, <?= htmlspecialchars(explode(' ', trim($_SESSION['nama_lengkap'] ?? 'Ketua'))[0]) ?> 👋</span>
+                        <div>
+                            <div class="artosku-greeting-text mb-0">Hi, <?= htmlspecialchars(explode(' ', trim($_SESSION['nama_lengkap'] ?? 'Ketua'))[0]) ?> 👋</div>
+                            <small class="text-secondary" style="font-size: 11px; font-weight: 500;">Bulan Berjalan • <?= date('F Y') ?></small>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <button type="button" class="artosku-icon-btn" onclick="toggleTheme()" title="Ganti Mode Tampilan">
                                 <i class="theme-toggle-icon"></i>
                             </button>
-                            <div class="artosku-icon-btn position-relative" title="Sesi Terautentikasi">
+                            <button type="button" class="artosku-icon-btn position-relative" data-bs-toggle="modal" data-bs-target="#modalNotifikasi" title="Notifikasi Keuangan">
                                 <i class="bi bi-bell-fill"></i>
                                 <span class="artosku-bell-dot"></span>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
                     <div class="artosku-capsule-row mb-3">
-                        <button type="button" class="artosku-capsule-pill" onclick="filterByBulanIni()">
-                            <?= date('F Y') ?>
-                        </button>
                         <button type="button" class="artosku-capsule-pill active" id="pillTotalSaldo" onclick="scrollToHeroSlide(0)">
                             Total Saldo
                         </button>
                         <button type="button" class="artosku-capsule-pill" id="pillWidget" onclick="scrollToHeroSlide(1)">
-                            Widget
+                            Grafik
                         </button>
                         <button type="button" class="artosku-capsule-pill" id="pillStats" onclick="scrollToHeroSlide(2)">
                             Statistik
@@ -373,9 +371,9 @@ foreach ($kat_expenses as $ke) {
                                         <div class="artosku-subcard-icon" style="background: rgba(52, 199, 89, 0.15); border-color: rgba(52, 199, 89, 0.25);">
                                             <i class="bi bi-wallet2" style="color: var(--boss-green);"></i>
                                         </div>
-                                        <div>
-                                            <span class="artosku-subcard-title">Wallet / Masuk</span>
-                                            <strong class="artosku-subcard-val text-income">+ <?= format_rupiah($total_masuk) ?></strong>
+                                        <div class="min-w-0 flex-grow-1">
+                                            <span class="artosku-subcard-title text-truncate">Wallet / Masuk</span>
+                                            <strong class="artosku-subcard-val text-income text-truncate">+ <?= format_rupiah($total_masuk) ?></strong>
                                         </div>
                                     </div>
                                 </div>
@@ -384,9 +382,9 @@ foreach ($kat_expenses as $ke) {
                                         <div class="artosku-subcard-icon" style="background: rgba(255, 59, 48, 0.15); border-color: rgba(255, 59, 48, 0.25);">
                                             <i class="bi bi-gem" style="color: var(--boss-red);"></i>
                                         </div>
-                                        <div>
-                                            <span class="artosku-subcard-title">Aset / Keluar</span>
-                                            <strong class="artosku-subcard-val text-expense">- <?= format_rupiah($total_keluar) ?></strong>
+                                        <div class="min-w-0 flex-grow-1">
+                                            <span class="artosku-subcard-title text-truncate">Aset / Keluar</span>
+                                            <strong class="artosku-subcard-val text-expense text-truncate">- <?= format_rupiah($total_keluar) ?></strong>
                                         </div>
                                     </div>
                                 </div>
@@ -446,37 +444,28 @@ foreach ($kat_expenses as $ke) {
                     <div id="contentSectionSaldo" class="hero-content-section active">
                         <div class="row g-3">
                         <div class="col-12">
-                            <div class="artosku-action-box mb-3">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-7 pe-2">
-                                        <div class="artosku-action-tile" onclick="startVoiceInput()" title="Bicara untuk mencatat transaksi">
-                                            <div class="d-flex align-items-center gap-2 mb-1">
-                                                <div class="artosku-action-icon ai-bot-icon">
-                                                    <i class="bi bi-robot" id="smartVoiceMicIcon"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="artosku-action-title">Mode AI</div>
-                                                    <span class="artosku-action-sub">Aktif — cukup ngomong</span>
-                                                </div>
+                            <div class="artosku-action-box mb-3" style="padding: 10px 14px; border-radius: 18px;">
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center gap-2 cursor-pointer p-1" onclick="startVoiceInput()" title="Bicara untuk catat transaksi">
+                                            <div class="artosku-action-icon ai-bot-icon" style="width: 36px; height: 36px; min-width: 36px; border-radius: 11px;">
+                                                <i class="bi bi-mic-fill" id="smartVoiceMicIcon" style="font-size: 16px;"></i>
                                             </div>
-                                            <div class="d-flex align-items-center gap-1 mt-1">
-                                                <span class="artosku-ai-switch"></span>
-                                                <span class="artosku-ai-status">AI Aktif</span>
+                                            <div class="min-w-0">
+                                                <div class="fw-bold" style="font-size: 13px; color: var(--boss-text-primary);">Suara AI</div>
+                                                <small class="text-secondary d-block text-truncate" style="font-size: 10px;">Contoh: "Makan 30k"</small>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-auto">
-                                        <div class="artosku-action-divider"></div>
-                                    </div>
-
-                                    <div class="col ps-2 text-center">
-                                        <div class="artosku-action-tile" onclick="triggerReceiptScan()" title="Pindai foto struk pembayaran">
-                                            <div class="artosku-action-icon scan-icon mx-auto mb-1">
-                                                <i class="bi bi-qr-code-scan"></i>
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center gap-2 cursor-pointer p-1 border-start border-secondary border-opacity-10 ps-2" onclick="triggerReceiptScan()" title="Pindai foto struk">
+                                            <div class="artosku-action-icon scan-icon" style="width: 36px; height: 36px; min-width: 36px; border-radius: 11px;">
+                                                <i class="bi bi-qr-code-scan" style="font-size: 16px;"></i>
                                             </div>
-                                            <div class="artosku-action-title" style="font-size: 12.5px;">Scan</div>
-                                            <span class="artosku-action-sub">Foto Struk</span>
+                                            <div class="min-w-0">
+                                                <div class="fw-bold" style="font-size: 13px; color: var(--boss-text-primary);">Scan Struk</div>
+                                                <small class="text-secondary d-block text-truncate" style="font-size: 10px;">Auto-deteksi foto</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -989,8 +978,8 @@ foreach ($kat_expenses as $ke) {
                     <div class="artosku-sheet-grabber"></div>
                     <div class="d-flex justify-content-between align-items-center mb-2 px-2">
                         <div>
-                            <h5 class="fw-bold text-white mb-0" id="modalTambahLabel">Tambah Transaksi</h5>
-                            <small class="text-white-50" style="font-size: 11px;">Pencatatan Keuangan Terintegrasi</small>
+                            <h5 class="fw-bold mb-0" id="modalTambahLabel" style="color: var(--boss-text-primary);">Tambah Transaksi</h5>
+                            <small class="text-secondary" style="font-size: 11px;">Pencatatan Keuangan Terintegrasi</small>
                         </div>
                         <button type="button" class="artosku-modal-close" data-bs-dismiss="modal" aria-label="Close">
                             <i class="bi bi-x-lg"></i>
@@ -1035,6 +1024,13 @@ foreach ($kat_expenses as $ke) {
                                 <span class="artosku-rp-prefix">Rp</span>
                                 <input type="number" name="jumlah" id="inputJumlah" class="artosku-amount-input" placeholder="0" min="100" step="100" required>
                             </div>
+                            <div class="d-flex flex-wrap gap-1 mt-2">
+                                <button type="button" class="btn btn-sm btn-ios-secondary py-1 px-2" style="font-size: 11px; border-radius: 8px;" onclick="addQuickAmount(10000)">+10k</button>
+                                <button type="button" class="btn btn-sm btn-ios-secondary py-1 px-2" style="font-size: 11px; border-radius: 8px;" onclick="addQuickAmount(20000)">+20k</button>
+                                <button type="button" class="btn btn-sm btn-ios-secondary py-1 px-2" style="font-size: 11px; border-radius: 8px;" onclick="addQuickAmount(50000)">+50k</button>
+                                <button type="button" class="btn btn-sm btn-ios-secondary py-1 px-2" style="font-size: 11px; border-radius: 8px;" onclick="addQuickAmount(100000)">+100k</button>
+                                <button type="button" class="btn btn-sm btn-ios-secondary py-1 px-2 text-danger ms-auto" style="font-size: 11px; border-radius: 8px;" onclick="clearQuickAmount()">Reset</button>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -1077,6 +1073,106 @@ foreach ($kat_expenses as $ke) {
     </div>
 
     
+    <div class="modal fade" id="modalNotifikasi" tabindex="-1" aria-labelledby="modalNotifikasiLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content artosku-modal-sheet p-0 overflow-hidden">
+                <div class="artosku-modal-header">
+                    <div class="artosku-sheet-grabber"></div>
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="ios-icon-box" style="width: 34px; height: 34px; border-radius: 10px; background: rgba(255, 69, 58, 0.12); color: #FF453A;">
+                                <i class="bi bi-bell-fill"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-0" id="modalNotifikasiLabel" style="color: var(--boss-text-primary); font-size: 16px;">Pusat Notifikasi</h5>
+                                <small class="text-secondary" style="font-size: 11px;">Aktivitas Keuangan & Status Akun</small>
+                            </div>
+                        </div>
+                        <button type="button" class="artosku-modal-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-body p-3">
+                    <div class="ios-card-group mb-3">
+                        <div class="ios-list-row p-3">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(52, 199, 89, 0.15); color: #34C759;">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Kondisi Finansial Terjaga</strong>
+                                        <span class="text-secondary" style="font-size: 10px;">Baru saja</span>
+                                    </div>
+                                    <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
+                                        Sisa saldo kas aktif Anda saat ini <strong><?= format_rupiah($saldo_akhir) ?></strong> dengan rasio tabungan <strong><?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 100 ?>%</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ios-list-row p-3">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(0, 122, 255, 0.15); color: #007AFF;">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Sinkronisasi Database Riil</strong>
+                                        <span class="text-secondary" style="font-size: 10px;">Hari ini</span>
+                                    </div>
+                                    <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
+                                        Sebanyak <?= count($daftar_transaksi) ?> mutasi keuangan telah terhubung dan tersimpan aman di database MySQL Laragon.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ios-list-row p-3">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(255, 149, 0, 0.15); color: #FF9500;">
+                                    <i class="bi bi-calendar-event-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Pengingat Kas Mahasiswa</strong>
+                                        <span class="text-secondary" style="font-size: 10px;">Bulan <?= date('F Y') ?></span>
+                                    </div>
+                                    <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
+                                        Pastikan seluruh bukti pengeluaran dan pemasukan dicatat tepat waktu sebelum penutupan buku bulan ini.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ios-list-row p-3">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(88, 86, 214, 0.15); color: #5856D6;">
+                                    <i class="bi bi-shield-lock-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Sesi Akun Aktif</strong>
+                                        <span class="text-secondary" style="font-size: 10px;">Terverifikasi</span>
+                                    </div>
+                                    <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
+                                        Login sebagai <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Firdaus Dhuha Prabowo') ?>. Sesi aktif hingga 30 hari.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-ios-secondary w-100 py-2.5 rounded-3 fw-semibold" data-bs-dismiss="modal">
+                        Tutup Notifikasi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="modalTambahKat" tabindex="-1" aria-labelledby="modalTambahKatLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ios-modal p-2">
@@ -1582,6 +1678,47 @@ foreach ($kat_expenses as $ke) {
 
             recognition.start();
 
+            function parseIndoVoiceAmount(transcript) {
+                const text = transcript.toLowerCase();
+                const jtMatch = text.match(/(\d+(?:[.,]\d+)?)\s*(?:jt|juta)/);
+                if (jtMatch) return Math.round(parseFloat(jtMatch[1].replace(',', '.')) * 1000000);
+
+                const rbMatch = text.match(/(\d+(?:[.,]\d+)?)\s*(?:k|rb|ribu)/);
+                if (rbMatch) return Math.round(parseFloat(rbMatch[1].replace(',', '.')) * 1000);
+
+                const wordsMap = [
+                    { w: 'setengah juta', v: 500000 }, { w: 'satu juta', v: 1000000 }, { w: 'dua juta', v: 2000000 },
+                    { w: 'tiga juta', v: 3000000 }, { w: 'lima juta', v: 5000000 }, { w: 'seratus lima puluh ribu', v: 150000 },
+                    { w: 'seratus ribu', v: 100000 }, { w: 'dua ratus ribu', v: 200000 }, { w: 'tiga ratus ribu', v: 300000 },
+                    { w: 'lima ratus ribu', v: 500000 }, { w: 'sembilan puluh ribu', v: 90000 }, { w: 'delapan puluh ribu', v: 80000 },
+                    { w: 'tujuh puluh lima ribu', v: 75000 }, { w: 'tujuh puluh ribu', v: 70000 }, { w: 'enam puluh lima ribu', v: 65000 },
+                    { w: 'enam puluh ribu', v: 60000 }, { w: 'lima puluh lima ribu', v: 55000 }, { w: 'lima puluh ribu', v: 50000 },
+                    { w: 'empat puluh lima ribu', v: 45000 }, { w: 'empat puluh ribu', v: 40000 }, { w: 'tiga puluh lima ribu', v: 35000 },
+                    { w: 'tiga puluh ribu', v: 30000 }, { w: 'dua puluh lima ribu', v: 25000 }, { w: 'dua puluh ribu', v: 20000 },
+                    { w: 'sembilan belas ribu', v: 19000 }, { w: 'delapan belas ribu', v: 18000 }, { w: 'tujuh belas ribu', v: 17000 },
+                    { w: 'enam belas ribu', v: 16000 }, { w: 'lima belas ribu', v: 15000 }, { w: 'empat belas ribu', v: 14000 },
+                    { w: 'tiga belas ribu', v: 13000 }, { w: 'dua belas ribu', v: 12000 }, { w: 'sebelas ribu', v: 11000 },
+                    { w: 'sepuluh ribu', v: 10000 }, { w: 'sembilan ribu', v: 9000 }, { w: 'delapan ribu', v: 8000 },
+                    { w: 'tujuh ribu', v: 7000 }, { w: 'enam ribu', v: 6000 }, { w: 'lima ribu', v: 5000 },
+                    { w: 'empat ribu', v: 4000 }, { w: 'tiga ribu', v: 3000 }, { w: 'dua ribu', v: 2000 }, { w: 'seribu', v: 1000 }
+                ];
+                for (const item of wordsMap) {
+                    if (text.includes(item.w)) return item.v;
+                }
+
+                const numMatches = text.match(/\d+/g);
+                if (numMatches) {
+                    const rawNum = parseInt(numMatches.join(''), 10);
+                    if (text.includes('ribu') || text.includes('rb') || text.includes(' k') || text.includes('k ') || text.endsWith('k')) {
+                        return rawNum < 1000 ? rawNum * 1000 : rawNum;
+                    }
+                    if (rawNum < 1000) return rawNum * 1000;
+                    return rawNum;
+                }
+
+                return 30000;
+            }
+
             recognition.onresult = function(event) {
                 const transcript = event.results[0][0].transcript.toLowerCase();
                 if (navMic) navMic.classList.remove('mic-pulse');
@@ -1589,25 +1726,43 @@ foreach ($kat_expenses as $ke) {
                 const tEl = document.getElementById('voiceToast');
                 if (tEl) tEl.remove();
 
-                let detectedNum = 0;
-                const numMatch = transcript.match(/\d+/g);
-                if (numMatch) {
-                    detectedNum = parseInt(numMatch.join(''), 10);
-                } else {
-                    if (transcript.includes('sepuluh ribu')) detectedNum = 10000;
-                    else if (transcript.includes('lima belas ribu')) detectedNum = 15000;
-                    else if (transcript.includes('dua puluh ribu')) detectedNum = 20000;
-                    else if (transcript.includes('dua puluh lima ribu')) detectedNum = 25000;
-                    else if (transcript.includes('tiga puluh ribu')) detectedNum = 30000;
-                    else if (transcript.includes('lima puluh ribu')) detectedNum = 50000;
-                    else if (transcript.includes('seratus ribu')) detectedNum = 100000;
-                    else detectedNum = 25000;
-                }
+                const detectedNum = parseIndoVoiceAmount(transcript);
 
-                let cleanJudul = transcript.replace(/\d+/g, '').replace(/(ribu|ratus|juta|rupiah)/gi, '').trim();
+                let cleanJudul = transcript
+                    .replace(/(\d+(?:[.,]\d+)?)\s*(?:jt|juta|k|rb|ribu)/gi, '')
+                    .replace(/\b(seratus|dua ratus|tiga ratus|empat ratus|lima ratus|sepuluh|sebelas|dua belas|tiga belas|empat belas|lima belas|enam belas|tujuh belas|delapan belas|sembilan belas|dua puluh|tiga puluh|empat puluh|lima puluh|enam puluh|tujuh puluh|delapan puluh|sembilan puluh|ribu|juta|rupiah|perak|rb|k)\b/gi, '')
+                    .replace(/\d+/g, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
                 if (cleanJudul.length < 3) cleanJudul = 'Pengeluaran Suara: ' + transcript;
 
                 selectModalJenis('Pengeluaran');
+
+                const catEl = document.getElementById('selectKategori');
+                if (catEl) {
+                    const textLower = transcript.toLowerCase();
+                    for (let i = 0; i < catEl.options.length; i++) {
+                        const optText = catEl.options[i].text.toLowerCase();
+                        if ((textLower.includes('makan') || textLower.includes('minum') || textLower.includes('kopi') || textLower.includes('snack') || textLower.includes('lunch') || textLower.includes('sarapan')) && optText.includes('makan')) {
+                            catEl.selectedIndex = i;
+                            break;
+                        } else if ((textLower.includes('bensin') || textLower.includes('pertalite') || textLower.includes('gojek') || textLower.includes('grab') || textLower.includes('ongkos') || textLower.includes('transport')) && (optText.includes('transport') || optText.includes('bensin'))) {
+                            catEl.selectedIndex = i;
+                            break;
+                        } else if ((textLower.includes('buku') || textLower.includes('makalah') || textLower.includes('fotokopi') || textLower.includes('print') || textLower.includes('tugas') || textLower.includes('kuliah')) && (optText.includes('kuliah') || optText.includes('buku'))) {
+                            catEl.selectedIndex = i;
+                            break;
+                        } else if ((textLower.includes('kos') || textLower.includes('wifi') || textLower.includes('listrik') || textLower.includes('pulsa') || textLower.includes('paket')) && (optText.includes('tagihan') || optText.includes('kos'))) {
+                            catEl.selectedIndex = i;
+                            break;
+                        } else if ((textLower.includes('gaji') || textLower.includes('freelance') || textLower.includes('kiriman') || textLower.includes('saku') || textLower.includes('transfer')) && (optText.includes('gaji') || optText.includes('kiriman') || optText.includes('pemasukan'))) {
+                            catEl.selectedIndex = i;
+                            selectModalJenis('Pemasukan');
+                            break;
+                        }
+                    }
+                }
+
                 document.getElementById('inputJudul').value = cleanJudul.charAt(0).toUpperCase() + cleanJudul.slice(1);
                 document.getElementById('inputJumlah').value = detectedNum;
                 document.getElementById('inputCatatan').value = 'Diinput via perintah suara: "' + transcript + '"';
@@ -1632,7 +1787,32 @@ foreach ($kat_expenses as $ke) {
             };
         }
 
+        function addQuickAmount(val) {
+            const el = document.getElementById('inputJumlah');
+            if (!el) return;
+            const cur = parseInt(el.value || 0, 10);
+            el.value = cur + val;
+        }
+
+        function clearQuickAmount() {
+            const el = document.getElementById('inputJumlah');
+            if (el) el.value = '';
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            const inpJml = document.getElementById('inputJumlah');
+            if (inpJml) {
+                inpJml.addEventListener('keydown', function(e) {
+                    if (e.key === 'k' || e.key === 'K') {
+                        e.preventDefault();
+                        const cur = parseInt(this.value || 0, 10);
+                        if (cur > 0) {
+                            this.value = cur * 1000;
+                        }
+                    }
+                });
+            }
+
             filterKategoriDropdown('Pengeluaran');
 
             let hash = window.location.hash.replace('#', '') || 'dompet';
