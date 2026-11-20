@@ -571,55 +571,61 @@ foreach ($kat_expenses as $ke) {
                     </div>
                 </div>
 
-                <div class="row g-2 mb-3">
-                    <div class="col-6 col-md-4">
-                        <div class="ios-card p-3 text-center h-100 d-flex flex-column justify-content-center">
-                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Pemasukan</small>
-                            <span class="fw-bold amount-income" style="font-size: 15px;">+ <?= format_rupiah($total_masuk) ?></span>
+                <div class="ios-card p-3 mb-3">
+                    <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom" style="border-color: var(--boss-border) !important;">
+                        <div>
+                            <small class="text-secondary text-uppercase fw-semibold d-block" style="font-size: 9.5px; letter-spacing: 0.5px;">Sisa Saldo Kas Bersih</small>
+                            <div class="fw-bold" style="color: var(--boss-text-primary); font-size: 21px; letter-spacing: -0.4px;">
+                                <?= format_rupiah($saldo_akhir) ?>
+                            </div>
                         </div>
+                        <span class="ios-badge-mono" style="font-size: 10.5px;">
+                            <?= ($total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 0) ?>% Simpan
+                        </span>
                     </div>
-                    <div class="col-6 col-md-4">
-                        <div class="ios-card p-3 text-center h-100 d-flex flex-column justify-content-center">
-                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Pengeluaran</small>
-                            <span class="fw-bold amount-expense" style="font-size: 15px;">- <?= format_rupiah($total_keluar) ?></span>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="p-2.5 rounded-3" style="background: var(--boss-card-inner); border: 1px solid var(--boss-neu-border);">
+                                <small class="text-secondary fw-semibold text-uppercase d-block" style="font-size: 9px; letter-spacing: 0.3px;">Pemasukan</small>
+                                <div class="fw-bold amount-income text-truncate mt-0.5" style="font-size: 14.5px;">
+                                    + <?= format_rupiah($total_masuk) ?>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <div class="ios-card p-3 text-center h-100 d-flex flex-column justify-content-center" style="background-color: var(--boss-badge-bg); border-color: var(--boss-border-active);">
-                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Sisa Saldo Kas Bersih</small>
-                            <span class="fw-bold" style="color: var(--boss-text-primary); font-size: 17px; letter-spacing: -0.3px;"><?= format_rupiah($saldo_akhir) ?></span>
+                        <div class="col-6">
+                            <div class="p-2.5 rounded-3" style="background: var(--boss-card-inner); border: 1px solid var(--boss-neu-border);">
+                                <small class="text-secondary fw-semibold text-uppercase d-block" style="font-size: 9px; letter-spacing: 0.3px;">Pengeluaran</small>
+                                <div class="fw-bold amount-expense text-truncate mt-0.5" style="font-size: 14.5px;">
+                                    - <?= format_rupiah($total_keluar) ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row g-3 mb-3 d-print-none">
-                    <div class="col-12 col-lg-7">
-                        <div class="ios-card p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div>
-                                    <h6 class="fw-bold mb-0" style="font-size: 13.5px; color: var(--boss-text-primary);">Tren Arus Kas</h6>
-                                    <small class="text-secondary" style="font-size: 11px;">Pemasukan vs Pengeluaran</small>
-                                </div>
-                                <span class="badge fw-semibold px-2 py-0.5" style="background: rgba(48, 209, 88, 0.12); color: var(--boss-green); font-size: 10px; border-radius: 6px;">Arus Kas</span>
-                            </div>
-                            <div style="height: 170px; position: relative;">
-                                <canvas id="chartCashflowLaporan"></canvas>
-                            </div>
+                <div class="ios-card p-3 mb-3 d-print-none">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <h6 class="fw-bold mb-0" style="font-size: 13.5px; color: var(--boss-text-primary);">Tren Arus Kas</h6>
+                            <small class="text-secondary" style="font-size: 11px;">Perbandingan Arus Kas Riil</small>
                         </div>
+                        <span class="ios-badge-mono" style="font-size: 10px;">Arus Kas</span>
                     </div>
-                    <div class="col-12 col-lg-5">
-                        <div class="ios-card p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div>
-                                    <h6 class="fw-bold mb-0" style="font-size: 13.5px; color: var(--boss-text-primary);">Proporsi Pengeluaran</h6>
-                                    <small class="text-secondary" style="font-size: 11px;">Alokasi Pengeluaran</small>
-                                </div>
-                                <span class="badge fw-semibold px-2 py-0.5" style="background: var(--boss-card-inner); color: var(--boss-text-secondary); border: 1px solid var(--boss-neu-border); font-size: 10px; border-radius: 6px;"><?= count($kat_expenses) ?> Kategori</span>
-                            </div>
-                            <div style="height: 170px; position: relative;">
-                                <canvas id="chartCategoryLaporan"></canvas>
-                            </div>
+                    <div style="height: 180px; position: relative; width: 100%;">
+                        <canvas id="chartCashflowLaporan"></canvas>
+                    </div>
+                </div>
+
+                <div class="ios-card p-3 mb-3 d-print-none">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <h6 class="fw-bold mb-0" style="font-size: 13.5px; color: var(--boss-text-primary);">Proporsi Pengeluaran</h6>
+                            <small class="text-secondary" style="font-size: 11px;">Rincian Beban per Kategori</small>
                         </div>
+                        <span class="ios-badge-mono" style="font-size: 10px;"><?= count($kat_expenses) ?> Kategori</span>
+                    </div>
+                    <div style="height: 200px; position: relative; width: 100%;">
+                        <canvas id="chartCategoryLaporan"></canvas>
                     </div>
                 </div>
 
@@ -1307,11 +1313,11 @@ foreach ($kat_expenses as $ke) {
                             label: 'Nominal (Rp)',
                             data: [<?= $total_masuk ?>, <?= $total_keluar ?>, <?= $saldo_akhir ?>],
                             backgroundColor: [
-                                'rgba(48, 209, 88, 0.85)',
-                                'rgba(255, 69, 58, 0.85)',
-                                'rgba(10, 132, 255, 0.85)'
+                                '#34C759',
+                                '#FF3B30',
+                                '#64748B'
                             ],
-                            borderRadius: 10
+                            borderRadius: 8
                         }]
                     },
                     options: {
@@ -1321,12 +1327,12 @@ foreach ($kat_expenses as $ke) {
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                grid: { color: 'rgba(255,255,255,0.06)' },
-                                ticks: { color: '#94A3B8' }
+                                grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                                ticks: { color: '#94A3B8', font: { size: 10 } }
                             },
                             x: {
                                 grid: { display: false },
-                                ticks: { color: '#CBD5E1' }
+                                ticks: { color: '#94A3B8', font: { size: 11, weight: '600' } }
                             }
                         }
                     }
@@ -1344,7 +1350,12 @@ foreach ($kat_expenses as $ke) {
                         datasets: [{
                             data: <?= json_encode($chart_data_kat) ?>,
                             backgroundColor: [
-                                '#FF3B30', '#FF9500', '#AF52DE', '#5AC8FA', '#34C759', '#FF2D55'
+                                '#E11D48',
+                                '#EF4444',
+                                '#F43F5E',
+                                '#B91C1C',
+                                '#991B1B',
+                                '#64748B'
                             ],
                             borderWidth: 0
                         }]
@@ -1355,7 +1366,7 @@ foreach ($kat_expenses as $ke) {
                         plugins: {
                             legend: {
                                 position: 'bottom',
-                                labels: { color: '#94A3B8', boxWidth: 12, font: { size: 10 } }
+                                labels: { color: '#94A3B8', boxWidth: 10, font: { size: 10.5 } }
                             }
                         }
                     }
