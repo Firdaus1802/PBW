@@ -369,8 +369,8 @@ foreach ($kat_expenses as $ke) {
                             <div class="row g-2 artosku-subcards-row mb-2">
                                 <div class="col-6">
                                     <div class="artosku-subcard" onclick="setInstantFilter('Pemasukan', 1)">
-                                        <div class="artosku-subcard-icon">
-                                            <i class="bi bi-wallet2 text-white"></i>
+                                        <div class="artosku-subcard-icon" style="background: rgba(52, 199, 89, 0.15); border-color: rgba(52, 199, 89, 0.25);">
+                                            <i class="bi bi-wallet2" style="color: var(--boss-green);"></i>
                                         </div>
                                         <div>
                                             <span class="artosku-subcard-title">Wallet / Masuk</span>
@@ -380,8 +380,8 @@ foreach ($kat_expenses as $ke) {
                                 </div>
                                 <div class="col-6">
                                     <div class="artosku-subcard" onclick="setInstantFilter('Pengeluaran', 2)">
-                                        <div class="artosku-subcard-icon">
-                                            <i class="bi bi-gem text-white"></i>
+                                        <div class="artosku-subcard-icon" style="background: rgba(255, 59, 48, 0.15); border-color: rgba(255, 59, 48, 0.25);">
+                                            <i class="bi bi-gem" style="color: var(--boss-red);"></i>
                                         </div>
                                         <div>
                                             <span class="artosku-subcard-title">Aset / Keluar</span>
@@ -585,6 +585,7 @@ foreach ($kat_expenses as $ke) {
                             <?php endif; ?>
                         </div>
                     </div>
+                </div>
                 </div>
 
                 <div id="contentSectionWidget" class="hero-content-section" style="display: none;">
@@ -1215,12 +1216,14 @@ foreach ($kat_expenses as $ke) {
 
             panels.forEach(p => {
                 p.classList.remove('active', 'slide-right', 'slide-left');
+                p.style.display = 'none';
             });
             mobileBtns.forEach(b => b.classList.remove('active'));
             deskBtns.forEach(d => d.classList.remove('active'));
 
             const panelEl = document.getElementById(target.id);
             if (panelEl) {
+                panelEl.style.display = 'block';
                 panelEl.classList.add('active', isSlideRight ? 'slide-right' : 'slide-left');
             }
 
@@ -1228,7 +1231,9 @@ foreach ($kat_expenses as $ke) {
             const dt = document.getElementById(target.dBtn); if (dt) dt.classList.add('active');
             if (titleEl) titleEl.innerText = target.title;
 
-            window.location.hash = tabName;
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, null, '#' + tabName);
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 

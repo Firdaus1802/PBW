@@ -984,6 +984,13 @@ foreach ($kat_expenses as $ke) {
                 <i class="bi bi-file-earmark-excel text-success"></i>
                 <span>Unduh Excel (.xls)</span>
             </a>
+
+            <div class="sidebar-heading mt-4">Versi Tampilan</div>
+
+            <a href="<?= base_url('index.php?view=mobile') ?>" class="nav-link" title="Buka Versi Web Mobile">
+                <i class="bi bi-phone text-primary"></i>
+                <span>Mode Web Mobile</span>
+            </a>
         </div>
 
         
@@ -1025,6 +1032,11 @@ foreach ($kat_expenses as $ke) {
                 </span>
 
                 
+                <a href="<?= base_url('index.php?view=mobile') ?>" class="btn btn-ios-secondary py-1 px-3 d-flex align-items-center gap-2" title="Buka Versi Web Mobile">
+                    <i class="bi bi-phone fs-6 text-primary"></i>
+                    <span class="d-none d-sm-inline small fw-semibold">Web Mobile</span>
+                </a>
+
                 <button type="button" onclick="toggleTheme()" class="btn btn-ios-secondary py-1 px-3 d-flex align-items-center gap-2" title="Ganti Mode Terang / Gelap">
                     <i class="theme-toggle-icon fs-6"></i>
                     <span class="d-none d-sm-inline small fw-semibold" id="themeModeText">Mode Tampilan</span>
