@@ -1307,3 +1307,56 @@ body {
   transform: scale(0.98);
   background: #2B5539;
 }
+
+@media (max-width: 767.98px) {
+  .ios-navbar {
+    display: none !important;
+  }
+
+  .ios-main-content {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-bottom: calc(90px + max(env(safe-area-inset-bottom, 16px), 16px)) !important;
+  }
+
+  .artosku-hero-banner {
+    border-radius: 0 0 32px 32px !important;
+    padding: max(env(safe-area-inset-top, 24px), 24px) 20px 32px 20px !important;
+    margin: 0 !important;
+    box-shadow: 0 10px 32px rgba(41, 83, 55, 0.25) !important;
+  }
+
+  .artosku-mobile-sheet {
+    background: var(--boss-bg) !important;
+    border-radius: 32px 32px 0 0 !important;
+    margin-top: -18px !important;
+    padding: 20px 16px 0 16px !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .modal-dialog {
+    margin: 0 !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    transform: none !important;
+  }
+
+  .artosku-modal-sheet {
+    border-radius: 28px 28px 0 0 !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  #tabViewKategori,
+  #tabViewLaporan,
+  #tabViewAkun {
+    padding: max(env(safe-area-inset-top, 20px), 20px) 16px 100px 16px !important;
+  }
+}

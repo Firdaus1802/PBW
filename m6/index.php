@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $is_mobile_device = preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini)/i', $ua);
-if (!$is_mobile_device && !isset($_GET['mobile']) && !isset($_GET['view'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && !$is_mobile_device && !isset($_GET['mobile']) && !isset($_GET['view'])) {
     header("Location: " . base_url("dashboard.php"));
     exit;
 }
@@ -52,15 +52,26 @@ if (isset($_GET['msg'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) {
-    $id_kategori = (int)$_POST['id_kategori'];
-    $tanggal     = sanitize($_POST['tanggal']);
-    $judul       = sanitize($_POST['judul']);
-    $jenis       = sanitize($_POST['jenis']);
-    $jumlah      = (float)$_POST['jumlah'];
-    $catatan     = sanitize($_POST['catatan']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['tambah_transaksi']) || isset($_POST['judul']))) {
+    $id_kategori = (int)($_POST['id_kategori'] ?? 0);
+    $tanggal     = sanitize($_POST['tanggal'] ?? date('Y-m-d'));
+    if (empty($tanggal)) $tanggal = date('Y-m-d');
+    $judul       = sanitize($_POST['judul'] ?? '');
+    $jenis       = sanitize($_POST['jenis'] ?? 'Pengeluaran');
+    if (!in_array($jenis, ['Pemasukan', 'Pengeluaran'])) $jenis = 'Pengeluaran';
+    $jumlah      = (float)($_POST['jumlah'] ?? 0);
+    $catatan     = sanitize($_POST['catatan'] ?? '');
 
-    if (!empty($judul) && $id_kategori > 0 && $jumlah > 0 && !empty($tanggal)) {
+    if ($id_kategori <= 0) {
+        $stmt_def = $pdo->prepare("SELECT id_kategori FROM kategori WHERE jenis = ? ORDER BY id_kategori ASC LIMIT 1");
+        $stmt_def->execute([$jenis]);
+        $row_def = $stmt_def->fetch();
+        if ($row_def) {
+            $id_kategori = (int)$row_def['id_kategori'];
+        }
+    }
+
+    if (!empty($judul) && $id_kategori > 0 && $jumlah > 0) {
         try {
             $stmt = $pdo->prepare("INSERT INTO transaksi (id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
@@ -270,193 +281,183 @@ foreach ($kat_expenses as $ke) {
             
             <div id="tabViewDompet" class="tab-view-panel active">
                 
-                <div class="row g-4">
-                    
-                    
-                    <div class="col-12 col-md-5 col-lg-4">
-                        
-                        
-                        <div class="artosku-hero-banner mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="artosku-greeting-text">Hi, <?= htmlspecialchars(explode(' ', trim($_SESSION['nama_lengkap'] ?? 'Ketua'))[0]) ?> 👋</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <button type="button" class="artosku-icon-btn" onclick="toggleTheme()" title="Ganti Mode Tampilan">
-                                        <i class="theme-toggle-icon"></i>
-                                    </button>
-                                    <div class="artosku-icon-btn position-relative" title="Sesi Terautentikasi">
-                                        <i class="bi bi-bell-fill"></i>
-                                        <span class="artosku-bell-dot"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="artosku-capsule-row mb-3">
-                                <button type="button" class="artosku-capsule-pill" onclick="filterByBulanIni()">
-                                    <?= date('F Y') ?>
-                                </button>
-                                <button type="button" class="artosku-capsule-pill active" id="pillTotalSaldo" onclick="showHeroView('saldo')">
-                                    Total Saldo
-                                </button>
-                                <button type="button" class="artosku-capsule-pill" id="pillWidget" onclick="showHeroView('widget')">
-                                    Widget
-                                </button>
-                            </div>
-
-                            <div id="artoskuBalanceSec">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div>
-                                        <span class="artosku-sub-label">Total kekayaan / Saldo kas</span>
-                                        <div class="d-flex align-items-center gap-2 mt-1">
-                                            <h1 class="artosku-main-balance mb-0" id="mainBalanceDisplay">
-                                                <?= format_rupiah($saldo_akhir) ?>
-                                            </h1>
-                                            <button type="button" class="artosku-eye-btn" onclick="toggleBalanceVisibility()" title="Sembunyikan / Tampilkan Saldo">
-                                                <i class="bi bi-eye-fill" id="toggleBalanceEye"></i>
-                                            </button>
-                                        </div>
-                                        <div class="artosku-trend-badge mt-1">
-                                            <i class="bi bi-arrow-up-right"></i>
-                                            <span>+<?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 100 ?>% surplus kas aktif</span>
-                                        </div>
-                                    </div>
-                                    <div class="artosku-piggy-badge">
-                                        <div class="artosku-piggy-circle">
-                                            <i class="bi bi-piggy-bank-fill"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-2 artosku-subcards-row mb-2">
-                                    <div class="col-6">
-                                        <div class="artosku-subcard" onclick="setInstantFilter('Pemasukan', 1)">
-                                            <div class="artosku-subcard-icon">
-                                                <i class="bi bi-wallet2 text-white"></i>
-                                            </div>
-                                            <div>
-                                                <span class="artosku-subcard-title">Wallet / Masuk</span>
-                                                <strong class="artosku-subcard-val text-income">+ <?= format_rupiah($total_masuk) ?></strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="artosku-subcard" onclick="setInstantFilter('Pengeluaran', 2)">
-                                            <div class="artosku-subcard-icon">
-                                                <i class="bi bi-gem text-white"></i>
-                                            </div>
-                                            <div>
-                                                <span class="artosku-subcard-title">Aset / Keluar</span>
-                                                <strong class="artosku-subcard-val text-expense">- <?= format_rupiah($total_keluar) ?></strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="artoskuWidgetSec" style="display: none;" class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="artosku-sub-label">Grafik Arus Kas Bulanan</span>
-                                    <span class="badge bg-white bg-opacity-20 text-white" style="font-size: 10px;"><?= tgl_indo(date('Y-m-d')) ?></span>
-                                </div>
-                                <div style="height: 120px; position: relative;">
-                                    <canvas id="chartCashflowHero"></canvas>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-center gap-1 mt-2">
-                                <span class="artosku-dot active" id="dotHero1"></span>
-                                <span class="artosku-dot" id="dotHero2"></span>
-                                <span class="artosku-dot" id="dotHero3"></span>
+                <div class="artosku-hero-banner mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="artosku-greeting-text">Hi, <?= htmlspecialchars(explode(' ', trim($_SESSION['nama_lengkap'] ?? 'Ketua'))[0]) ?> 👋</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="artosku-icon-btn" onclick="toggleTheme()" title="Ganti Mode Tampilan">
+                                <i class="theme-toggle-icon"></i>
+                            </button>
+                            <div class="artosku-icon-btn position-relative" title="Sesi Terautentikasi">
+                                <i class="bi bi-bell-fill"></i>
+                                <span class="artosku-bell-dot"></span>
                             </div>
                         </div>
-
-                        <div class="artosku-action-box mb-3">
-                            <div class="row g-0 align-items-center">
-                                <div class="col-7 pe-2">
-                                    <div class="artosku-action-tile" onclick="startVoiceInput()" title="Bicara untuk mencatat transaksi">
-                                        <div class="d-flex align-items-center gap-2 mb-1">
-                                            <div class="artosku-action-icon ai-bot-icon">
-                                                <i class="bi bi-robot" id="smartVoiceMicIcon"></i>
-                                            </div>
-                                            <div>
-                                                <div class="artosku-action-title">Mode AI</div>
-                                                <span class="artosku-action-sub">Aktif — cukup ngomong</span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-1 mt-1">
-                                            <span class="artosku-ai-switch"></span>
-                                            <span class="artosku-ai-status">AI Aktif</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto">
-                                    <div class="artosku-action-divider"></div>
-                                </div>
-
-                                <div class="col ps-2 text-center">
-                                    <div class="artosku-action-tile" onclick="triggerReceiptScan()" title="Pindai foto struk pembayaran">
-                                        <div class="artosku-action-icon scan-icon mx-auto mb-1">
-                                            <i class="bi bi-qr-code-scan"></i>
-                                        </div>
-                                        <div class="artosku-action-title" style="font-size: 12.5px;">Scan</div>
-                                        <span class="artosku-action-sub">Foto Struk</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div class="ios-card p-3 d-none d-md-block">
-                            <h6 class="fw-bold mb-3" style="font-size: 13.5px; letter-spacing: -0.2px;">Statistik Kas Mahasiswa</h6>
-                            <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
-                                <span>Total Riwayat</span>
-                                <strong style="color: var(--boss-text-primary);"><?= count($daftar_transaksi) ?> transaksi</strong>
-                            </div>
-                            <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
-                                <span>Rasio Pemasukan</span>
-                                <strong class="text-success"><?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 0 ?>% Surplus</strong>
-                            </div>
-                            <div class="d-flex justify-content-between text-secondary small py-2">
-                                <span>Sisa Kas Tersimpan</span>
-                                <strong style="color: var(--boss-text-primary);"><?= format_rupiah($saldo_akhir) ?></strong>
-                            </div>
-                        </div>
-
                     </div>
 
-                    
-                    <div class="col-12 col-md-7 col-lg-8">
-                        
-                        
-                        <div class="row g-2 mb-3">
-                            <div class="col-12 col-sm-6">
-                                <div class="ios-segmented-control-slider-wrap" id="filterSegmentedWrap">
-                                    <div class="ios-segmented-slider ios-segmented-slider-3" id="filterSegmentSlider"></div>
-                                    <button type="button" class="ios-segmented-tab-btn active" id="btnFilterSemua" onclick="setInstantFilter('Semua', 0)">Semua</button>
-                                    <button type="button" class="ios-segmented-tab-btn" id="btnFilterPemasukan" onclick="setInstantFilter('Pemasukan', 1)">Pemasukan</button>
-                                    <button type="button" class="ios-segmented-tab-btn" id="btnFilterPengeluaran" onclick="setInstantFilter('Pengeluaran', 2)">Pengeluaran</button>
+                    <div class="artosku-capsule-row mb-3">
+                        <button type="button" class="artosku-capsule-pill" onclick="filterByBulanIni()">
+                            <?= date('F Y') ?>
+                        </button>
+                        <button type="button" class="artosku-capsule-pill active" id="pillTotalSaldo" onclick="showHeroView('saldo')">
+                            Total Saldo
+                        </button>
+                        <button type="button" class="artosku-capsule-pill" id="pillWidget" onclick="showHeroView('widget')">
+                            Widget
+                        </button>
+                    </div>
+
+                    <div id="artoskuBalanceSec">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="artosku-sub-label">Total kekayaan / Saldo kas</span>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <h1 class="artosku-main-balance mb-0" id="mainBalanceDisplay">
+                                        <?= format_rupiah($saldo_akhir) ?>
+                                    </h1>
+                                    <button type="button" class="artosku-eye-btn" onclick="toggleBalanceVisibility()" title="Sembunyikan / Tampilkan Saldo">
+                                        <i class="bi bi-eye-fill" id="toggleBalanceEye"></i>
+                                    </button>
+                                </div>
+                                <div class="artosku-trend-badge mt-1">
+                                    <i class="bi bi-arrow-up-right"></i>
+                                    <span>+<?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 100 ?>% surplus kas aktif</span>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
-                                <div class="ios-search-wrapper">
-                                    <i class="bi bi-search ios-search-icon"></i>
-                                    <input type="text" id="instantSearchInput" class="ios-input ios-search-input" placeholder="Cari transaksi..." onkeyup="filterTransaksiLive()">
+                            <div class="artosku-piggy-badge">
+                                <div class="artosku-piggy-circle">
+                                    <i class="bi bi-piggy-bank-fill"></i>
                                 </div>
                             </div>
                         </div>
 
-                        
-                        <div class="d-flex justify-content-between align-items-center mb-2 px-1">
-                            <h6 class="text-secondary fw-semibold text-uppercase mb-0" style="font-size: 11px; letter-spacing: 0.8px;">
-                                Catatan Transaksi (<span id="totalVisibleTrx"><?= count($daftar_transaksi) ?></span>)
-                            </h6>
-                            <small class="text-secondary" style="font-size: 11px;">Ketuk titik tiga untuk opsi</small>
+                        <div class="row g-2 artosku-subcards-row mb-2">
+                            <div class="col-6">
+                                <div class="artosku-subcard" onclick="setInstantFilter('Pemasukan', 1)">
+                                    <div class="artosku-subcard-icon">
+                                        <i class="bi bi-wallet2 text-white"></i>
+                                    </div>
+                                    <div>
+                                        <span class="artosku-subcard-title">Wallet / Masuk</span>
+                                        <strong class="artosku-subcard-val text-income">+ <?= format_rupiah($total_masuk) ?></strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="artosku-subcard" onclick="setInstantFilter('Pengeluaran', 2)">
+                                    <div class="artosku-subcard-icon">
+                                        <i class="bi bi-gem text-white"></i>
+                                    </div>
+                                    <div>
+                                        <span class="artosku-subcard-title">Aset / Keluar</span>
+                                        <strong class="artosku-subcard-val text-expense">- <?= format_rupiah($total_keluar) ?></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="artoskuWidgetSec" style="display: none;" class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="artosku-sub-label">Grafik Arus Kas Bulanan</span>
+                            <span class="badge bg-white bg-opacity-20 text-white" style="font-size: 10px;"><?= tgl_indo(date('Y-m-d')) ?></span>
+                        </div>
+                        <div style="height: 120px; position: relative;">
+                            <canvas id="chartCashflowHero"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-1 mt-2">
+                        <span class="artosku-dot active" id="dotHero1"></span>
+                        <span class="artosku-dot" id="dotHero2"></span>
+                        <span class="artosku-dot" id="dotHero3"></span>
+                    </div>
+                </div>
+
+                <div class="artosku-mobile-sheet">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-5 col-lg-4">
+                            <div class="artosku-action-box mb-3">
+                                <div class="row g-0 align-items-center">
+                                    <div class="col-7 pe-2">
+                                        <div class="artosku-action-tile" onclick="startVoiceInput()" title="Bicara untuk mencatat transaksi">
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <div class="artosku-action-icon ai-bot-icon">
+                                                    <i class="bi bi-robot" id="smartVoiceMicIcon"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="artosku-action-title">Mode AI</div>
+                                                    <span class="artosku-action-sub">Aktif — cukup ngomong</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-1 mt-1">
+                                                <span class="artosku-ai-switch"></span>
+                                                <span class="artosku-ai-status">AI Aktif</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <div class="artosku-action-divider"></div>
+                                    </div>
+
+                                    <div class="col ps-2 text-center">
+                                        <div class="artosku-action-tile" onclick="triggerReceiptScan()" title="Pindai foto struk pembayaran">
+                                            <div class="artosku-action-icon scan-icon mx-auto mb-1">
+                                                <i class="bi bi-qr-code-scan"></i>
+                                            </div>
+                                            <div class="artosku-action-title" style="font-size: 12.5px;">Scan</div>
+                                            <span class="artosku-action-sub">Foto Struk</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ios-card p-3 d-none d-md-block">
+                                <h6 class="fw-bold mb-3" style="font-size: 13.5px; letter-spacing: -0.2px;">Statistik Kas Mahasiswa</h6>
+                                <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
+                                    <span>Total Riwayat</span>
+                                    <strong style="color: var(--boss-text-primary);"><?= count($daftar_transaksi) ?> transaksi</strong>
+                                </div>
+                                <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
+                                    <span>Rasio Pemasukan</span>
+                                    <strong class="text-success"><?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 0 ?>% Surplus</strong>
+                                </div>
+                                <div class="d-flex justify-content-between text-secondary small py-2">
+                                    <span>Sisa Kas Tersimpan</span>
+                                    <strong style="color: var(--boss-text-primary);"><?= format_rupiah($saldo_akhir) ?></strong>
+                                </div>
+                            </div>
                         </div>
 
-                        
-                        <div class="ios-card-group mb-4" id="transactionListContainer">
+                        <div class="col-12 col-md-7 col-lg-8">
+                            <div class="row g-2 mb-3">
+                                <div class="col-12 col-sm-6">
+                                    <div class="ios-segmented-control-slider-wrap" id="filterSegmentedWrap">
+                                        <div class="ios-segmented-slider ios-segmented-slider-3" id="filterSegmentSlider"></div>
+                                        <button type="button" class="ios-segmented-tab-btn active" id="btnFilterSemua" onclick="setInstantFilter('Semua', 0)">Semua</button>
+                                        <button type="button" class="ios-segmented-tab-btn" id="btnFilterPemasukan" onclick="setInstantFilter('Pemasukan', 1)">Pemasukan</button>
+                                        <button type="button" class="ios-segmented-tab-btn" id="btnFilterPengeluaran" onclick="setInstantFilter('Pengeluaran', 2)">Pengeluaran</button>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="ios-search-wrapper">
+                                        <i class="bi bi-search ios-search-icon"></i>
+                                        <input type="text" id="instantSearchInput" class="ios-input ios-search-input" placeholder="Cari transaksi..." onkeyup="filterTransaksiLive()">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                                <h6 class="text-secondary fw-semibold text-uppercase mb-0" style="font-size: 11px; letter-spacing: 0.8px;">
+                                    Catatan Transaksi (<span id="totalVisibleTrx"><?= count($daftar_transaksi) ?></span>)
+                                </h6>
+                                <small class="text-secondary" style="font-size: 11px;">Ketuk titik tiga untuk opsi</small>
+                            </div>
+
+                            <div class="ios-card-group mb-4" id="transactionListContainer">
                             <?php if (empty($daftar_transaksi)): ?>
                                 <div class="p-4 text-center text-secondary small">Belum ada transaksi tercatat.</div>
                             <?php else: ?>
@@ -524,6 +525,8 @@ foreach ($kat_expenses as $ke) {
                         </div>
 
                     </div>
+
+                </div>
 
                 </div>
 
@@ -864,6 +867,7 @@ foreach ($kat_expenses as $ke) {
                 </div>
                 
                 <form action="index.php" method="POST" id="formCatatTransaksi">
+                    <input type="hidden" name="tambah_transaksi" value="1">
                     <div class="modal-body p-3 p-md-4">
                         <div class="mb-3 text-center">
                             <div class="ios-segmented-control-slider-wrap" id="modalJenisSegmentedWrap">
