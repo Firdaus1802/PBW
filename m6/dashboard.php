@@ -996,7 +996,7 @@ foreach ($kat_expenses as $ke) {
         
         <div class="sidebar-footer-card">
             <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-primary bg-opacity-20 text-primary d-flex align-items-center justify-content-center fw-bold" style="width: 34px; height: 34px; font-size: 13px;">
+                <div class="d-flex align-items-center justify-content-center fw-bold" style="width: 34px; height: 34px; border-radius: 10px; background: var(--ios-center-circle-bg); color: var(--ios-center-circle-color); font-size: 13px;">
                     FD
                 </div>
                 <div>
@@ -1096,9 +1096,27 @@ foreach ($kat_expenses as $ke) {
                 
                 <div class="row g-3 mb-4">
 
-                    
                     <div class="col-sm-6 col-xl-3">
-                        <div class="ios-kpi-card">
+                        <div class="ios-kpi-card h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
+                                    Sisa Saldo Kas Riil
+                                </span>
+                                <div class="ios-kpi-pill">
+                                    <i class="bi bi-wallet2"></i>
+                                </div>
+                            </div>
+                            <h4 class="fw-bold mb-0" style="color: var(--app-text-primary); letter-spacing: -0.5px;">
+                                <?= format_rupiah($saldo_akhir) ?>
+                            </h4>
+                            <small class="text-success fw-semibold" style="font-size: 11px;">
+                                <i class="bi bi-arrow-up-right me-0.5"></i> <?= $rasio_simpan ?>% Surplus Kas
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="ios-kpi-card h-100">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
                                     Total Pemasukan
@@ -1114,9 +1132,8 @@ foreach ($kat_expenses as $ke) {
                         </div>
                     </div>
 
-                    
                     <div class="col-sm-6 col-xl-3">
-                        <div class="ios-kpi-card">
+                        <div class="ios-kpi-card h-100">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
                                     Total Pengeluaran
@@ -1132,68 +1149,30 @@ foreach ($kat_expenses as $ke) {
                         </div>
                     </div>
 
-                    
                     <div class="col-sm-6 col-xl-3">
-                        <div class="ios-kpi-card">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
-                                    Saldo Kas Fisik
-                                </span>
-                                <div class="ios-kpi-pill">
-                                    <i class="bi bi-wallet2"></i>
+                        <div class="ios-kpi-card h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
+                                        Total Mutasi
+                                    </span>
+                                    <div class="ios-kpi-pill">
+                                        <i class="bi bi-receipt"></i>
+                                    </div>
                                 </div>
+                                <h4 class="fw-bold mb-1" style="color: var(--app-text-primary); letter-spacing: -0.5px;">
+                                    <?= count($daftar_transaksi) ?> Transaksi
+                                </h4>
                             </div>
-                            <h4 class="fw-bold mb-0" style="color: var(--app-text-primary); letter-spacing: -0.5px;">
-                                <?= format_rupiah($saldo_akhir) ?>
-                            </h4>
-                            <small style="color: var(--app-text-muted); font-size: 11px;">Pemasukan dikurangi Pengeluaran</small>
-                        </div>
-                    </div>
-
-                    
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="ios-kpi-card">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
-                                    Total Mutasi
-                                </span>
-                                <div class="ios-kpi-pill">
-                                    <i class="bi bi-receipt"></i>
+                            <div>
+                                <div class="progress my-1.5" style="height: 5px; border-radius: 10px; background: var(--app-border);">
+                                    <div class="progress-bar" role="progressbar" style="width: <?= $rasio_simpan ?>%; background-color: var(--ios-green);" aria-valuenow="<?= $rasio_simpan ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
+                                <small style="color: var(--app-text-muted); font-size: 10.5px;"><?= $rasio_simpan ?>% efisiensi kas tersimpan</small>
                             </div>
-                            <h4 class="fw-bold mb-0" style="color: var(--app-text-primary); letter-spacing: -0.5px;">
-                                <?= count($daftar_transaksi) ?> Transaksi
-                            </h4>
-                            <small style="color: var(--app-text-muted); font-size: 11px;">Pencatatan kas aktif</small>
                         </div>
                     </div>
 
-                </div>
-
-                
-                <div class="ios-hero-banner mb-4">
-                    <div class="row align-items-center g-3">
-                        <div class="col-12 col-md-8">
-                            <span class="badge ios-hero-pill mb-2 fw-semibold">
-                                <i class="bi bi-shield-check me-1"></i> Rekapitulasi Kas Keuangan Personal
-                            </span>
-                            <h2 class="display-6 fw-bold mb-2 hero-amount-text" style="letter-spacing: -1px;">
-                                Total Saldo Kas: <?= format_rupiah($saldo_akhir) ?>
-                            </h2>
-                            <p class="small mb-3 hero-subtext">
-                                Akumulasi saldo riil kas aktif berdasarkan penerimaan <strong><?= format_rupiah($total_masuk) ?></strong> dan pengeluaran <strong><?= format_rupiah($total_keluar) ?></strong> yang tercatat di sistem secara transparan.
-                            </p>
-                            <div class="progress hero-progress" style="height: 6px; border-radius: 10px; max-width: 420px;">
-                                <div class="progress-bar" role="progressbar" style="width: <?= $rasio_simpan ?>%; background-color: var(--ios-green);" aria-valuenow="<?= $rasio_simpan ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <small class="hero-subtext mt-1 d-block" style="font-size: 10.5px;"><?= $rasio_simpan ?>% rasio saldo kas tersimpan</small>
-                        </div>
-                        <div class="col-12 col-md-4 text-md-end">
-                            <a href="#transaksiSection" class="btn btn-hero-action py-2 px-4 fw-semibold rounded-3 shadow-sm">
-                                <i class="bi bi-receipt me-1"></i> Riwayat Transaksi
-                            </a>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -1233,7 +1212,7 @@ foreach ($kat_expenses as $ke) {
                         <div class="px-3 pb-3 pt-1 text-center small text-secondary" style="font-size: 11px;">
                             <?php if (!empty($donut_labels)): ?>
                                 <?php 
-                                $palette = ['#334155', '#475569', '#64748B', '#059669', '#D97706'];
+                                $palette = ['#E11D48', '#EF4444', '#F43F5E', '#B91C1C', '#64748B'];
                                 foreach (array_slice($donut_labels, 0, 4) as $idx => $lbl): 
                                     $col = $palette[$idx % count($palette)];
                                 ?>
@@ -1951,9 +1930,7 @@ foreach ($kat_expenses as $ke) {
 
             const donutLabels = <?= json_encode($donut_labels) ?>;
             const donutData   = <?= json_encode($donut_values) ?>;
-            const donutPalette = isDark 
-                ? ['#CBD5E1', '#94A3B8', '#64748B', '#10B981', '#F59E0B'] 
-                : ['#334155', '#475569', '#64748B', '#059669', '#D97706'];
+            const donutPalette = ['#E11D48', '#EF4444', '#F43F5E', '#B91C1C', '#991B1B', '#64748B'];
 
             categoryChart = new Chart(ctxDonut, {
                 type: 'doughnut',
