@@ -530,7 +530,7 @@ foreach ($kat_expenses as $ke) {
                                     <?= htmlspecialchars($kat['nama_kategori']) ?>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
-                                    <span class="badge <?= $is_in ? 'text-success bg-success' : 'text-danger bg-danger' ?> bg-opacity-15 fw-semibold px-2 py-0.5" style="font-size: 10px; border-radius: 6px;">
+                                    <span class="badge fw-semibold px-2 py-0.5" style="background: <?= $is_in ? 'rgba(48, 209, 88, 0.12)' : 'rgba(255, 69, 58, 0.12)' ?>; color: <?= $is_in ? 'var(--boss-green)' : 'var(--boss-red)' ?>; font-size: 10px; border-radius: 6px;">
                                         <?= $kat['jenis'] ?>
                                     </span>
                                     <span class="text-secondary" style="font-size: 11px;">
@@ -572,85 +572,108 @@ foreach ($kat_expenses as $ke) {
                 </div>
 
                 <div class="row g-2 mb-3">
-                    <div class="col-6">
-                        <div class="ios-card p-3 text-center">
+                    <div class="col-6 col-md-4">
+                        <div class="ios-card p-3 text-center h-100 d-flex flex-column justify-content-center">
                             <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Pemasukan</small>
                             <span class="fw-bold amount-income" style="font-size: 15px;">+ <?= format_rupiah($total_masuk) ?></span>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="ios-card p-3 text-center">
+                    <div class="col-6 col-md-4">
+                        <div class="ios-card p-3 text-center h-100 d-flex flex-column justify-content-center">
                             <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Pengeluaran</small>
                             <span class="fw-bold amount-expense" style="font-size: 15px;">- <?= format_rupiah($total_keluar) ?></span>
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="ios-card p-3 text-center" style="background-color: var(--boss-badge-bg); border-color: var(--boss-border-active);">
+                    <div class="col-12 col-md-4">
+                        <div class="ios-card p-3 text-center h-100 d-flex flex-column justify-content-center" style="background-color: var(--boss-badge-bg); border-color: var(--boss-border-active);">
                             <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Sisa Saldo Kas Bersih</small>
-                            <span class="fw-bold" style="color: var(--boss-text-primary); font-size: 18px; letter-spacing: -0.3px;"><?= format_rupiah($saldo_akhir) ?></span>
+                            <span class="fw-bold" style="color: var(--boss-text-primary); font-size: 17px; letter-spacing: -0.3px;"><?= format_rupiah($saldo_akhir) ?></span>
                         </div>
                     </div>
                 </div>
 
-                <div class="ios-card p-3 mb-3 d-print-none">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div>
-                            <h6 class="fw-bold mb-0" style="font-size: 14px; color: var(--boss-text-primary);">Tren Arus Kas (Pemasukan vs Pengeluaran)</h6>
-                            <small class="text-secondary" style="font-size: 11px;">Visualisasi Data Riil Database MySQL</small>
+                <div class="row g-3 mb-3 d-print-none">
+                    <div class="col-12 col-lg-7">
+                        <div class="ios-card p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <h6 class="fw-bold mb-0" style="font-size: 13.5px; color: var(--boss-text-primary);">Tren Arus Kas</h6>
+                                    <small class="text-secondary" style="font-size: 11px;">Pemasukan vs Pengeluaran</small>
+                                </div>
+                                <span class="badge fw-semibold px-2 py-0.5" style="background: rgba(48, 209, 88, 0.12); color: var(--boss-green); font-size: 10px; border-radius: 6px;">Arus Kas</span>
+                            </div>
+                            <div style="height: 170px; position: relative;">
+                                <canvas id="chartCashflowLaporan"></canvas>
+                            </div>
                         </div>
-                        <span class="badge bg-success bg-opacity-20 text-success fw-bold" style="font-size: 10px;">Arus Kas</span>
                     </div>
-                    <div style="height: 180px; position: relative;">
-                        <canvas id="chartCashflowLaporan"></canvas>
+                    <div class="col-12 col-lg-5">
+                        <div class="ios-card p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <h6 class="fw-bold mb-0" style="font-size: 13.5px; color: var(--boss-text-primary);">Proporsi Pengeluaran</h6>
+                                    <small class="text-secondary" style="font-size: 11px;">Alokasi Pengeluaran</small>
+                                </div>
+                                <span class="badge fw-semibold px-2 py-0.5" style="background: var(--boss-card-inner); color: var(--boss-text-secondary); border: 1px solid var(--boss-neu-border); font-size: 10px; border-radius: 6px;"><?= count($kat_expenses) ?> Kategori</span>
+                            </div>
+                            <div style="height: 170px; position: relative;">
+                                <canvas id="chartCategoryLaporan"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="ios-card p-3 mb-3 d-print-none">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div>
-                            <h6 class="fw-bold mb-0" style="font-size: 14px; color: var(--boss-text-primary);">Proporsi Pengeluaran per Kategori</h6>
-                            <small class="text-secondary" style="font-size: 11px;">Kategori Pengeluaran Terbesar</small>
-                        </div>
-                        <span class="badge bg-secondary bg-opacity-20 text-secondary" style="font-size: 10px;"><?= count($kat_expenses) ?> Kategori</span>
-                    </div>
-                    <div style="height: 200px; position: relative;">
-                        <canvas id="chartCategoryLaporan"></canvas>
-                    </div>
+                <div class="d-flex justify-content-between align-items-center mb-2 px-1 d-print-none">
+                    <h6 class="text-secondary fw-semibold text-uppercase mb-0" style="font-size: 11px; letter-spacing: 0.8px;">
+                        Rincian Mutasi Kas (<?= count($daftar_transaksi) ?>)
+                    </h6>
+                    <small class="text-secondary" style="font-size: 11px;">Tersusun kronologis</small>
                 </div>
 
                 <div class="ios-card-group mb-4 d-print-none">
-                    <?php foreach ($daftar_transaksi as $row): 
-                        $is_masuk = ($row['jenis'] === 'Pemasukan');
-                        $amount_class = $is_masuk ? 'amount-income' : 'amount-expense';
-                    ?>
-                    <div class="ios-list-row p-3">
-                        <div class="d-flex align-items-center justify-content-between mb-1">
-                            <span class="badge <?= $is_masuk ? 'text-success bg-success' : 'text-danger bg-danger' ?> bg-opacity-15 fw-semibold px-2 py-0.5" style="font-size: 10px; border-radius: 6px;">
-                                <?= $row['jenis'] ?> • <?= htmlspecialchars($row['nama_kategori']) ?>
-                            </span>
-                            <span class="text-secondary" style="font-size: 11px;">
-                                <?= tgl_indo($row['tanggal']) ?>
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between gap-2">
-                            <div class="min-w-0 flex-grow-1">
-                                <div class="fw-semibold text-truncate" style="font-size: 14px; color: var(--boss-text-primary);">
-                                    <?= htmlspecialchars($row['judul']) ?>
+                    <?php if (empty($daftar_transaksi)): ?>
+                        <div class="p-4 text-center text-secondary small">Belum ada riwayat transaksi.</div>
+                    <?php else: ?>
+                        <?php foreach ($daftar_transaksi as $row): 
+                            $is_masuk = ($row['jenis'] === 'Pemasukan');
+                            $sign = $is_masuk ? '+' : '-';
+                            $amount_class = $is_masuk ? 'amount-income' : 'amount-expense';
+                        ?>
+                        <div class="ios-list-row" style="padding: 12px 14px;">
+                            <div class="d-flex align-items-center gap-2.5 min-w-0 flex-grow-1 me-2">
+                                <div class="ios-icon-box flex-shrink-0" style="width: 38px; height: 38px;">
+                                    <i class="bi <?= htmlspecialchars($row['icon'] ?: 'bi-tags-fill') ?>"></i>
                                 </div>
-                                <?php if (!empty($row['catatan'])): ?>
-                                    <small class="text-secondary d-block text-truncate" style="font-size: 11px;">
-                                        <?= htmlspecialchars($row['catatan']) ?>
-                                    </small>
-                                <?php endif; ?>
+                                <div class="min-w-0 flex-grow-1">
+                                    <div class="fw-semibold text-truncate mb-0" style="font-size: 14px; letter-spacing: -0.2px; color: var(--boss-text-primary);">
+                                        <?= htmlspecialchars($row['judul']) ?>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1.5 mt-0.5 text-truncate">
+                                        <span class="ios-badge-mono text-truncate" style="max-width: 120px;">
+                                            <?= htmlspecialchars($row['nama_kategori']) ?>
+                                        </span>
+                                        <span class="text-secondary flex-shrink-0" style="font-size: 10.5px;">
+                                            • <?= tgl_indo($row['tanggal']) ?>
+                                        </span>
+                                    </div>
+                                    <?php if (!empty($row['catatan'])): ?>
+                                        <small class="text-secondary d-block text-truncate mt-0.5" style="font-size: 11px;">
+                                            <?= htmlspecialchars($row['catatan']) ?>
+                                        </small>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                             <div class="text-end flex-shrink-0">
-                                <strong class="<?= $amount_class ?>" style="font-size: 14px; white-space: nowrap;">
-                                    <?= ($is_masuk ? '+' : '-') ?> <?= format_rupiah($row['jumlah']) ?>
-                                </strong>
+                                <div class="fw-bold <?= $amount_class ?>" style="font-size: 13.5px; letter-spacing: -0.3px; white-space: nowrap;">
+                                    <?= $sign ?> <?= format_rupiah($row['jumlah']) ?>
+                                </div>
+                                <small class="text-uppercase text-secondary d-block mt-0.5" style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.3px;">
+                                    <?= $row['jenis'] ?>
+                                </small>
                             </div>
                         </div>
-                    </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
 
                 <div class="table-responsive rounded-4 overflow-hidden border mb-4 d-none d-print-block" style="border-color: var(--boss-table-border) !important;">
@@ -685,7 +708,7 @@ foreach ($kat_expenses as $ke) {
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    <span class="badge <?= $is_masuk ? 'text-success bg-success' : 'text-danger bg-danger' ?> bg-opacity-15 fw-semibold px-2 py-1" style="font-size: 11px;">
+                                    <span class="badge fw-semibold px-2 py-1" style="background: <?= $is_masuk ? 'rgba(48, 209, 88, 0.12)' : 'rgba(255, 69, 58, 0.12)' ?>; color: <?= $is_masuk ? 'var(--boss-green)' : 'var(--boss-red)' ?>; font-size: 11px; border-radius: 6px;">
                                         <?= $row['jenis'] ?>
                                     </span>
                                 </td>
@@ -729,7 +752,7 @@ foreach ($kat_expenses as $ke) {
                         <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Firdaus Dhuha Prabowo') ?>
                     </h5>
                     <p class="text-secondary small mb-2">Mahasiswa Sistem Informasi • PBW Gunadarma</p>
-                    <span class="badge bg-success bg-opacity-15 text-success px-3 py-1 fw-semibold" style="border-radius: 20px; font-size: 11px;">
+                    <span class="badge px-3 py-1 fw-semibold" style="background: rgba(48, 209, 88, 0.12); color: var(--boss-green); border-radius: 20px; font-size: 11px;">
                         <i class="bi bi-shield-check me-1"></i> Sesi Aktif 30 Hari
                     </span>
                 </div>
@@ -753,7 +776,7 @@ foreach ($kat_expenses as $ke) {
                     </div>
                     <div class="ios-list-row">
                         <span class="text-secondary small">Jumlah Riwayat Tercatat</span>
-                        <span class="badge bg-secondary bg-opacity-15 text-secondary px-2 py-1" style="font-size: 11px;"><?= count($daftar_transaksi) ?> transaksi</span>
+                        <span class="badge px-2 py-1" style="background: var(--boss-card-inner); color: var(--boss-text-secondary); border: 1px solid var(--boss-neu-border); font-size: 11px; border-radius: 6px;"><?= count($daftar_transaksi) ?> transaksi</span>
                     </div>
                 </div>
 

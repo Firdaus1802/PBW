@@ -136,7 +136,7 @@ $kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx
                                 <?= htmlspecialchars($kat['nama_kategori']) ?>
                             </div>
                             <div class="d-flex align-items-center gap-2 mt-1">
-                                <span class="badge <?= $is_in ? 'text-success bg-success' : 'text-danger bg-danger' ?> bg-opacity-15 fw-semibold px-2 py-0" style="font-size: 10.5px;">
+                                <span class="badge fw-semibold px-2 py-0.5" style="background: <?= $is_in ? 'rgba(48, 209, 88, 0.12)' : 'rgba(255, 69, 58, 0.12)' ?>; color: <?= $is_in ? 'var(--boss-green)' : 'var(--boss-red)' ?>; font-size: 10.5px; border-radius: 6px;">
                                     <?= $kat['jenis'] ?>
                                 </span>
                                 <span class="text-secondary small" style="font-size: 11px;">

@@ -1469,7 +1469,7 @@ foreach ($kat_expenses as $ke) {
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-secondary bg-opacity-15 px-2 py-1" style="color: var(--app-text-secondary); border-radius: 6px; font-size: 11.5px;">
+                                        <span class="badge px-2 py-1" style="background: var(--app-card-inner, rgba(148,163,184,0.12)); color: var(--app-text-secondary); border-radius: 6px; font-size: 11.5px;">
                                             <?= (int)$rekap['total_trx'] ?> kali mutasi
                                         </span>
                                     </td>
