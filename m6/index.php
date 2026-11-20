@@ -1321,7 +1321,6 @@ foreach ($kat_expenses as $ke) {
 
             const target = panelMap[tabName] || panelMap['dompet'];
             const newIndex = tabIndices[tabName] !== undefined ? tabIndices[tabName] : 0;
-            const isSlideRight = newIndex >= currentTabIndex;
             currentTabIndex = newIndex;
 
             panels.forEach(p => {
@@ -1334,7 +1333,7 @@ foreach ($kat_expenses as $ke) {
             const panelEl = document.getElementById(target.id);
             if (panelEl) {
                 panelEl.style.display = 'block';
-                panelEl.classList.add('active', isSlideRight ? 'slide-right' : 'slide-left');
+                panelEl.classList.add('active');
             }
 
             const mb = document.getElementById(target.mBtn); if (mb) mb.classList.add('active');
@@ -1344,7 +1343,7 @@ foreach ($kat_expenses as $ke) {
             if (window.history && window.history.replaceState) {
                 window.history.replaceState(null, null, '#' + tabName);
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo(0, 0);
         }
 
         let isBalanceHidden = false;
@@ -1948,7 +1947,7 @@ foreach ($kat_expenses as $ke) {
             let touchStartY = 0;
 
             document.addEventListener('touchstart', (e) => {
-                if (e.target.closest('#heroCarouselWrap') || e.target.closest('.modal') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('select') || e.target.closest('.table-responsive') || e.target.closest('.dropdown-menu')) {
+                if (e.target.closest('#heroCarouselWrap') || e.target.closest('.modal') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('select') || e.target.closest('.table-responsive') || e.target.closest('.dropdown-menu') || e.target.closest('.ios-capsule-navbar') || e.target.closest('button') || e.target.closest('a') || e.target.closest('.btn')) {
                     touchStartX = 0;
                     return;
                 }
