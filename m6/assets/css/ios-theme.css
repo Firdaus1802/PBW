@@ -1086,18 +1086,53 @@ body {
   color: var(--boss-red) !important;
 }
 
+.ios-hero-carousel-wrap {
+  display: flex !important;
+  overflow-x: auto !important;
+  scroll-snap-type: x mandatory !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+  scroll-behavior: smooth !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.ios-hero-carousel-wrap::-webkit-scrollbar {
+  display: none !important;
+}
+
+.ios-hero-slide {
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  scroll-snap-align: start !important;
+  scroll-snap-stop: always !important;
+  padding: 0 2px !important;
+  box-sizing: border-box !important;
+}
+
+.artosku-stat-mini-card {
+  background: var(--boss-card-inner);
+  border: 1px solid var(--boss-border);
+  box-shadow: var(--boss-neu-inset);
+  border-radius: 14px;
+}
+
 .artosku-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
   background: var(--boss-text-muted);
   opacity: 0.35;
   display: inline-block;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  cursor: pointer;
 }
 
 .artosku-dot.active {
-  width: 16px;
+  width: 22px;
   border-radius: 9999px;
   background: var(--boss-text-primary);
   opacity: 1;
@@ -1150,9 +1185,9 @@ body {
 }
 
 .artosku-ai-switch {
-  width: 26px;
-  height: 14px;
-  background: var(--boss-text-primary);
+  width: 28px;
+  height: 16px;
+  background: #34C759;
   border-radius: 9999px;
   position: relative;
   display: inline-block;
@@ -1163,10 +1198,11 @@ body {
   position: absolute;
   top: 2px;
   right: 2px;
-  width: 10px;
-  height: 10px;
-  background: var(--boss-bg);
+  width: 12px;
+  height: 12px;
+  background: #FFFFFF;
   border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .artosku-ai-status {
@@ -1452,17 +1488,19 @@ body {
 
   .artosku-hero-banner,
   .ios-neumorph-hero {
-    border-radius: 0 0 32px 32px !important;
-    padding: max(env(safe-area-inset-top, 24px), 24px) 20px 32px 20px !important;
-    margin: 0 !important;
+    border-radius: 28px !important;
+    padding: 20px 18px 22px 18px !important;
+    margin: max(env(safe-area-inset-top, 16px), 16px) 14px 16px 14px !important;
     box-shadow: var(--boss-neu-shadow) !important;
+    background: var(--boss-card) !important;
+    border: 1px solid var(--boss-neu-border) !important;
   }
 
   .artosku-mobile-sheet {
-    background: var(--boss-bg) !important;
-    border-radius: 32px 32px 0 0 !important;
-    margin-top: -18px !important;
-    padding: 20px 16px 0 16px !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    margin-top: 0 !important;
+    padding: 0 14px !important;
     position: relative !important;
     z-index: 2 !important;
   }

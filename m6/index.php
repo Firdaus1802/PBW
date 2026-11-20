@@ -353,78 +353,114 @@ foreach ($kat_expenses as $ke) {
                         <button type="button" class="artosku-capsule-pill" onclick="filterByBulanIni()">
                             <?= date('F Y') ?>
                         </button>
-                        <button type="button" class="artosku-capsule-pill active" id="pillTotalSaldo" onclick="showHeroView('saldo')">
+                        <button type="button" class="artosku-capsule-pill active" id="pillTotalSaldo" onclick="scrollToHeroSlide(0)">
                             Total Saldo
                         </button>
-                        <button type="button" class="artosku-capsule-pill" id="pillWidget" onclick="showHeroView('widget')">
+                        <button type="button" class="artosku-capsule-pill" id="pillWidget" onclick="scrollToHeroSlide(1)">
                             Widget
+                        </button>
+                        <button type="button" class="artosku-capsule-pill" id="pillStats" onclick="scrollToHeroSlide(2)">
+                            Statistik
                         </button>
                     </div>
 
-                    <div id="artoskuBalanceSec">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <span class="artosku-sub-label">Total kekayaan / Saldo kas</span>
-                                <div class="d-flex align-items-center gap-2 mt-1">
-                                    <h1 class="artosku-main-balance mb-0" id="mainBalanceDisplay">
-                                        <?= format_rupiah($saldo_akhir) ?>
-                                    </h1>
-                                    <button type="button" class="artosku-eye-btn" onclick="toggleBalanceVisibility()" title="Sembunyikan / Tampilkan Saldo">
-                                        <i class="bi bi-eye-fill" id="toggleBalanceEye"></i>
-                                    </button>
+                    <div class="ios-hero-carousel-wrap" id="heroCarouselWrap">
+                        <div class="ios-hero-slide" id="heroSlideSaldo">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <span class="artosku-sub-label">Total kekayaan / Saldo kas</span>
+                                    <div class="d-flex align-items-center gap-2 mt-1">
+                                        <h1 class="artosku-main-balance mb-0" id="mainBalanceDisplay">
+                                            <?= format_rupiah($saldo_akhir) ?>
+                                        </h1>
+                                        <button type="button" class="artosku-eye-btn" onclick="toggleBalanceVisibility()" title="Sembunyikan / Tampilkan Saldo">
+                                            <i class="bi bi-eye-fill" id="toggleBalanceEye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="artosku-trend-badge mt-1">
+                                        <i class="bi bi-arrow-up-right"></i>
+                                        <span>+<?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 100 ?>% surplus kas aktif</span>
+                                    </div>
                                 </div>
-                                <div class="artosku-trend-badge mt-1">
-                                    <i class="bi bi-arrow-up-right"></i>
-                                    <span>+<?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 100 ?>% surplus kas aktif</span>
+                                <div class="artosku-piggy-badge">
+                                    <div class="artosku-piggy-circle">
+                                        <i class="bi bi-piggy-bank-fill"></i>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="artosku-piggy-badge">
-                                <div class="artosku-piggy-circle">
-                                    <i class="bi bi-piggy-bank-fill"></i>
+
+                            <div class="row g-2 artosku-subcards-row mb-2">
+                                <div class="col-6">
+                                    <div class="artosku-subcard" onclick="setInstantFilter('Pemasukan', 1)">
+                                        <div class="artosku-subcard-icon">
+                                            <i class="bi bi-wallet2 text-white"></i>
+                                        </div>
+                                        <div>
+                                            <span class="artosku-subcard-title">Wallet / Masuk</span>
+                                            <strong class="artosku-subcard-val text-income">+ <?= format_rupiah($total_masuk) ?></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="artosku-subcard" onclick="setInstantFilter('Pengeluaran', 2)">
+                                        <div class="artosku-subcard-icon">
+                                            <i class="bi bi-gem text-white"></i>
+                                        </div>
+                                        <div>
+                                            <span class="artosku-subcard-title">Aset / Keluar</span>
+                                            <strong class="artosku-subcard-val text-expense">- <?= format_rupiah($total_keluar) ?></strong>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row g-2 artosku-subcards-row mb-2">
-                            <div class="col-6">
-                                <div class="artosku-subcard" onclick="setInstantFilter('Pemasukan', 1)">
-                                    <div class="artosku-subcard-icon">
-                                        <i class="bi bi-wallet2 text-white"></i>
+                        <div class="ios-hero-slide" id="heroSlideWidget">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="artosku-sub-label">Grafik Arus Kas Bulanan</span>
+                                <span class="badge bg-secondary bg-opacity-25 text-body small" style="font-size: 10px;"><?= tgl_indo(date('Y-m-d')) ?></span>
+                            </div>
+                            <div style="height: 125px; position: relative;">
+                                <canvas id="chartCashflowHero"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="ios-hero-slide" id="heroSlideStats">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="artosku-sub-label">Statistik & Kebugaran Finansial</span>
+                                <span class="badge bg-secondary bg-opacity-25 text-body small" style="font-size: 10px;">PBW 2026</span>
+                            </div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-4">
+                                    <div class="artosku-stat-mini-card text-center p-2">
+                                        <span class="d-block text-secondary" style="font-size: 10px;">Mutasi</span>
+                                        <strong class="d-block mt-1" style="font-size: 14px; color: var(--boss-text-primary);"><?= count($daftar_transaksi) ?></strong>
                                     </div>
-                                    <div>
-                                        <span class="artosku-subcard-title">Wallet / Masuk</span>
-                                        <strong class="artosku-subcard-val text-income">+ <?= format_rupiah($total_masuk) ?></strong>
+                                </div>
+                                <div class="col-4">
+                                    <div class="artosku-stat-mini-card text-center p-2">
+                                        <span class="d-block text-secondary" style="font-size: 10px;">Surplus</span>
+                                        <strong class="d-block mt-1 text-success" style="font-size: 14px;"><?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 0 ?>%</strong>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="artosku-stat-mini-card text-center p-2">
+                                        <span class="d-block text-secondary" style="font-size: 10px;">Kategori</span>
+                                        <strong class="d-block mt-1" style="font-size: 14px; color: var(--boss-text-primary);"><?= count($kategori_list) ?></strong>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div class="artosku-subcard" onclick="setInstantFilter('Pengeluaran', 2)">
-                                    <div class="artosku-subcard-icon">
-                                        <i class="bi bi-gem text-white"></i>
-                                    </div>
-                                    <div>
-                                        <span class="artosku-subcard-title">Aset / Keluar</span>
-                                        <strong class="artosku-subcard-val text-expense">- <?= format_rupiah($total_keluar) ?></strong>
-                                    </div>
-                                </div>
+                            <div class="d-flex align-items-center justify-content-between mt-3 px-1">
+                                <small class="text-secondary" style="font-size: 11px;">Rasio Tabungan Terjaga</small>
+                                <span class="badge bg-success bg-opacity-20 text-success fw-bold" style="font-size: 10.5px;">Sehat Finansial</span>
                             </div>
                         </div>
                     </div>
 
-                    <div id="artoskuWidgetSec" style="display: none;" class="mb-3">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="artosku-sub-label">Grafik Arus Kas Bulanan</span>
-                            <span class="badge bg-white bg-opacity-20 text-white" style="font-size: 10px;"><?= tgl_indo(date('Y-m-d')) ?></span>
-                        </div>
-                        <div style="height: 120px; position: relative;">
-                            <canvas id="chartCashflowHero"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center gap-1 mt-2">
-                        <span class="artosku-dot active" id="dotHero1"></span>
-                        <span class="artosku-dot" id="dotHero2"></span>
-                        <span class="artosku-dot" id="dotHero3"></span>
+                    <div class="d-flex justify-content-center gap-1 mt-3">
+                        <span class="artosku-dot active" id="dotHero1" onclick="scrollToHeroSlide(0)"></span>
+                        <span class="artosku-dot" id="dotHero2" onclick="scrollToHeroSlide(1)"></span>
+                        <span class="artosku-dot" id="dotHero3" onclick="scrollToHeroSlide(2)"></span>
                     </div>
                 </div>
 
@@ -485,21 +521,16 @@ foreach ($kat_expenses as $ke) {
                         </div>
 
                         <div class="col-12 col-md-7 col-lg-8">
-                            <div class="row g-2 mb-3">
-                                <div class="col-12 col-sm-6">
-                                    <div class="ios-segmented-control-slider-wrap" id="filterSegmentedWrap">
-                                        <div class="ios-segmented-slider ios-segmented-slider-3" id="filterSegmentSlider"></div>
-                                        <button type="button" class="ios-segmented-tab-btn active" id="btnFilterSemua" onclick="setInstantFilter('Semua', 0)">Semua</button>
-                                        <button type="button" class="ios-segmented-tab-btn" id="btnFilterPemasukan" onclick="setInstantFilter('Pemasukan', 1)">Pemasukan</button>
-                                        <button type="button" class="ios-segmented-tab-btn" id="btnFilterPengeluaran" onclick="setInstantFilter('Pengeluaran', 2)">Pengeluaran</button>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="ios-search-wrapper">
-                                        <i class="bi bi-search ios-search-icon"></i>
-                                        <input type="text" id="instantSearchInput" class="ios-input ios-search-input" placeholder="Cari transaksi..." onkeyup="filterTransaksiLive()">
-                                    </div>
-                                </div>
+                            <div class="ios-search-wrapper mb-2">
+                                <i class="bi bi-search ios-search-icon"></i>
+                                <input type="text" id="instantSearchInput" class="ios-input ios-search-input" placeholder="Cari transaksi..." onkeyup="filterTransaksiLive()">
+                            </div>
+
+                            <div class="ios-segmented-control-slider-wrap mb-3" id="filterSegmentedWrap">
+                                <div class="ios-segmented-slider ios-segmented-slider-3" id="filterSegmentSlider"></div>
+                                <button type="button" class="ios-segmented-tab-btn active" id="btnFilterSemua" onclick="setInstantFilter('Semua', 0)">Semua</button>
+                                <button type="button" class="ios-segmented-tab-btn" id="btnFilterPemasukan" onclick="setInstantFilter('Pemasukan', 1)">Pemasukan</button>
+                                <button type="button" class="ios-segmented-tab-btn" id="btnFilterPengeluaran" onclick="setInstantFilter('Pengeluaran', 2)">Pengeluaran</button>
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mb-2 px-1">
@@ -519,42 +550,42 @@ foreach ($kat_expenses as $ke) {
                                     $amount_class = $is_masuk ? 'amount-income' : 'amount-expense';
                                 ?>
                                 <div class="ios-list-row trx-card-item" data-jenis="<?= $trx['jenis'] ?>" data-search="<?= strtolower(htmlspecialchars($trx['judul'] . ' ' . $trx['nama_kategori'] . ' ' . $trx['catatan'])) ?>">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="ios-icon-box">
+                                    <div class="d-flex align-items-center gap-3 min-w-0 flex-grow-1 me-2">
+                                        <div class="ios-icon-box flex-shrink-0">
                                             <i class="bi <?= htmlspecialchars($trx['icon']) ?>"></i>
                                         </div>
-                                        <div>
-                                            <div class="fw-semibold mb-0" style="font-size: 14.5px; letter-spacing: -0.2px; color: var(--boss-text-primary);">
+                                        <div class="min-w-0 flex-grow-1">
+                                            <div class="fw-semibold text-truncate mb-0" style="font-size: 14.5px; letter-spacing: -0.2px; color: var(--boss-text-primary);">
                                                 <?= htmlspecialchars($trx['judul']) ?>
                                             </div>
-                                            <div class="d-flex align-items-center gap-2 mt-1">
-                                                <span class="ios-badge-mono">
+                                            <div class="d-flex align-items-center gap-2 mt-0.5 text-truncate">
+                                                <span class="ios-badge-mono text-truncate">
                                                     <?= htmlspecialchars($trx['nama_kategori']) ?>
                                                 </span>
-                                                <span class="text-secondary" style="font-size: 11.5px;">
+                                                <span class="text-secondary flex-shrink-0" style="font-size: 11px;">
                                                     • <?= tgl_indo($trx['tanggal']) ?>
                                                 </span>
                                             </div>
                                             <?php if (!empty($trx['catatan'])): ?>
-                                                <small class="text-secondary d-block mt-1" style="font-size: 11px;">
+                                                <small class="text-secondary d-block mt-0.5 text-truncate" style="font-size: 11px;">
                                                     <?= htmlspecialchars($trx['catatan']) ?>
                                                 </small>
                                             <?php endif; ?>
                                         </div>
                                     </div>
 
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
                                         <div class="text-end">
                                             <span class="fw-bold <?= $amount_class ?>" style="font-size: 14.5px; letter-spacing: -0.3px;">
                                                 <?= $sign ?> <?= format_rupiah($trx['jumlah']) ?>
                                             </span>
-                                            <small class="d-block text-secondary text-uppercase" style="font-size: 10px;">
+                                            <small class="d-block text-secondary text-uppercase" style="font-size: 9.5px;">
                                                 <?= $trx['jenis'] ?>
                                             </small>
                                         </div>
 
                                         <div class="dropdown">
-                                            <button class="btn btn-ios-secondary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" style="width: 32px; height: 32px;">
+                                            <button class="btn btn-ios-secondary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" style="width: 30px; height: 30px;">
                                                 <i class="bi bi-three-dots-vertical"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end p-2" style="background-color: var(--boss-card); border: 1px solid var(--boss-border-active);">
@@ -1144,29 +1175,43 @@ foreach ($kat_expenses as $ke) {
         }
 
         let chartCashflowHeroInstance = null;
-        function showHeroView(view) {
+        function scrollToHeroSlide(index) {
+            const carousel = document.getElementById('heroCarouselWrap');
+            if (carousel) {
+                const width = carousel.offsetWidth;
+                carousel.scrollTo({
+                    left: index * width,
+                    behavior: 'smooth'
+                });
+                updateHeroSlideIndicators(index);
+            }
+        }
+
+        function updateHeroSlideIndicators(index) {
+            const dots = [
+                document.getElementById('dotHero1'),
+                document.getElementById('dotHero2'),
+                document.getElementById('dotHero3')
+            ];
+            dots.forEach((d, i) => {
+                if (!d) return;
+                if (i === index) {
+                    d.classList.add('active');
+                } else {
+                    d.classList.remove('active');
+                }
+            });
+
             const pSaldo = document.getElementById('pillTotalSaldo');
             const pWidget = document.getElementById('pillWidget');
-            const secSaldo = document.getElementById('artoskuBalanceSec');
-            const secWidget = document.getElementById('artoskuWidgetSec');
-            const dot1 = document.getElementById('dotHero1');
-            const dot2 = document.getElementById('dotHero2');
+            const pStats = document.getElementById('pillStats');
 
-            if (view === 'widget') {
-                if (pSaldo) pSaldo.classList.remove('active');
-                if (pWidget) pWidget.classList.add('active');
-                if (secSaldo) secSaldo.style.display = 'none';
-                if (secWidget) secWidget.style.display = 'block';
-                if (dot1) dot1.classList.remove('active');
-                if (dot2) dot2.classList.add('active');
+            if (pSaldo) pSaldo.classList.toggle('active', index === 0);
+            if (pWidget) pWidget.classList.toggle('active', index === 1);
+            if (pStats) pStats.classList.toggle('active', index === 2);
+
+            if (index === 1) {
                 initHeroWidgetChart();
-            } else {
-                if (pWidget) pWidget.classList.remove('active');
-                if (pSaldo) pSaldo.classList.add('active');
-                if (secWidget) secWidget.style.display = 'none';
-                if (secSaldo) secSaldo.style.display = 'block';
-                if (dot2) dot2.classList.remove('active');
-                if (dot1) dot1.classList.add('active');
             }
         }
 
@@ -1568,6 +1613,62 @@ foreach ($kat_expenses as $ke) {
 
                 updateCollapsibleHeader();
             }
+
+            const carousel = document.getElementById('heroCarouselWrap');
+            if (carousel) {
+                let carouselScrollTimer = null;
+                carousel.addEventListener('scroll', () => {
+                    if (carouselScrollTimer) return;
+                    carouselScrollTimer = setTimeout(() => {
+                        carouselScrollTimer = null;
+                        const width = carousel.offsetWidth;
+                        if (width <= 0) return;
+                        const scrollLeft = carousel.scrollLeft;
+                        const activeIndex = Math.min(Math.max(Math.round(scrollLeft / width), 0), 2);
+                        updateHeroSlideIndicators(activeIndex);
+                    }, 50);
+                }, { passive: true });
+            }
+
+            const tabsList = ['dompet', 'kategori', 'laporan', 'akun'];
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            document.addEventListener('touchstart', (e) => {
+                if (e.target.closest('#heroCarouselWrap') || e.target.closest('.modal') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('select') || e.target.closest('.table-responsive') || e.target.closest('.dropdown-menu')) {
+                    touchStartX = 0;
+                    return;
+                }
+                if (e.touches && e.touches.length > 0) {
+                    touchStartX = e.touches[0].screenX;
+                    touchStartY = e.touches[0].screenY;
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', (e) => {
+                if (!touchStartX) return;
+                if (!e.changedTouches || e.changedTouches.length === 0) return;
+                const touchEndX = e.changedTouches[0].screenX;
+                const touchEndY = e.changedTouches[0].screenY;
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
+
+                if (Math.abs(diffX) > 65 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+                    const currentActive = document.querySelector('.tab-view-panel.active');
+                    if (currentActive) {
+                        const currentId = currentActive.id.replace('tabView', '').toLowerCase();
+                        const currentIndex = tabsList.indexOf(currentId);
+                        if (currentIndex !== -1) {
+                            if (diffX < 0 && currentIndex < tabsList.length - 1) {
+                                switchIosTab(tabsList[currentIndex + 1]);
+                            } else if (diffX > 0 && currentIndex > 0) {
+                                switchIosTab(tabsList[currentIndex - 1]);
+                            }
+                        }
+                    }
+                }
+                touchStartX = 0;
+            }, { passive: true });
         });
     </script>
 </body>
