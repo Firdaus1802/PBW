@@ -1094,6 +1094,38 @@ foreach ($kat_expenses as $ke) {
 
                 <div class="modal-body p-3">
                     <div class="ios-card-group mb-3">
+                        <?php 
+                        $recent_notifs = array_slice($daftar_transaksi, 0, 3);
+                        if (!empty($recent_notifs)):
+                            foreach ($recent_notifs as $nt):
+                                $is_masuk = ($nt['jenis'] === 'Pemasukan');
+                                $is_bank = preg_match('/(bni|bca|mandiri|bri|dana|gopay|ovo|shopee)/i', $nt['judul'] . ' ' . $nt['catatan'] . ' ' . $nt['nama_kategori']);
+                                $icon_nt = $is_bank ? 'bi-bank' : ($is_masuk ? 'bi-arrow-down-left-circle-fill' : 'bi-arrow-up-right-circle-fill');
+                        ?>
+                        <div class="ios-list-row p-3">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: var(--boss-segmented-bg); color: <?= $is_masuk ? 'var(--money-in)' : 'var(--money-out)' ?>; border: 1px solid var(--boss-border);">
+                                    <i class="bi <?= $icon_nt ?>" style="font-size: 16px;"></i>
+                                </div>
+                                <div class="flex-grow-1 min-w-0">
+                                    <div class="d-flex justify-content-between align-items-center mb-0.5">
+                                        <strong class="text-truncate me-2" style="font-size: 13px; color: var(--boss-text-primary);">
+                                            <?= $is_masuk ? 'Dana Masuk' : 'Pengeluaran Kas' ?>
+                                        </strong>
+                                        <span class="text-secondary flex-shrink-0" style="font-size: 10px;"><?= tgl_indo($nt['tanggal']) ?></span>
+                                    </div>
+                                    <p class="mb-0 text-truncate" style="font-size: 12px; color: var(--boss-text-primary);">
+                                        <?= htmlspecialchars($nt['judul']) ?>: <strong style="color: <?= $is_masuk ? 'var(--money-in)' : 'var(--money-out)' ?>;"><?= ($is_masuk ? '+' : '-') ?> <?= format_rupiah($nt['jumlah']) ?></strong>
+                                    </p>
+                                    <small class="text-secondary d-block" style="font-size: 10.5px;">Kategori: <?= htmlspecialchars($nt['nama_kategori']) ?></small>
+                                </div>
+                            </div>
+                        </div>
+                        <?php 
+                            endforeach;
+                        endif; 
+                        ?>
+
                         <div class="ios-list-row p-3">
                             <div class="d-flex align-items-start gap-3">
                                 <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border);">
@@ -1101,45 +1133,11 @@ foreach ($kat_expenses as $ke) {
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Kondisi Finansial Terjaga</strong>
-                                        <span class="text-secondary" style="font-size: 10px;">Baru saja</span>
+                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Kondisi Saldo DompetKu</strong>
+                                        <span class="text-secondary" style="font-size: 10px;">Update</span>
                                     </div>
                                     <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
-                                        Sisa saldo kas aktif Anda saat ini <strong><?= format_rupiah($saldo_akhir) ?></strong> dengan rasio tabungan <strong><?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 100 ?>%</strong>.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ios-list-row p-3">
-                            <div class="d-flex align-items-start gap-3">
-                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border);">
-                                    <i class="bi bi-arrow-repeat" style="font-size: 16px;"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Sinkronisasi Database Riil</strong>
-                                        <span class="text-secondary" style="font-size: 10px;">Hari ini</span>
-                                    </div>
-                                    <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
-                                        Sebanyak <?= count($daftar_transaksi) ?> mutasi keuangan telah terhubung dan tersimpan aman di database MySQL Laragon.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="ios-list-row p-3">
-                            <div class="d-flex align-items-start gap-3">
-                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border);">
-                                    <i class="bi bi-calendar3" style="font-size: 15px;"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Pengingat Kas Mahasiswa</strong>
-                                        <span class="text-secondary" style="font-size: 10px;">Bulan <?= date('F Y') ?></span>
-                                    </div>
-                                    <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
-                                        Pastikan seluruh bukti pengeluaran dan pemasukan dicatat tepat waktu sebelum penutupan buku bulan ini.
+                                        Sisa saldo kas aktif @<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?> saat ini <strong><?= format_rupiah($saldo_akhir) ?></strong> dengan rasio tersimpan <strong><?= $rasio_simpan ?>%</strong>.
                                     </p>
                                 </div>
                             </div>
@@ -1152,11 +1150,11 @@ foreach ($kat_expenses as $ke) {
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Sesi Akun Aktif</strong>
+                                        <strong style="font-size: 13px; color: var(--boss-text-primary);">Sesi Akun Terhubung</strong>
                                         <span class="text-secondary" style="font-size: 10px;">Terverifikasi</span>
                                     </div>
                                     <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
-                                        Login sebagai <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Mahasiswa') ?> (@<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?>). Sesi aktif hingga 30 hari.
+                                        Login sebagai <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Mahasiswa') ?> (@<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?>). Sesi terenkripsi & data terisolasi.
                                     </p>
                                 </div>
                             </div>
