@@ -12,8 +12,6 @@ $sql = "SELECT t.*, k.nama_kategori
         ORDER BY t.tanggal ASC, t.id_transaksi ASC";
 $transaksi_list = $pdo->query($sql)->fetchAll();
 
-$paylater_list = $pdo->query("SELECT * FROM kredit_paylater ORDER BY status ASC, jatuh_tempo ASC")->fetchAll();
-
 $total_masuk = 0;
 $total_keluar = 0;
 foreach ($transaksi_list as $t) {
@@ -79,7 +77,7 @@ header("Expires: 0");
     <br><br>
 
     
-    <div class="bold" style="font-size: 12pt;">A. RIWAYAT TRANSAKSI KAS</div>
+    <div class="bold" style="font-size: 12pt;">RINCIAN MUTASI TRANSAKSI KAS</div>
     <table>
         <thead>
             <tr>
@@ -116,37 +114,6 @@ header("Expires: 0");
                 <td></td>
             </tr>
         </tfoot>
-    </table>
-
-    <br><br>
-
-    
-    <div class="bold" style="font-size: 12pt;">B. PENCATATAN TANGGUNGAN KREDIT & PAYLATER</div>
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 50px;">No</th>
-                <th style="width: 280px;">Nama Tagihan / Cicilan</th>
-                <th style="width: 140px;">Jumlah (Rp)</th>
-                <th style="width: 120px;">Jatuh Tempo</th>
-                <th style="width: 120px;">Status</th>
-                <th style="width: 240px;">Catatan</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $no_k = 1; foreach ($paylater_list as $k): ?>
-            <tr>
-                <td class="text-center"><?= $no_k++ ?></td>
-                <td><?= htmlspecialchars($k['nama_tagihan']) ?></td>
-                <td class="text-end bold">Rp <?= number_format($k['jumlah_tagihan'], 2, ',', '.') ?></td>
-                <td class="text-center"><?= $k['jatuh_tempo'] ?></td>
-                <td class="text-center bold" style="color: <?= $k['status'] === 'Lunas' ? '#16A34A' : '#DC2626' ?>;">
-                    <?= $k['status'] ?>
-                </td>
-                <td><?= htmlspecialchars($k['catatan'] ?? '-') ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
     </table>
 
 </body>

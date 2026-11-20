@@ -6,6 +6,7 @@ CREATE DATABASE IF NOT EXISTS `db_kas_mahasiswa` CHARACTER SET utf8mb4 COLLATE u
 USE `db_kas_mahasiswa`;
 
 -- 1. Tabel Pengguna (Admin / Mahasiswa)
+DROP TABLE IF EXISTS `kredit_paylater`;
 DROP TABLE IF EXISTS `transaksi`;
 DROP TABLE IF EXISTS `kategori`;
 DROP TABLE IF EXISTS `users`;
@@ -74,18 +75,3 @@ INSERT INTO `transaksi` (`id_transaksi`, `id_kategori`, `tanggal`, `judul`, `jen
 (5, 4, '2026-11-10', 'Makan Siang & Stok Mie/Camilan Kos', 'Pengeluaran', 85000.00, 'Belanja mingguan di minimarket'),
 (6, 6, '2026-11-12', 'Isi Bensin Motor & Servis Ringan', 'Pengeluaran', 60000.00, 'Ganti oli dan bensin pertalite'),
 (7, 8, '2026-11-15', 'Nugas Bareng di Cafe Kampus', 'Pengeluaran', 45000.00, 'Kopi americano dan cemilan bareng teman');
-CREATE TABLE IF NOT EXISTS kredit_paylater (
-  id_kredit INT NOT NULL AUTO_INCREMENT,
-  nama_tagihan VARCHAR(100) NOT NULL,
-  jumlah_tagihan DECIMAL(12,2) NOT NULL,
-  jatuh_tempo DATE NOT NULL,
-  status ENUM('Belum Lunas', 'Lunas') DEFAULT 'Belum Lunas',
-  catatan VARCHAR(255) DEFAULT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id_kredit)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO kredit_paylater (nama_tagihan, jumlah_tagihan, jatuh_tempo, status, catatan) VALUES
-('Spaylater - Beli Headset & Mouse', 180000.00, '2026-11-25', 'Belum Lunas', 'Cicilan perlengkapan kuliah PBW'),
-('Cicilan Modul Lab Komputer', 120000.00, '2026-11-28', 'Belum Lunas', 'Modul praktikum sistem informasi'),
-('Pinjam Uang Bensin Teman', 50000.00, '2026-11-20', 'Lunas', 'Sudah diganti pas kiriman ortu masuk');
