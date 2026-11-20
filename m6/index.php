@@ -680,38 +680,37 @@ foreach ($kat_expenses as $ke) {
                     </button>
                 </div>
 
-                <div class="row g-3 row-cols-1 row-cols-md-2 row-cols-lg-3">
+                <div class="ios-card-group mb-4">
                     <?php foreach ($kategori_list as $kat): 
                         $is_in = ($kat['jenis'] === 'Pemasukan');
                     ?>
-                    <div class="col">
-                        <div class="ios-card p-3 d-flex align-items-center justify-content-between h-100">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="ios-icon-box" style="width: 42px; height: 42px;">
-                                    <i class="bi <?= htmlspecialchars($kat['icon']) ?>"></i>
+                    <div class="ios-list-row p-3 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3 min-w-0 flex-grow-1 me-2">
+                            <div class="ios-icon-box flex-shrink-0" style="width: 38px; height: 38px; border-radius: 10px; background: var(--boss-segmented-bg); border: 1px solid var(--boss-border); color: var(--boss-text-primary);">
+                                <i class="bi <?= htmlspecialchars($kat['icon']) ?>" style="font-size: 16px;"></i>
+                            </div>
+                            <div class="min-w-0 flex-grow-1">
+                                <div class="fw-semibold text-truncate mb-0.5" style="font-size: 14px; color: var(--boss-text-primary);">
+                                    <?= htmlspecialchars($kat['nama_kategori']) ?>
                                 </div>
-                                <div>
-                                    <div class="fw-semibold text-truncate" style="max-width: 170px; font-size: 14px; color: var(--boss-text-primary);">
-                                        <?= htmlspecialchars($kat['nama_kategori']) ?>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mt-1">
-                                        <span class="badge <?= $is_in ? 'text-success bg-success' : 'text-danger bg-danger' ?> bg-opacity-15 fw-semibold px-2 py-0" style="font-size: 10.5px;">
-                                            <?= $kat['jenis'] ?>
-                                        </span>
-                                        <span class="text-secondary small" style="font-size: 11px;">
-                                            <?= $kat['total_trx'] ?> data
-                                        </span>
-                                    </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge <?= $is_in ? 'text-success bg-success' : 'text-danger bg-danger' ?> bg-opacity-15 fw-semibold px-2 py-0.5" style="font-size: 10px; border-radius: 6px;">
+                                        <?= $kat['jenis'] ?>
+                                    </span>
+                                    <span class="text-secondary" style="font-size: 11px;">
+                                        <?= $kat['total_trx'] ?> mutasi
+                                    </span>
                                 </div>
                             </div>
-
-                            <a href="<?= base_url('kategori.php?hapus=' . $kat['id_kategori']) ?>" 
-                               class="btn btn-ios-danger btn-sm py-1 px-2" 
-                               onclick="return confirm('Hapus kategori <?= htmlspecialchars($kat['nama_kategori']) ?>?');"
-                               title="Hapus Kategori">
-                                <i class="bi bi-trash3"></i>
-                            </a>
                         </div>
+
+                        <a href="<?= base_url('kategori.php?hapus=' . $kat['id_kategori']) ?>" 
+                           class="btn btn-ios-danger btn-sm rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                           style="width: 32px; height: 32px;"
+                           onclick="return confirm('Hapus kategori <?= htmlspecialchars($kat['nama_kategori']) ?>?');"
+                           title="Hapus Kategori">
+                            <i class="bi bi-trash3" style="font-size: 13px;"></i>
+                        </a>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -721,48 +720,78 @@ foreach ($kat_expenses as $ke) {
             
             <div id="tabViewLaporan" class="tab-view-panel">
                 
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 no-print">
+                <div class="d-flex justify-content-between align-items-center gap-2 mb-3 no-print">
                     <div>
-                        <h5 class="fw-bold mb-0" style="letter-spacing: -0.3px;">Laporan Arus Kas Mahasiswa</h5>
-                        <small class="text-secondary">Rekapitulasi keuangan personal per <?= tgl_indo(date('Y-m-d')) ?></small>
+                        <h5 class="fw-bold mb-0" style="letter-spacing: -0.3px;">Laporan Kas</h5>
+                        <small class="text-secondary" style="font-size: 11.5px;">Rekapitulasi per <?= tgl_indo(date('Y-m-d')) ?></small>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <a href="<?= base_url('export_excel.php') ?>" class="btn btn-ios-secondary btn-sm py-2 px-3 d-flex align-items-center gap-1" title="Unduh File Excel">
-                            <i class="bi bi-file-earmark-excel text-success"></i> Export Excel
+                    <div class="d-flex align-items-center gap-1">
+                        <a href="<?= base_url('export_excel.php') ?>" class="btn btn-ios-secondary btn-sm py-1.5 px-2.5 d-flex align-items-center gap-1" title="Unduh File Excel" style="font-size: 12px; border-radius: 9px;">
+                            <i class="bi bi-file-earmark-excel text-success"></i> Excel
                         </a>
-                        <a href="<?= base_url('laporan.php') ?>" class="btn btn-ios-secondary btn-sm py-2 px-3 d-flex align-items-center gap-1" title="Buka Halaman Fokus">
-                            <i class="bi bi-arrows-fullscreen"></i> <span class="d-none d-sm-inline">Fokus Lembar</span>
-                        </a>
-                        <button onclick="window.print()" class="btn btn-ios-primary btn-sm py-2 px-4 d-flex align-items-center gap-2">
+                        <button onclick="window.print()" class="btn btn-ios-primary btn-sm py-1.5 px-3 d-flex align-items-center gap-1" style="font-size: 12px; border-radius: 9px;">
                             <i class="bi bi-printer-fill"></i> Cetak PDF
                         </button>
                     </div>
                 </div>
 
-                
-                <div class="row g-3 mb-4">
-                    <div class="col-12 col-md-4">
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
                         <div class="ios-card p-3 text-center">
-                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.6px;">Total Pemasukan</small>
-                            <span class="fw-bold amount-income" style="font-size: 18px;">+ <?= format_rupiah($total_masuk) ?></span>
+                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Pemasukan</small>
+                            <span class="fw-bold amount-income" style="font-size: 15px;">+ <?= format_rupiah($total_masuk) ?></span>
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-6">
                         <div class="ios-card p-3 text-center">
-                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.6px;">Total Pengeluaran</small>
-                            <span class="fw-bold amount-expense" style="font-size: 18px;">- <?= format_rupiah($total_keluar) ?></span>
+                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Pengeluaran</small>
+                            <span class="fw-bold amount-expense" style="font-size: 15px;">- <?= format_rupiah($total_keluar) ?></span>
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
+                    <div class="col-12">
                         <div class="ios-card p-3 text-center" style="background-color: var(--boss-badge-bg); border-color: var(--boss-border-active);">
-                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.6px;">Sisa Saldo Kas</small>
+                            <small class="text-secondary d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">Sisa Saldo Kas Bersih</small>
                             <span class="fw-bold" style="color: var(--boss-text-primary); font-size: 18px; letter-spacing: -0.3px;"><?= format_rupiah($saldo_akhir) ?></span>
                         </div>
                     </div>
                 </div>
 
-                
-                <div class="table-responsive rounded-4 overflow-hidden border mb-4" style="border-color: var(--boss-table-border) !important;">
+                <div class="ios-card-group mb-4 d-print-none">
+                    <?php foreach ($daftar_transaksi as $row): 
+                        $is_masuk = ($row['jenis'] === 'Pemasukan');
+                        $amount_class = $is_masuk ? 'amount-income' : 'amount-expense';
+                    ?>
+                    <div class="ios-list-row p-3">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <span class="badge <?= $is_masuk ? 'text-success bg-success' : 'text-danger bg-danger' ?> bg-opacity-15 fw-semibold px-2 py-0.5" style="font-size: 10px; border-radius: 6px;">
+                                <?= $row['jenis'] ?> • <?= htmlspecialchars($row['nama_kategori']) ?>
+                            </span>
+                            <span class="text-secondary" style="font-size: 11px;">
+                                <?= tgl_indo($row['tanggal']) ?>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between gap-2">
+                            <div class="min-w-0 flex-grow-1">
+                                <div class="fw-semibold text-truncate" style="font-size: 14px; color: var(--boss-text-primary);">
+                                    <?= htmlspecialchars($row['judul']) ?>
+                                </div>
+                                <?php if (!empty($row['catatan'])): ?>
+                                    <small class="text-secondary d-block text-truncate" style="font-size: 11px;">
+                                        <?= htmlspecialchars($row['catatan']) ?>
+                                    </small>
+                                <?php endif; ?>
+                            </div>
+                            <div class="text-end flex-shrink-0">
+                                <strong class="<?= $amount_class ?>" style="font-size: 14px; white-space: nowrap;">
+                                    <?= ($is_masuk ? '+' : '-') ?> <?= format_rupiah($row['jumlah']) ?>
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="table-responsive rounded-4 overflow-hidden border mb-4 d-none d-print-block" style="border-color: var(--boss-table-border) !important;">
                     <table class="table rekap-table align-middle mb-0">
                         <thead>
                             <tr>
