@@ -465,7 +465,8 @@ foreach ($kat_expenses as $ke) {
                 </div>
 
                 <div class="artosku-mobile-sheet">
-                    <div class="row g-3">
+                    <div id="contentSectionSaldo" class="hero-content-section active">
+                        <div class="row g-3">
                         <div class="col-12 col-md-5 col-lg-4">
                             <div class="artosku-action-box mb-3">
                                 <div class="row g-0 align-items-center">
@@ -606,11 +607,109 @@ foreach ($kat_expenses as $ke) {
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </div>
-
                     </div>
-
                 </div>
 
+                <div id="contentSectionWidget" class="hero-content-section" style="display: none;">
+                    <div class="ios-card p-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="fw-bold mb-0" style="font-size: 14px; color: var(--boss-text-primary);">Proporsi Pengeluaran per Kategori</h6>
+                                <small class="text-secondary" style="font-size: 11px;">Alokasi kas keluar mahasiswa</small>
+                            </div>
+                            <span class="badge bg-secondary bg-opacity-20 text-secondary" style="font-size: 10px;"><?= count($kat_expenses) ?> Kategori</span>
+                        </div>
+                        <div style="height: 200px; position: relative;">
+                            <canvas id="chartCategoryMobile"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="ios-card p-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <h6 class="fw-bold mb-0" style="font-size: 14px; color: var(--boss-text-primary);">Tren Arus Kas (Masuk vs Keluar)</h6>
+                                <small class="text-secondary" style="font-size: 11px;">Rasio pergerakan kas riil</small>
+                            </div>
+                            <span class="badge bg-success bg-opacity-20 text-success fw-bold" style="font-size: 10px;">Surplus Kas</span>
+                        </div>
+                        <div style="height: 160px; position: relative;">
+                            <canvas id="chartCashflowMobileBar"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="ios-card p-3 mb-4">
+                        <h6 class="fw-bold mb-2" style="font-size: 13.5px; color: var(--boss-text-primary);">Kategori Pengeluaran Terbesar</h6>
+                        <?php foreach (array_slice($kat_expenses, 0, 4) as $ke): 
+                            $pct = $total_keluar > 0 ? round(($ke['total'] / $total_keluar) * 100) : 0;
+                        ?>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between small mb-1">
+                                <span class="text-secondary" style="font-size: 12px;"><?= htmlspecialchars($ke['nama_kategori']) ?></span>
+                                <strong style="color: var(--boss-text-primary); font-size: 12px;"><?= format_rupiah($ke['total']) ?> (<?= $pct ?>%)</strong>
+                            </div>
+                            <div class="progress" style="height: 6px; background-color: var(--boss-input-bg); border-radius: 9999px;">
+                                <div class="progress-bar bg-danger bg-opacity-75" role="progressbar" style="width: <?= $pct ?>%; border-radius: 9999px;"></div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <div id="contentSectionStats" class="hero-content-section" style="display: none;">
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="ios-card p-3 text-center h-100">
+                                <small class="text-secondary d-block" style="font-size: 10.5px;">TOTAL PEMASUKAN</small>
+                                <strong class="d-block mt-1 text-success" style="font-size: 15px;">+ <?= format_rupiah($total_masuk) ?></strong>
+                                <span class="text-secondary" style="font-size: 10px;">Kas diterima</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ios-card p-3 text-center h-100">
+                                <small class="text-secondary d-block" style="font-size: 10.5px;">TOTAL PENGELUARAN</small>
+                                <strong class="d-block mt-1 text-danger" style="font-size: 15px;">- <?= format_rupiah($total_keluar) ?></strong>
+                                <span class="text-secondary" style="font-size: 10px;">Kas dibelanjakan</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ios-card p-3 text-center h-100">
+                                <small class="text-secondary d-block" style="font-size: 10.5px;">SISA SALDO KAS</small>
+                                <strong class="d-block mt-1" style="font-size: 15px; color: var(--boss-text-primary);"><?= format_rupiah($saldo_akhir) ?></strong>
+                                <span class="text-secondary" style="font-size: 10px;">Tersimpan aktif</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="ios-card p-3 text-center h-100">
+                                <small class="text-secondary d-block" style="font-size: 10.5px;">RASIO TABUNGAN</small>
+                                <strong class="d-block mt-1 text-primary" style="font-size: 15px;"><?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 0 ?>%</strong>
+                                <span class="text-secondary" style="font-size: 10px;">Status sangat sehat</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ios-card p-3 mb-4">
+                        <h6 class="fw-bold mb-3" style="font-size: 13.5px; color: var(--boss-text-primary);">Distribusi Kategori Keuangan</h6>
+                        <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
+                            <span>Total Kategori Terdaftar</span>
+                            <strong style="color: var(--boss-text-primary);"><?= count($kategori_list) ?> Kategori</strong>
+                        </div>
+                        <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
+                            <span>Total Mutasi Transaksi</span>
+                            <strong style="color: var(--boss-text-primary);"><?= count($daftar_transaksi) ?> Mutasi</strong>
+                        </div>
+                        <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
+                            <span>Rata-Rata Pengeluaran per Transaksi</span>
+                            <?php 
+                                $cnt_exp = 0; foreach($daftar_transaksi as $d) { if($d['jenis']==='Pengeluaran') $cnt_exp++; }
+                                $avg_exp = $cnt_exp > 0 ? $total_keluar / $cnt_exp : 0;
+                            ?>
+                            <strong class="text-danger"><?= format_rupiah($avg_exp) ?></strong>
+                        </div>
+                        <div class="d-flex justify-content-between text-secondary small py-2">
+                            <span>Sisa Kas Mahasiswa</span>
+                            <strong class="text-success"><?= format_rupiah($saldo_akhir) ?></strong>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -1187,7 +1286,9 @@ foreach ($kat_expenses as $ke) {
             }
         }
 
+        let currentHeroSlideIndex = 0;
         function updateHeroSlideIndicators(index) {
+            currentHeroSlideIndex = index;
             const dots = [
                 document.getElementById('dotHero1'),
                 document.getElementById('dotHero2'),
@@ -1210,8 +1311,84 @@ foreach ($kat_expenses as $ke) {
             if (pWidget) pWidget.classList.toggle('active', index === 1);
             if (pStats) pStats.classList.toggle('active', index === 2);
 
+            const secSaldo = document.getElementById('contentSectionSaldo');
+            const secWidget = document.getElementById('contentSectionWidget');
+            const secStats = document.getElementById('contentSectionStats');
+
+            if (secSaldo) secSaldo.style.display = index === 0 ? 'block' : 'none';
+            if (secWidget) secWidget.style.display = index === 1 ? 'block' : 'none';
+            if (secStats) secStats.style.display = index === 2 ? 'block' : 'none';
+
             if (index === 1) {
                 initHeroWidgetChart();
+                initMobileWidgetCharts();
+            }
+        }
+
+        let chartMobileCategoryInstance = null;
+        let chartMobileCashflowBarInstance = null;
+
+        function initMobileWidgetCharts() {
+            const ctxCat = document.getElementById('chartCategoryMobile');
+            if (ctxCat && !chartMobileCategoryInstance) {
+                chartMobileCategoryInstance = new Chart(ctxCat, {
+                    type: 'doughnut',
+                    data: {
+                        labels: <?= json_encode($chart_labels_kat) ?>,
+                        datasets: [{
+                            data: <?= json_encode($chart_data_kat) ?>,
+                            backgroundColor: [
+                                '#FF3B30', '#FF9500', '#AF52DE', '#5AC8FA', '#34C759', '#FF2D55'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#94A3B8', boxWidth: 10, font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const ctxBar = document.getElementById('chartCashflowMobileBar');
+            if (ctxBar && !chartMobileCashflowBarInstance) {
+                chartMobileCashflowBarInstance = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Masuk', 'Keluar', 'Sisa'],
+                        datasets: [{
+                            data: [<?= $total_masuk ?>, <?= $total_keluar ?>, <?= $saldo_akhir ?>],
+                            backgroundColor: [
+                                'rgba(52, 199, 89, 0.9)',
+                                'rgba(255, 59, 48, 0.9)',
+                                'rgba(0, 122, 255, 0.9)'
+                            ],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255,255,255,0.06)' },
+                                ticks: { color: '#94A3B8', font: { size: 10 } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#CBD5E1', font: { size: 11, weight: 'bold' } }
+                            }
+                        }
+                    }
+                });
             }
         }
 
@@ -1657,12 +1834,26 @@ foreach ($kat_expenses as $ke) {
                     const currentActive = document.querySelector('.tab-view-panel.active');
                     if (currentActive) {
                         const currentId = currentActive.id.replace('tabView', '').toLowerCase();
-                        const currentIndex = tabsList.indexOf(currentId);
-                        if (currentIndex !== -1) {
-                            if (diffX < 0 && currentIndex < tabsList.length - 1) {
-                                switchIosTab(tabsList[currentIndex + 1]);
-                            } else if (diffX > 0 && currentIndex > 0) {
-                                switchIosTab(tabsList[currentIndex - 1]);
+                        if (currentId === 'dompet') {
+                            if (diffX < 0) {
+                                if (currentHeroSlideIndex < 2) {
+                                    scrollToHeroSlide(currentHeroSlideIndex + 1);
+                                } else {
+                                    switchIosTab('kategori');
+                                }
+                            } else if (diffX > 0) {
+                                if (currentHeroSlideIndex > 0) {
+                                    scrollToHeroSlide(currentHeroSlideIndex - 1);
+                                }
+                            }
+                        } else {
+                            const currentIndex = tabsList.indexOf(currentId);
+                            if (currentIndex !== -1) {
+                                if (diffX < 0 && currentIndex < tabsList.length - 1) {
+                                    switchIosTab(tabsList[currentIndex + 1]);
+                                } else if (diffX > 0 && currentIndex > 0) {
+                                    switchIosTab(tabsList[currentIndex - 1]);
+                                }
                             }
                         }
                     }
