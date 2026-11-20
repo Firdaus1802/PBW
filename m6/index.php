@@ -738,99 +738,173 @@ foreach ($kat_expenses as $ke) {
             
             <div id="tabViewAkun" class="tab-view-panel">
                 
-                <div class="mb-4">
-                    <h5 class="fw-bold mb-1" style="letter-spacing: -0.4px; color: var(--boss-text-primary);">Akun & Pengaturan</h5>
-                    <small class="text-secondary">Informasi identitas mahasiswa dan preferensi sistem</small>
-                </div>
-
-                
-                <div class="ios-card p-4 mb-4 text-center">
-                    <div class="mx-auto mb-3" style="width: 68px; height: 68px; border-radius: 20px; background: var(--boss-hero-gradient); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; box-shadow: 0 8px 20px rgba(0,0,0,0.18);">
-                        FD
+                <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+                    <div>
+                        <h5 class="fw-bold mb-0" style="letter-spacing: -0.4px; color: var(--boss-text-primary);">Akun & Pengaturan</h5>
+                        <small class="text-secondary" style="font-size: 11.5px;">Profil mahasiswa dan preferensi sistem</small>
                     </div>
-                    <h5 class="fw-bold mb-1" style="color: var(--boss-text-primary); letter-spacing: -0.3px;">
-                        <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Firdaus Dhuha Prabowo') ?>
-                    </h5>
-                    <p class="text-secondary small mb-2">Mahasiswa Sistem Informasi • PBW Gunadarma</p>
-                    <span class="badge px-3 py-1 fw-semibold" style="background: rgba(48, 209, 88, 0.12); color: var(--boss-green); border-radius: 20px; font-size: 11px;">
-                        <i class="bi bi-shield-check me-1"></i> Sesi Aktif 30 Hari
+                    <span class="badge px-2.5 py-1 fw-semibold" style="background: rgba(48, 209, 88, 0.12); color: var(--boss-green); border-radius: 20px; font-size: 10.5px;">
+                        <i class="bi bi-shield-check me-1"></i> Aktif
                     </span>
                 </div>
 
-                
-                <div class="mb-2 px-1">
-                    <span class="fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.6px; color: var(--boss-text-muted);">Ringkasan Kas Pribadi</span>
-                </div>
-                <div class="ios-card-group mb-4">
-                    <div class="ios-list-row">
-                        <span class="text-secondary small">Total Pemasukan</span>
-                        <strong class="text-success small fw-bold">+ <?= format_rupiah($total_masuk) ?></strong>
+                <div class="ios-card p-4 mb-3 text-center position-relative overflow-hidden">
+                    <div class="position-relative d-inline-block mx-auto mb-3">
+                        <div class="d-flex align-items-center justify-content-center" style="width: 76px; height: 76px; border-radius: 24px; background: linear-gradient(135deg, #0A84FF 0%, #5E5CE6 100%); color: #FFFFFF; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; box-shadow: 0 10px 25px rgba(10, 132, 255, 0.35);">
+                            FD
+                        </div>
+                        <div class="position-absolute d-flex align-items-center justify-content-center" style="bottom: -2px; right: -2px; width: 24px; height: 24px; border-radius: 50%; background: #30D158; color: #FFFFFF; font-size: 13px; border: 2.5px solid var(--boss-card);">
+                            <i class="bi bi-check-lg"></i>
+                        </div>
                     </div>
-                    <div class="ios-list-row">
-                        <span class="text-secondary small">Total Pengeluaran</span>
-                        <strong class="text-danger small fw-bold">- <?= format_rupiah($total_keluar) ?></strong>
-                    </div>
-                    <div class="ios-list-row">
-                        <span class="text-secondary small">Sisa Saldo Kas Riil</span>
-                        <strong style="color: var(--boss-text-primary);" class="small fw-bold"><?= format_rupiah($saldo_akhir) ?></strong>
-                    </div>
-                    <div class="ios-list-row">
-                        <span class="text-secondary small">Jumlah Riwayat Tercatat</span>
-                        <span class="badge px-2 py-1" style="background: var(--boss-card-inner); color: var(--boss-text-secondary); border: 1px solid var(--boss-neu-border); font-size: 11px; border-radius: 6px;"><?= count($daftar_transaksi) ?> transaksi</span>
+                    <h5 class="fw-bold mb-1 d-flex align-items-center justify-content-center gap-1.5" style="color: var(--boss-text-primary); letter-spacing: -0.3px;">
+                        <span><?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Firdaus Dhuha Prabowo') ?></span>
+                        <i class="bi bi-patch-check-fill" style="color: #0A84FF; font-size: 16px;"></i>
+                    </h5>
+                    <p class="text-secondary small mb-3" style="font-size: 12px;">Mahasiswa Sistem Informasi • Universitas Gunadarma</p>
+                    <div class="d-flex align-items-center justify-content-center gap-1.5 flex-wrap">
+                        <span class="badge px-2.5 py-1 fw-semibold" style="background: rgba(48, 209, 88, 0.12); color: var(--boss-green); border-radius: 20px; font-size: 10.5px;">
+                            <i class="bi bi-shield-check me-1"></i> Sesi Aktif 30 Hari
+                        </span>
+                        <span class="badge px-2.5 py-1 fw-semibold" style="background: rgba(10, 132, 255, 0.12); color: #0A84FF; border-radius: 20px; font-size: 10.5px;">
+                            <i class="bi bi-mortarboard-fill me-1"></i> Kelas 3KA31
+                        </span>
+                        <span class="badge px-2.5 py-1 fw-semibold" style="background: var(--boss-card-inner); color: var(--boss-text-secondary); border: 1px solid var(--boss-neu-border); border-radius: 20px; font-size: 10.5px;">
+                            <i class="bi bi-database-check me-1"></i> MySQL Connected
+                        </span>
                     </div>
                 </div>
 
-                
-                <div class="mb-2 px-1">
-                    <span class="fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.6px; color: var(--boss-text-muted);">Preferensi & Fitur</span>
+                <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                    <span class="fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.6px; color: var(--boss-text-muted);">Ringkasan Kas Pribadi</span>
+                    <span class="badge px-2 py-0.5 fw-semibold" style="background: rgba(48, 209, 88, 0.12); color: var(--boss-green); border-radius: 8px; font-size: 10.5px;">
+                        <?= $rasio_simpan ?>% Surplus
+                    </span>
                 </div>
-                <div class="ios-card-group mb-4">
-                    <div class="ios-list-row cursor-pointer" onclick="toggleTheme()">
+
+                <div class="ios-card p-3 mb-3">
+                    <div class="d-flex align-items-center justify-content-between pb-2 mb-2 border-bottom" style="border-color: var(--boss-border) !important;">
+                        <div>
+                            <small class="text-secondary text-uppercase fw-semibold d-block" style="font-size: 9.5px; letter-spacing: 0.5px;">Sisa Saldo Kas Aktif</small>
+                            <div class="fw-bold" style="font-size: 21px; color: var(--boss-text-primary); letter-spacing: -0.4px;">
+                                <?= format_rupiah($saldo_akhir) ?>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge px-2 py-1" style="background: var(--boss-card-inner); color: var(--boss-text-secondary); border: 1px solid var(--boss-neu-border); font-size: 11px; border-radius: 8px;">
+                                <?= count($daftar_transaksi) ?> transaksi
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row g-2 pt-1">
+                        <div class="col-6">
+                            <div class="p-2.5 rounded-3" style="background: var(--boss-card-inner); border: 1px solid var(--boss-neu-border);">
+                                <div class="d-flex align-items-center gap-1.5 mb-1">
+                                    <i class="bi bi-arrow-down-left fw-bold text-success" style="font-size: 12px;"></i>
+                                    <small class="text-secondary fw-semibold text-uppercase" style="font-size: 9px; letter-spacing: 0.3px;">Pemasukan</small>
+                                </div>
+                                <div class="fw-bold amount-income text-truncate" style="font-size: 14px;">
+                                    + <?= format_rupiah($total_masuk) ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2.5 rounded-3" style="background: var(--boss-card-inner); border: 1px solid var(--boss-neu-border);">
+                                <div class="d-flex align-items-center gap-1.5 mb-1">
+                                    <i class="bi bi-arrow-up-right fw-bold text-danger" style="font-size: 12px;"></i>
+                                    <small class="text-secondary fw-semibold text-uppercase" style="font-size: 9px; letter-spacing: 0.3px;">Pengeluaran</small>
+                                </div>
+                                <div class="fw-bold amount-expense text-truncate" style="font-size: 14px;">
+                                    - <?= format_rupiah($total_keluar) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-2 px-1">
+                    <span class="fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.6px; color: var(--boss-text-muted);">Preferensi & Alat Sistem</span>
+                </div>
+                <div class="ios-card-group mb-3">
+                    <div class="ios-list-row cursor-pointer" onclick="toggleTheme()" style="padding: 12px 14px;">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="ios-icon-box" style="width: 34px; height: 34px; font-size: 16px;">
+                            <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #FF9500 0%, #FF5E3A 100%); color: #FFFFFF; font-size: 17px; border: none; box-shadow: 0 4px 10px rgba(255, 149, 0, 0.3);">
                                 <i class="theme-toggle-icon"></i>
                             </div>
                             <div>
                                 <div class="fw-semibold small" style="color: var(--boss-text-primary);">Mode Tampilan</div>
-                                <small class="text-secondary" style="font-size: 11px;">Ganti Tema Terang (Cupertino) / Gelap (Titanium)</small>
+                                <small class="text-secondary" style="font-size: 11px;">Ganti Tema Cupertino (Terang) / Titanium (Gelap)</small>
                             </div>
                         </div>
-                        <i class="bi bi-chevron-right text-muted small"></i>
+                        <div class="d-flex align-items-center gap-1.5">
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </div>
                     </div>
 
-                    <a href="<?= base_url('export_excel.php') ?>" class="ios-list-row">
+                    <div class="ios-list-row cursor-pointer" data-bs-toggle="modal" data-bs-target="#modalNotifikasi" style="padding: 12px 14px;">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="ios-icon-box" style="width: 34px; height: 34px; font-size: 16px; color: #107C41;">
-                                <i class="bi bi-file-earmark-excel"></i>
+                            <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #FF2D55 0%, #FF375F 100%); color: #FFFFFF; font-size: 17px; border: none; box-shadow: 0 4px 10px rgba(255, 45, 85, 0.3);">
+                                <i class="bi bi-bell-fill"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold small" style="color: var(--boss-text-primary);">Pusat Notifikasi</div>
+                                <small class="text-secondary" style="font-size: 11px;">Pengingat saldo, kas & riwayat sinkronisasi</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-1.5">
+                            <span class="badge bg-danger rounded-pill px-2 py-0.5" style="font-size: 10px;">Baru</span>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </div>
+                    </div>
+
+                    <a href="<?= base_url('export_excel.php') ?>" class="ios-list-row text-decoration-none" style="padding: 12px 14px;">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #34C759 0%, #30B0C7 100%); color: #FFFFFF; font-size: 17px; border: none; box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3);">
+                                <i class="bi bi-file-earmark-excel-fill"></i>
                             </div>
                             <div>
                                 <div class="fw-semibold small" style="color: var(--boss-text-primary);">Unduh Laporan Excel</div>
-                                <small class="text-secondary" style="font-size: 11px;">Format berkas Microsoft Excel (.xls)</small>
+                                <small class="text-secondary" style="font-size: 11px;">Ekspor seluruh transaksi (.xls)</small>
                             </div>
                         </div>
-                        <i class="bi bi-chevron-right text-muted small"></i>
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="badge px-2 py-0.5" style="background: var(--boss-card-inner); color: var(--boss-text-secondary); border: 1px solid var(--boss-neu-border); font-size: 10px; border-radius: 6px;">.XLS</span>
+                            <i class="bi bi-chevron-right text-muted small"></i>
+                        </div>
                     </a>
 
-                    <a href="<?= base_url('dashboard.php?desktop=1') ?>" class="ios-list-row">
+                    <a href="<?= base_url('dashboard.php?desktop=1') ?>" class="ios-list-row text-decoration-none" style="padding: 12px 14px;">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="ios-icon-box" style="width: 34px; height: 34px; font-size: 16px; color: #007AFF;">
-                                <i class="bi bi-laptop"></i>
+                            <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%); color: #FFFFFF; font-size: 17px; border: none; box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);">
+                                <i class="bi bi-laptop-fill"></i>
                             </div>
                             <div>
                                 <div class="fw-semibold small" style="color: var(--boss-text-primary);">Mode Layar Lebar</div>
                                 <small class="text-secondary" style="font-size: 11px;">Buka versi dashboard desktop lengkap</small>
                             </div>
                         </div>
-                        <i class="bi bi-box-arrow-up-right text-muted small"></i>
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="badge px-2 py-0.5" style="background: rgba(0, 122, 255, 0.12); color: #0A84FF; font-size: 10px; border-radius: 6px;">Pro</span>
+                            <i class="bi bi-box-arrow-up-right text-muted small"></i>
+                        </div>
                     </a>
                 </div>
 
-                
-                <div class="mb-4">
-                    <a href="<?= base_url('logout.php') ?>" class="btn btn-outline-danger w-100 py-3 rounded-4 fw-semibold d-flex align-items-center justify-content-center gap-2" onclick="return confirm('Keluar dari sesi akun DompetKu?');">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Keluar dari Akun</span>
+                <div class="ios-card-group mb-3">
+                    <a href="<?= base_url('logout.php') ?>" class="ios-list-row justify-content-center text-decoration-none" onclick="return confirm('Keluar dari sesi akun DompetKu?');" style="padding: 13px 14px; background: rgba(255, 59, 48, 0.05);">
+                        <span class="fw-semibold text-danger d-flex align-items-center gap-2" style="font-size: 13.5px;">
+                            <i class="bi bi-box-arrow-right"></i> Keluar dari Akun DompetKu
+                        </span>
                     </a>
+                </div>
+
+                <div class="text-center text-secondary small py-2 mb-4">
+                    <div class="fw-semibold" style="font-size: 11px; color: var(--boss-text-secondary); letter-spacing: -0.1px;">
+                        DompetKu Mahasiswa v6.0 Pro
+                    </div>
+                    <div class="mt-0.5" style="font-size: 10.5px; opacity: 0.7;">
+                        Praktikum Pemrograman Berbasis Web • Universitas Gunadarma
+                    </div>
                 </div>
 
             </div>
