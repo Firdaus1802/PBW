@@ -47,6 +47,8 @@ $success_msg = '';
 
 if (isset($_GET['msg']) && $_GET['msg'] === 'logged_out') {
     $success_msg = 'Anda telah berhasil keluar dari sistem.';
+} elseif (isset($_GET['msg']) && $_GET['msg'] === 'registered') {
+    $success_msg = 'Akun berhasil dibuat! Silakan masuk dengan akun baru Anda.';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -433,6 +435,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span>Masuk ke Sistem</span>
                     <i class="bi bi-arrow-right"></i>
                 </button>
+
+                <div class="text-center mt-3 pt-1">
+                    <span style="font-size: 13px; color: var(--auth-text-muted);">Belum punya akun?</span>
+                    <a href="<?= base_url('register.php') ?>" class="fw-semibold text-decoration-none ms-1" style="color: var(--auth-text-title); text-decoration: underline !important; font-size: 13px;">Daftar Akun Baru</a>
+                </div>
             </form>
 
             <div class="auth-footer">
