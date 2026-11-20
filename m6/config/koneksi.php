@@ -81,13 +81,6 @@ try {
                 ('Belanja Bulanan', 'Pengeluaran', 'bi-cart'),
                 ('Transport & Bensin', 'Pengeluaran', 'bi-fuel-pump'),
                 ('Kos & Hunian', 'Pengeluaran', 'bi-house-door');
-
-                INSERT INTO transaksi (id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES 
-                (1, '" . date('Y-m-d') . "', 'Uang Saku Bulanan', 'Pemasukan', 2500000, 'Kiriman via transfer'),
-                (2, '" . date('Y-m-d') . "', 'Desain Web Portfolio', 'Pemasukan', 750000, 'Honor klien'),
-                (4, '" . date('Y-m-d') . "', 'Makan Siang Kampus', 'Pengeluaran', 25000, 'Kantin F8'),
-                (7, '" . date('Y-m-d') . "', 'Bensin Motor', 'Pengeluaran', 35000, 'Pertalite full'),
-                (5, '" . date('Y-m-d') . "', 'Print Makalah PBW', 'Pengeluaran', 15000, 'Fotokopi kampus');
             ");
         }
     } catch (Throwable $sqle) {

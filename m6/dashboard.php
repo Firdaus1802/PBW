@@ -1256,6 +1256,14 @@ foreach ($kat_expenses as $ke) {
                             </tr>
                         </thead>
                         <tbody>
+                            <?php if (empty($daftar_transaksi)): ?>
+                            <tr>
+                                <td colspan="7" class="text-center py-4" style="color: var(--app-text-muted); font-size: 13px;">
+                                    <i class="bi bi-inbox d-block mb-1" style="font-size: 24px; opacity: 0.5;"></i>
+                                    Belum ada transaksi kas yang dicatat. Klik tombol <strong>Catat Baru</strong> di atas untuk menambah transaksi manual.
+                                </td>
+                            </tr>
+                            <?php else: ?>
                             <?php $no = 1; foreach ($daftar_transaksi as $row): 
                                 $is_masuk = ($row['jenis'] === 'Pemasukan');
                             ?>
@@ -1296,6 +1304,7 @@ foreach ($kat_expenses as $ke) {
                                 </td>
                             </tr>
                             <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

@@ -65,13 +65,3 @@ INSERT INTO `kategori` (`id_kategori`, `nama_kategori`, `jenis`, `icon`, `warna`
 (6, 'Transportasi & Bensin', 'Pengeluaran', 'bi-fuel-pump', '#5AC8FA'),
 (7, 'Kos & Kebutuhan Harian', 'Pengeluaran', 'bi-house-door', '#FF3B30'),
 (8, 'Hiburan & Ngopi', 'Pengeluaran', 'bi-controller', '#FF2D55');
-
--- Data Transaksi Realistis
-INSERT INTO `transaksi` (`id_transaksi`, `id_kategori`, `tanggal`, `judul`, `jenis`, `jumlah`, `catatan`) VALUES
-(1, 1, '2026-11-01', 'Transfer Uang Saku Bulanan', 'Pemasukan', 2500000.00, 'Kiriman bulanan orang tua awal bulan November'),
-(2, 7, '2026-11-02', 'Bayar Uang Kos Bulanan', 'Pengeluaran', 850000.00, 'Pembayaran sewa kamar kos periode November'),
-(3, 2, '2026-11-05', 'Pembayaran Pembuatan Web Landing Page', 'Pemasukan', 750000.00, 'Project freelance UMKM toko kue'),
-(4, 5, '2026-11-07', 'Beli Buku Pemrograman Web & Fotokopi Modul', 'Pengeluaran', 125000.00, 'Modul praktikum PBW dan buku acuan'),
-(5, 4, '2026-11-10', 'Makan Siang & Stok Mie/Camilan Kos', 'Pengeluaran', 85000.00, 'Belanja mingguan di minimarket'),
-(6, 6, '2026-11-12', 'Isi Bensin Motor & Servis Ringan', 'Pengeluaran', 60000.00, 'Ganti oli dan bensin pertalite'),
-(7, 8, '2026-11-15', 'Nugas Bareng di Cafe Kampus', 'Pengeluaran', 45000.00, 'Kopi americano dan cemilan bareng teman');
