@@ -165,9 +165,16 @@ body {
 
 .ios-main-content {
   width: 100%;
-  max-width: 1240px;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 18px 16px 40px;
+  padding: 14px 14px calc(95px + max(env(safe-area-inset-bottom, 16px), 16px)) 14px;
+  box-sizing: border-box;
+}
+
+.ios-navbar .container-xl {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0;
 }
 
 .ios-navbar {
@@ -727,9 +734,34 @@ body {
 }
 
 @media (min-width: 768px) {
+  .ios-app-shell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--boss-card-inner);
+    min-height: 100vh;
+  }
+  .ios-navbar {
+    width: 100% !important;
+    max-width: 480px !important;
+    border-radius: 0 0 24px 24px !important;
+    border: 1px solid var(--boss-neu-border) !important;
+    box-shadow: var(--boss-neu-shadow) !important;
+  }
+  .ios-main-content {
+    max-width: 480px !important;
+    padding: 16px 14px 120px 14px !important;
+  }
   .ios-capsule-navbar,
   .ios-tab-bar {
-    display: none !important;
+    display: flex !important;
+    position: fixed !important;
+    bottom: 24px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    max-width: 440px !important;
+    width: calc(100% - 32px) !important;
+    margin: 0 !important;
   }
 }
 
@@ -1415,27 +1447,41 @@ body {
   .ios-main-content {
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 0 !important;
-    padding-bottom: calc(90px + max(env(safe-area-inset-bottom, 16px), 16px)) !important;
+    padding: 0 14px calc(95px + max(env(safe-area-inset-bottom, 16px), 16px)) 14px !important;
+    box-sizing: border-box !important;
   }
 
   .artosku-hero-banner,
   .ios-neumorph-hero {
-    border-radius: 28px !important;
+    border-radius: 26px !important;
     padding: 20px 18px 22px 18px !important;
-    margin: max(env(safe-area-inset-top, 16px), 16px) 14px 16px 14px !important;
+    margin: max(env(safe-area-inset-top, 16px), 16px) 0 16px 0 !important;
     box-shadow: var(--boss-neu-shadow) !important;
     background: var(--boss-card) !important;
     border: 1px solid var(--boss-neu-border) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .artosku-mobile-sheet {
     background: transparent !important;
     border-radius: 0 !important;
     margin-top: 0 !important;
-    padding: 0 14px !important;
+    padding: 0 !important;
     position: relative !important;
     z-index: 2 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .artosku-mobile-sheet .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .artosku-mobile-sheet .row > [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .modal-dialog {
@@ -1459,6 +1505,6 @@ body {
   #tabViewKategori,
   #tabViewLaporan,
   #tabViewAkun {
-    padding: max(env(safe-area-inset-top, 20px), 20px) 16px 100px 16px !important;
+    padding: max(env(safe-area-inset-top, 20px), 20px) 0 100px 0 !important;
   }
 }

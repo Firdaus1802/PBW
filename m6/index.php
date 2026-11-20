@@ -11,14 +11,17 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
-$is_mobile_device = preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini)/i', $ua);
+$is_mobile_device = (bool)preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini|webos)/i', $ua);
+
 if (isset($_GET['view']) && $_GET['view'] === 'mobile') {
     $_SESSION['preferred_view'] = 'mobile';
-}
-if (isset($_GET['view']) && $_GET['view'] === 'desktop') {
+} elseif (isset($_GET['view']) && $_GET['view'] === 'desktop') {
     $_SESSION['preferred_view'] = 'desktop';
 }
-$force_mobile = ($is_mobile_device || (isset($_SESSION['preferred_view']) && $_SESSION['preferred_view'] === 'mobile') || isset($_GET['mobile']) || (isset($_GET['view']) && $_GET['view'] === 'mobile'));
+
+$has_explicit_mobile_flag = (isset($_GET['view']) && $_GET['view'] === 'mobile') || isset($_GET['mobile']);
+$force_mobile = $is_mobile_device || $has_explicit_mobile_flag;
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && !$force_mobile) {
     header("Location: " . base_url("dashboard.php"));
     exit;
@@ -263,7 +266,7 @@ foreach ($kat_expenses as $ke) {
                 </div>
 
                 
-                <div class="d-none d-md-flex align-items-center gap-1 p-1" style="background-color: var(--boss-segmented-bg); border-radius: 14px; border: 1px solid var(--boss-border);">
+                <div class="d-none">
                     <button type="button" class="ios-desktop-tab-btn active" id="deskTabDompet" onclick="switchIosTab('dompet')">
                         <i class="bi bi-wallet2 me-1"></i> Dompet
                     </button>
@@ -278,23 +281,21 @@ foreach ($kat_expenses as $ke) {
                     </button>
                 </div>
 
-                
                 <div class="d-flex align-items-center gap-2">
-                    
-                    
+                    <a href="<?= base_url('dashboard.php?view=desktop') ?>" class="ios-circle-btn d-none d-md-flex" title="Kembali ke Dashboard PC">
+                        <i class="bi bi-laptop"></i>
+                    </a>
+
                     <input type="file" id="receiptFileInput" style="display:none;" accept="image/*" onchange="processReceipt(this)">
 
-                    
                     <button type="button" onclick="toggleTheme()" class="ios-circle-btn" title="Ganti Mode Terang / Gelap">
                         <i class="theme-toggle-icon"></i>
                     </button>
 
-                    
                     <button type="button" class="ios-circle-btn ios-circle-btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah" title="Catat Transaksi Manual">
                         <i class="bi bi-plus-lg"></i>
                     </button>
 
-                    
                     <a href="<?= base_url('logout.php') ?>" class="ios-circle-btn" title="Keluar dari Sesi" onclick="return confirm('Keluar dari sesi DompetKu?');">
                         <i class="bi bi-box-arrow-right"></i>
                     </a>
@@ -444,7 +445,7 @@ foreach ($kat_expenses as $ke) {
                 <div class="artosku-mobile-sheet">
                     <div id="contentSectionSaldo" class="hero-content-section active">
                         <div class="row g-3">
-                        <div class="col-12 col-md-5 col-lg-4">
+                        <div class="col-12">
                             <div class="artosku-action-box mb-3">
                                 <div class="row g-0 align-items-center">
                                     <div class="col-7 pe-2">
@@ -480,25 +481,9 @@ foreach ($kat_expenses as $ke) {
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="ios-card p-3 d-none d-md-block">
-                                <h6 class="fw-bold mb-3" style="font-size: 13.5px; letter-spacing: -0.2px;">Statistik Kas Mahasiswa</h6>
-                                <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
-                                    <span>Total Riwayat</span>
-                                    <strong style="color: var(--boss-text-primary);"><?= count($daftar_transaksi) ?> transaksi</strong>
-                                </div>
-                                <div class="d-flex justify-content-between text-secondary small py-2 border-bottom border-secondary border-opacity-10">
-                                    <span>Rasio Pemasukan</span>
-                                    <strong class="text-success"><?= $total_masuk > 0 ? round(($saldo_akhir / $total_masuk) * 100) : 0 ?>% Surplus</strong>
-                                </div>
-                                <div class="d-flex justify-content-between text-secondary small py-2">
-                                    <span>Sisa Kas Tersimpan</span>
-                                    <strong style="color: var(--boss-text-primary);"><?= format_rupiah($saldo_akhir) ?></strong>
-                                </div>
-                            </div>
                         </div>
 
-                        <div class="col-12 col-md-7 col-lg-8">
+                        <div class="col-12">
                             <div class="ios-search-wrapper mb-2">
                                 <i class="bi bi-search ios-search-icon"></i>
                                 <input type="text" id="instantSearchInput" class="ios-input ios-search-input" placeholder="Cari transaksi..." onkeyup="filterTransaksiLive()">
@@ -527,44 +512,44 @@ foreach ($kat_expenses as $ke) {
                                     $sign = $is_masuk ? '+' : '-';
                                     $amount_class = $is_masuk ? 'amount-income' : 'amount-expense';
                                 ?>
-                                <div class="ios-list-row trx-card-item" data-jenis="<?= $trx['jenis'] ?>" data-search="<?= strtolower(htmlspecialchars($trx['judul'] . ' ' . $trx['nama_kategori'] . ' ' . $trx['catatan'])) ?>">
-                                    <div class="d-flex align-items-center gap-3 min-w-0 flex-grow-1 me-2">
-                                        <div class="ios-icon-box flex-shrink-0">
+                                <div class="ios-list-row trx-card-item" data-jenis="<?= $trx['jenis'] ?>" data-search="<?= strtolower(htmlspecialchars($trx['judul'] . ' ' . $trx['nama_kategori'] . ' ' . $trx['catatan'])) ?>" style="padding: 12px 14px;">
+                                    <div class="d-flex align-items-center gap-2 min-w-0 flex-grow-1 me-2">
+                                        <div class="ios-icon-box flex-shrink-0" style="width: 38px; height: 38px;">
                                             <i class="bi <?= htmlspecialchars($trx['icon']) ?>"></i>
                                         </div>
                                         <div class="min-w-0 flex-grow-1">
-                                            <div class="fw-semibold text-truncate mb-0" style="font-size: 14.5px; letter-spacing: -0.2px; color: var(--boss-text-primary);">
+                                            <div class="fw-semibold text-truncate mb-0" style="font-size: 14px; letter-spacing: -0.2px; color: var(--boss-text-primary);">
                                                 <?= htmlspecialchars($trx['judul']) ?>
                                             </div>
-                                            <div class="d-flex align-items-center gap-2 mt-0.5 text-truncate">
-                                                <span class="ios-badge-mono text-truncate">
+                                            <div class="d-flex align-items-center gap-1 mt-0.5 text-truncate">
+                                                <span class="ios-badge-mono text-truncate" style="max-width: 105px;">
                                                     <?= htmlspecialchars($trx['nama_kategori']) ?>
                                                 </span>
-                                                <span class="text-secondary flex-shrink-0" style="font-size: 11px;">
+                                                <span class="text-secondary flex-shrink-0" style="font-size: 10.5px;">
                                                     • <?= tgl_indo($trx['tanggal']) ?>
                                                 </span>
                                             </div>
                                             <?php if (!empty($trx['catatan'])): ?>
-                                                <small class="text-secondary d-block mt-0.5 text-truncate" style="font-size: 11px;">
+                                                <small class="text-secondary d-block mt-0.5 text-truncate" style="font-size: 10.5px;">
                                                     <?= htmlspecialchars($trx['catatan']) ?>
                                                 </small>
                                             <?php endif; ?>
                                         </div>
                                     </div>
 
-                                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                    <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
                                         <div class="text-end">
-                                            <span class="fw-bold <?= $amount_class ?>" style="font-size: 14.5px; letter-spacing: -0.3px;">
+                                            <span class="fw-bold <?= $amount_class ?>" style="font-size: 13.5px; white-space: nowrap; letter-spacing: -0.3px;">
                                                 <?= $sign ?> <?= format_rupiah($trx['jumlah']) ?>
                                             </span>
-                                            <small class="d-block text-secondary text-uppercase" style="font-size: 9.5px;">
+                                            <small class="d-block text-secondary text-uppercase" style="font-size: 9px; line-height: 1;">
                                                 <?= $trx['jenis'] ?>
                                             </small>
                                         </div>
 
                                         <div class="dropdown">
-                                            <button class="btn btn-ios-secondary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center" data-bs-toggle="dropdown" style="width: 30px; height: 30px;">
-                                                <i class="bi bi-three-dots-vertical"></i>
+                                            <button class="btn btn-ios-secondary btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center flex-shrink-0" data-bs-toggle="dropdown" style="width: 28px; height: 28px; min-width: 28px;">
+                                                <i class="bi bi-three-dots-vertical" style="font-size: 13px;"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end p-2" style="background-color: var(--boss-card); border: 1px solid var(--boss-border-active);">
                                                 <li>
