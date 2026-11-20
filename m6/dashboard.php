@@ -1797,35 +1797,6 @@ foreach ($kat_expenses as $ke) {
     }
     setInterval(updateWibClock, 1000);
 
-    let isKineticScrolling = false;
-
-    function smoothScrollToTarget(container, targetY, duration = 460) {
-        isKineticScrolling = true;
-        const startY = container.scrollTop;
-        const diff = targetY - startY;
-        const startTime = performance.now();
-
-        function easeOutQuart(t) {
-            return 1 - Math.pow(1 - t, 4);
-        }
-
-        function step(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const ease = easeOutQuart(progress);
-            
-            container.scrollTop = startY + diff * ease;
-
-            if (progress < 1) {
-                requestAnimationFrame(step);
-            } else {
-                container.scrollTop = targetY;
-                setTimeout(() => { isKineticScrolling = false; }, 80);
-            }
-        }
-        requestAnimationFrame(step);
-    }
-
     document.querySelectorAll('.macos-sidebar .nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -1840,9 +1811,10 @@ foreach ($kat_expenses as $ke) {
                     this.classList.add('active');
 
                     const targetTop = Math.max(0, targetEl.offsetTop - 15);
-                    smoothScrollToTarget(contentArea, targetTop, 460);
-
-                    history.pushState(null, null, href);
+                    contentArea.scrollTo({
+                        top: targetTop,
+                        behavior: 'smooth'
+                    });
                 }
             }
         });
@@ -1852,8 +1824,16 @@ foreach ($kat_expenses as $ke) {
     const navSections = ['overviewSection', 'transaksiSection', 'kategoriSection', 'laporanSection'];
     
     if (rightContentArea) {
+        let isNavClicking = false;
+        document.querySelectorAll('.macos-sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                isNavClicking = true;
+                setTimeout(() => { isNavClicking = false; }, 600);
+            });
+        });
+
         rightContentArea.addEventListener('scroll', () => {
-            if (isKineticScrolling) return;
+            if (isNavClicking) return;
 
             let current = 'overviewSection';
             const scrollPos = rightContentArea.scrollTop + 80;

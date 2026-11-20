@@ -12,7 +12,14 @@ if (!isset($_SESSION['user_id'])) {
 
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $is_mobile_device = preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini)/i', $ua);
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && !$is_mobile_device && !isset($_GET['mobile']) && !isset($_GET['view'])) {
+if (isset($_GET['view']) && $_GET['view'] === 'mobile') {
+    $_SESSION['preferred_view'] = 'mobile';
+}
+if (isset($_GET['view']) && $_GET['view'] === 'desktop') {
+    $_SESSION['preferred_view'] = 'desktop';
+}
+$force_mobile = ($is_mobile_device || (isset($_SESSION['preferred_view']) && $_SESSION['preferred_view'] === 'mobile') || isset($_GET['mobile']) || (isset($_GET['view']) && $_GET['view'] === 'mobile'));
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && !$force_mobile) {
     header("Location: " . base_url("dashboard.php"));
     exit;
 }
@@ -52,34 +59,57 @@ if (isset($_GET['msg'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['tambah_transaksi']) || isset($_POST['judul']))) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['tambah_transaksi']) || isset($_POST['judul']) || isset($_POST['jumlah']))) {
     $id_kategori = (int)($_POST['id_kategori'] ?? 0);
     $tanggal     = sanitize($_POST['tanggal'] ?? date('Y-m-d'));
     if (empty($tanggal)) $tanggal = date('Y-m-d');
     $judul       = sanitize($_POST['judul'] ?? '');
     $jenis       = sanitize($_POST['jenis'] ?? 'Pengeluaran');
     if (!in_array($jenis, ['Pemasukan', 'Pengeluaran'])) $jenis = 'Pengeluaran';
-    $jumlah      = (float)($_POST['jumlah'] ?? 0);
-    $catatan     = sanitize($_POST['catatan'] ?? '');
+    
+    $raw_jumlah = $_POST['jumlah'] ?? 0;
+    if (is_string($raw_jumlah)) {
+        $cleaned = preg_replace('/[^0-9.]/', '', str_replace(',', '.', $raw_jumlah));
+        $jumlah = (float)$cleaned;
+    } else {
+        $jumlah = (float)$raw_jumlah;
+    }
+    
+    $catatan = sanitize($_POST['catatan'] ?? '');
 
     if ($id_kategori <= 0) {
-        $stmt_def = $pdo->prepare("SELECT id_kategori FROM kategori WHERE jenis = ? ORDER BY id_kategori ASC LIMIT 1");
+        $stmt_def = $pdo->prepare("SELECT id_kategori, nama_kategori FROM kategori WHERE jenis = ? ORDER BY id_kategori ASC LIMIT 1");
         $stmt_def->execute([$jenis]);
         $row_def = $stmt_def->fetch();
         if ($row_def) {
             $id_kategori = (int)$row_def['id_kategori'];
+            if (empty($judul)) $judul = $row_def['nama_kategori'];
         }
     }
 
-    if (!empty($judul) && $id_kategori > 0 && $jumlah > 0) {
+    if (empty($judul)) {
+        if ($id_kategori > 0) {
+            $stmt_kn = $pdo->prepare("SELECT nama_kategori FROM kategori WHERE id_kategori = ?");
+            $stmt_kn->execute([$id_kategori]);
+            $row_kn = $stmt_kn->fetch();
+            $judul = $row_kn ? $row_kn['nama_kategori'] : ($jenis === 'Pemasukan' ? 'Pemasukan Kas' : 'Pengeluaran Kas');
+        } else {
+            $judul = $jenis === 'Pemasukan' ? 'Pemasukan Kas' : 'Pengeluaran Kas';
+        }
+    }
+
+    if ($id_kategori > 0 && $jumlah > 0) {
         try {
             $stmt = $pdo->prepare("INSERT INTO transaksi (id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
-            header("Location: " . base_url("index.php?msg=added#dompet"));
+            $redir_view = $force_mobile ? 'view=mobile&' : '';
+            header("Location: " . base_url("index.php?" . $redir_view . "msg=added#dompet"));
             exit;
         } catch (PDOException $e) {
             $alert_msg = '<div class="alert alert-danger rounded-4">Gagal mencatat transaksi: ' . $e->getMessage() . '</div>';
         }
+    } else {
+        $alert_msg = '<div class="alert alert-warning rounded-4">Harap isi nominal transaksi dengan benar.</div>';
     }
 }
 
@@ -274,6 +304,28 @@ foreach ($kat_expenses as $ke) {
             </div>
         </nav>
 
+        <div class="ios-sticky-mini-header" id="iosStickyMiniHeader">
+            <div class="ios-mini-header-inner">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="ios-mini-icon-circle">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                    <div>
+                        <span class="ios-mini-title">DompetKu</span>
+                        <span class="ios-mini-balance" id="miniBalanceDisplay"><?= format_rupiah($saldo_akhir) ?></span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" onclick="toggleTheme()" class="ios-mini-btn" title="Ganti Mode Tampilan">
+                        <i class="theme-toggle-icon"></i>
+                    </button>
+                    <button type="button" class="ios-mini-btn ios-mini-btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah" title="Tambah Transaksi">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="ios-main-content">
             
             <?= $alert_msg ?>
@@ -281,7 +333,7 @@ foreach ($kat_expenses as $ke) {
             
             <div id="tabViewDompet" class="tab-view-panel active">
                 
-                <div class="artosku-hero-banner mb-3">
+                <div class="artosku-hero-banner mb-3" id="iosHeroHeader">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex align-items-center gap-2">
                             <span class="artosku-greeting-text">Hi, <?= htmlspecialchars(explode(' ', trim($_SESSION['nama_lengkap'] ?? 'Ketua'))[0]) ?> 👋</span>
@@ -866,8 +918,9 @@ foreach ($kat_expenses as $ke) {
                     </div>
                 </div>
                 
-                <form action="index.php" method="POST" id="formCatatTransaksi">
+                <form action="<?= base_url('index.php') ?>" method="POST" id="formCatatTransaksi">
                     <input type="hidden" name="tambah_transaksi" value="1">
+                    <input type="hidden" name="view" value="mobile">
                     <div class="modal-body p-3 p-md-4">
                         <div class="mb-3 text-center">
                             <div class="ios-segmented-control-slider-wrap" id="modalJenisSegmentedWrap">
@@ -937,7 +990,8 @@ foreach ($kat_expenses as $ke) {
                     <h5 class="modal-title fw-bold" id="modalTambahKatLabel" style="letter-spacing: -0.3px;">Tambah Kategori</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="index.php" method="POST">
+                <form action="<?= base_url('index.php') ?>" method="POST">
+                    <input type="hidden" name="view" value="mobile">
                     <div class="modal-body py-3">
                         <div class="mb-3 text-center">
                             <label class="form-label text-secondary small fw-medium d-block mb-1">Jenis Kategori</label>
@@ -1075,13 +1129,16 @@ foreach ($kat_expenses as $ke) {
         function toggleBalanceVisibility() {
             const el = document.getElementById('mainBalanceDisplay');
             const eye = document.getElementById('toggleBalanceEye');
+            const miniEl = document.getElementById('miniBalanceDisplay');
             if (!el || !eye) return;
             isBalanceHidden = !isBalanceHidden;
             if (isBalanceHidden) {
                 el.innerText = 'Rp ••••••••';
+                if (miniEl) miniEl.innerText = 'Rp ••••••••';
                 eye.className = 'bi bi-eye-slash-fill';
             } else {
                 el.innerText = realBalanceText;
+                if (miniEl) miniEl.innerText = realBalanceText;
                 eye.className = 'bi bi-eye-fill';
             }
         }
@@ -1470,6 +1527,47 @@ foreach ($kat_expenses as $ke) {
             }
             setInterval(updateLiveClock, 1000);
             updateLiveClock();
+
+            const heroHeaderEl = document.getElementById('iosHeroHeader');
+            const stickyMiniEl = document.getElementById('iosStickyMiniHeader');
+            if (heroHeaderEl || stickyMiniEl) {
+                let isScrollTicking = false;
+                const updateCollapsibleHeader = () => {
+                    const scrollPos = window.scrollY || window.pageYOffset || 0;
+                    if (heroHeaderEl) {
+                        const maxThreshold = 140;
+                        const progress = Math.min(Math.max(scrollPos / maxThreshold, 0), 1);
+                        const opacity = Math.max(1 - (progress * 1.3), 0);
+                        const translateY = -(progress * 26);
+                        const blurPx = (progress * 8).toFixed(1);
+
+                        heroHeaderEl.style.opacity = opacity;
+                        heroHeaderEl.style.transform = `translateY(${translateY}px) scale(${1 - (progress * 0.04)})`;
+                        heroHeaderEl.style.filter = `blur(${blurPx}px)`;
+                        heroHeaderEl.style.pointerEvents = opacity <= 0.05 ? 'none' : 'auto';
+                    }
+
+                    if (stickyMiniEl) {
+                        if (scrollPos > 70) {
+                            stickyMiniEl.classList.add('visible');
+                        } else {
+                            stickyMiniEl.classList.remove('visible');
+                        }
+                    }
+                };
+
+                window.addEventListener('scroll', () => {
+                    if (!isScrollTicking) {
+                        window.requestAnimationFrame(() => {
+                            updateCollapsibleHeader();
+                            isScrollTicking = false;
+                        });
+                        isScrollTicking = true;
+                    }
+                }, { passive: true });
+
+                updateCollapsibleHeader();
+            }
         });
     </script>
 </body>

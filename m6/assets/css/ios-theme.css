@@ -1,18 +1,21 @@
 :root, [data-theme="light"], [data-bs-theme="light"] {
   
-  --boss-bg: #F2F2F7;
-  --boss-navbar: rgba(255, 255, 255, 0.88);
-  --boss-card: #FFFFFF;
-  --boss-card-inner: #F8F9FA;
+  --boss-bg: #EEF1F6;
+  --boss-navbar: rgba(238, 241, 246, 0.9);
+  --boss-card: #EEF1F6;
+  --boss-card-inner: #E4E9F2;
   --boss-border: rgba(0, 0, 0, 0.08);
   --boss-border-active: rgba(0, 0, 0, 0.16);
+  --boss-neu-shadow: 6px 6px 16px #D1D9E6, -6px -6px 16px #FFFFFF;
+  --boss-neu-inset: inset 3px 3px 6px #D1D9E6, inset -3px -3px 6px #FFFFFF;
+  --boss-neu-border: rgba(255, 255, 255, 0.85);
   --boss-text-primary: #1C1C1E;
   --boss-text-secondary: #636366;
   --boss-text-muted: #8E8E93;
   --boss-blue: #1C1C1E;
   --boss-green: #34C759;
   --boss-red: #FF3B30;
-  --boss-input-bg: rgba(118, 118, 128, 0.12);
+  --boss-input-bg: rgba(118, 118, 128, 0.1);
   --boss-input-text: #1C1C1E;
   --boss-icon-bg: rgba(0, 0, 0, 0.05);
   --boss-icon-color: #1C1C1E;
@@ -23,15 +26,15 @@
   --boss-segmented-active: #FFFFFF;
   --boss-segmented-text: #8E8E93;
   --boss-segmented-text-active: #000000;
-  --boss-hero-gradient: linear-gradient(145deg, #1C1D24 0%, #101115 100%);
-  --boss-stat-bg: rgba(255, 255, 255, 0.08);
+  --boss-hero-gradient: linear-gradient(145deg, #F3F6FA 0%, #E8EDF4 100%);
+  --boss-stat-bg: rgba(0, 0, 0, 0.04);
   --boss-btn-primary-bg: #1C1C1E;
   --boss-btn-primary-text: #FFFFFF;
   --boss-btn-secondary-bg: rgba(120, 120, 128, 0.12);
   --boss-btn-secondary-text: #1C1C1E;
   --boss-btn-secondary-border: transparent;
-  --boss-table-th-bg: #F8F9FA;
-  --boss-table-td-bg: #FFFFFF;
+  --boss-table-th-bg: #E8EDF4;
+  --boss-table-td-bg: #EEF1F6;
   --boss-table-border: rgba(0, 0, 0, 0.06);
   --boss-dropdown-bg: #FFFFFF;
   --boss-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 14px rgba(0, 0, 0, 0.02);
@@ -41,15 +44,15 @@
   --boss-radius-xl: 22px;
 
   
-  --ios-nav-bg: rgba(255, 255, 255, 0.88);
-  --ios-tab-bg: rgba(255, 255, 255, 0.92);
+  --ios-nav-bg: rgba(238, 241, 246, 0.9);
+  --ios-tab-bg: rgba(238, 241, 246, 0.94);
   --ios-tab-border: rgba(0, 0, 0, 0.08);
   --ios-btn-circle-bg: rgba(120, 120, 128, 0.12);
   --ios-btn-circle-border: transparent;
   --ios-btn-circle-color: #1C1C1E;
   --ios-center-circle-bg: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
   --ios-center-circle-color: #FFFFFF;
-  --ios-center-circle-border: #F2F2F7;
+  --ios-center-circle-border: #EEF1F6;
   --ios-center-circle-shadow: 0 8px 22px rgba(15, 23, 42, 0.25);
   
   --ios-spring: cubic-bezier(0.25, 1, 0.5, 1);
@@ -58,30 +61,33 @@
 
 [data-theme="dark"], [data-bs-theme="dark"] {
   
-  --boss-bg: #0C0D12;
-  --boss-navbar: rgba(16, 18, 25, 0.88);
-  --boss-card: #181920;
-  --boss-card-inner: #20222B;
+  --boss-bg: #0E1015;
+  --boss-navbar: rgba(16, 18, 25, 0.9);
+  --boss-card: #151821;
+  --boss-card-inner: #1C202B;
   --boss-border: rgba(255, 255, 255, 0.08);
   --boss-border-active: rgba(255, 255, 255, 0.18);
+  --boss-neu-shadow: 6px 6px 18px rgba(0, 0, 0, 0.65), -3px -3px 12px rgba(255, 255, 255, 0.03);
+  --boss-neu-inset: inset 3px 3px 6px rgba(0, 0, 0, 0.6), inset -2px -2px 5px rgba(255, 255, 255, 0.03);
+  --boss-neu-border: rgba(255, 255, 255, 0.07);
   --boss-text-primary: #FFFFFF;
   --boss-text-secondary: #CBD5E1;
   --boss-text-muted: #8E8E93;
   --boss-blue: #FFFFFF;
   --boss-green: #30D158;
   --boss-red: #FF453A;
-  --boss-input-bg: rgba(255, 255, 255, 0.08);
+  --boss-input-bg: rgba(255, 255, 255, 0.07);
   --boss-input-text: #FFFFFF;
-  --boss-icon-bg: rgba(255, 255, 255, 0.08);
+  --boss-icon-bg: rgba(255, 255, 255, 0.07);
   --boss-icon-color: #F8FAFC;
-  --boss-badge-bg: rgba(255, 255, 255, 0.08);
+  --boss-badge-bg: rgba(255, 255, 255, 0.07);
   --boss-badge-text: #F1F5F9;
   --boss-badge-border: rgba(255, 255, 255, 0.14);
   --boss-segmented-bg: rgba(255, 255, 255, 0.08);
   --boss-segmented-active: #2C2F40;
   --boss-segmented-text: #8E8E93;
   --boss-segmented-text-active: #FFFFFF;
-  --boss-hero-gradient: linear-gradient(145deg, #181920 0%, #0F1015 100%);
+  --boss-hero-gradient: linear-gradient(145deg, #161822 0%, #101217 100%);
   --boss-stat-bg: rgba(255, 255, 255, 0.06);
   --boss-btn-primary-bg: #FFFFFF;
   --boss-btn-primary-text: #090A0F;
@@ -89,7 +95,7 @@
   --boss-btn-secondary-text: #F1F5F9;
   --boss-btn-secondary-border: rgba(255, 255, 255, 0.12);
   --boss-table-th-bg: #1A1D28;
-  --boss-table-td-bg: #181920;
+  --boss-table-td-bg: #151821;
   --boss-table-border: rgba(255, 255, 255, 0.08);
   --boss-dropdown-bg: #20222B;
   --boss-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -856,42 +862,59 @@ body {
   cursor: pointer;
 }
 
-.artosku-hero-banner {
-  background: linear-gradient(180deg, #356846 0%, #295337 100%);
-  color: #FFFFFF !important;
+.artosku-hero-banner,
+.ios-neumorph-hero {
+  background: var(--boss-card);
+  color: var(--boss-text-primary) !important;
   border-radius: 26px;
-  padding: 20px 20px 16px 20px;
-  box-shadow: 0 12px 32px rgba(41, 83, 55, 0.28);
+  padding: 22px 20px 20px 20px;
+  box-shadow: var(--boss-neu-shadow);
+  border: 1px solid var(--boss-neu-border);
   position: relative;
   overflow: hidden;
+  transition: opacity 0.22s cubic-bezier(0.25, 1, 0.5, 1), transform 0.22s cubic-bezier(0.25, 1, 0.5, 1), filter 0.22s ease;
+  will-change: opacity, transform, filter;
 }
 
-.artosku-hero-banner * {
-  color: #FFFFFF;
+[data-theme="dark"] .artosku-hero-banner,
+[data-theme="dark"] .ios-neumorph-hero {
+  background: linear-gradient(145deg, #161822 0%, #101217 100%);
+  color: #FFFFFF !important;
+}
+
+[data-theme="light"] .artosku-hero-banner,
+[data-theme="light"] .ios-neumorph-hero {
+  background: linear-gradient(145deg, #F3F6FA 0%, #E8EDF4 100%);
+  color: #1C1D21 !important;
 }
 
 .artosku-greeting-text {
   font-size: 19px;
   font-weight: 700;
   letter-spacing: -0.4px;
+  color: var(--boss-text-primary);
 }
 
-.artosku-icon-btn {
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  width: 36px;
-  height: 36px;
+.artosku-icon-btn,
+.ios-neu-btn {
+  background: var(--boss-card);
+  border: 1px solid var(--boss-neu-border);
+  box-shadow: var(--boss-neu-shadow);
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  color: var(--boss-text-primary);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.artosku-icon-btn:active {
+.artosku-icon-btn:active,
+.ios-neu-btn:active {
+  box-shadow: var(--boss-neu-inset);
   transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.25);
 }
 
 .artosku-bell-dot {
@@ -902,7 +925,7 @@ body {
   height: 7px;
   background-color: #FF453A;
   border-radius: 50%;
-  border: 1.5px solid #356846;
+  border: 1.5px solid var(--boss-card);
 }
 
 .artosku-capsule-row {
@@ -917,33 +940,37 @@ body {
   display: none;
 }
 
-.artosku-capsule-pill {
-  border: none;
+.artosku-capsule-pill,
+.ios-neu-capsule {
+  border: 1px solid var(--boss-neu-border);
   border-radius: 9999px;
   padding: 6px 14px;
   font-size: 12px;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.18);
-  color: #FFFFFF;
+  background: var(--boss-card);
+  box-shadow: var(--boss-neu-shadow);
+  color: var(--boss-text-secondary);
   white-space: nowrap;
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.artosku-capsule-pill.active {
-  background: #FFFFFF !important;
-  color: #295337 !important;
+.artosku-capsule-pill.active,
+.ios-neu-capsule.active {
+  box-shadow: var(--boss-neu-inset) !important;
+  color: var(--boss-text-primary) !important;
   font-weight: 700;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: var(--boss-border-active);
 }
 
-.artosku-capsule-pill:active {
+.artosku-capsule-pill:active,
+.ios-neu-capsule:active {
   transform: scale(0.94);
 }
 
 .artosku-sub-label {
   font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.72) !important;
+  color: var(--boss-text-muted) !important;
   font-weight: 500;
   letter-spacing: 0.2px;
 }
@@ -953,23 +980,25 @@ body {
   font-weight: 800;
   letter-spacing: -0.8px;
   line-height: 1.15;
+  color: var(--boss-text-primary);
 }
 
 .artosku-eye-btn {
   background: transparent;
   border: none;
   padding: 4px;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--boss-text-muted);
   cursor: pointer;
   font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: color 0.15s ease;
 }
 
 .artosku-eye-btn:hover,
 .artosku-eye-btn:active {
-  color: #FFFFFF;
+  color: var(--boss-text-primary);
 }
 
 .artosku-trend-badge {
@@ -977,8 +1006,8 @@ body {
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 500;
+  color: var(--boss-green);
+  font-weight: 600;
 }
 
 .artosku-piggy-badge {
@@ -991,75 +1020,78 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--boss-card);
+  border: 1px solid var(--boss-neu-border);
+  box-shadow: var(--boss-neu-shadow);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  font-size: 24px;
+  color: var(--boss-text-primary);
 }
 
-.artosku-subcard {
-  background: rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 16px;
-  padding: 10px 12px;
+.artosku-subcard,
+.ios-neu-subcard {
+  background: var(--boss-card);
+  border: 1px solid var(--boss-neu-border);
+  box-shadow: var(--boss-neu-inset);
+  border-radius: 18px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition: transform 0.15s ease;
 }
 
-.artosku-subcard:active {
+.artosku-subcard:active,
+.ios-neu-subcard:active {
   transform: scale(0.96);
-  background: rgba(0, 0, 0, 0.25);
 }
 
 .artosku-subcard-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
-  background: rgba(255, 255, 255, 0.2);
+  font-size: 16px;
+  background: var(--boss-stat-bg);
+  color: var(--boss-text-primary);
   flex-shrink: 0;
+  border: 1px solid var(--boss-border);
 }
 
 .artosku-subcard-title {
   display: block;
   font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.72) !important;
+  color: var(--boss-text-muted) !important;
   font-weight: 500;
 }
 
 .artosku-subcard-val {
   display: block;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: -0.2px;
   line-height: 1.2;
 }
 
 .artosku-subcard-val.text-income {
-  color: #5BFFA0 !important;
+  color: var(--boss-green) !important;
 }
 
 .artosku-subcard-val.text-expense {
-  color: #FFA59E !important;
+  color: var(--boss-red) !important;
 }
 
 .artosku-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--boss-text-muted);
+  opacity: 0.35;
   display: inline-block;
   transition: all 0.2s ease;
 }
@@ -1067,15 +1099,17 @@ body {
 .artosku-dot.active {
   width: 16px;
   border-radius: 9999px;
-  background: #FFFFFF;
+  background: var(--boss-text-primary);
+  opacity: 1;
 }
 
-.artosku-action-box {
+.artosku-action-box,
+.ios-neu-action-box {
   background: var(--boss-card);
-  border: 1px solid var(--boss-border);
-  border-radius: 20px;
-  padding: 12px 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--boss-neu-border);
+  border-radius: 22px;
+  padding: 14px 16px;
+  box-shadow: var(--boss-neu-shadow);
 }
 
 .artosku-action-tile {
@@ -1090,29 +1124,17 @@ body {
 }
 
 .artosku-action-icon {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 17px;
+  font-size: 18px;
   flex-shrink: 0;
-}
-
-.artosku-action-icon.ai-bot-icon {
-  background: rgba(53, 104, 70, 0.14);
-  color: #356846;
-}
-
-[data-theme="dark"] .artosku-action-icon.ai-bot-icon {
-  background: rgba(53, 104, 70, 0.25);
-  color: #6CE296;
-}
-
-.artosku-action-icon.scan-icon {
   background: var(--boss-stat-bg);
   color: var(--boss-text-primary);
+  border: 1px solid var(--boss-border);
 }
 
 .artosku-action-title {
@@ -1130,7 +1152,7 @@ body {
 .artosku-ai-switch {
   width: 26px;
   height: 14px;
-  background: #356846;
+  background: var(--boss-text-primary);
   border-radius: 9999px;
   position: relative;
   display: inline-block;
@@ -1143,18 +1165,14 @@ body {
   right: 2px;
   width: 10px;
   height: 10px;
-  background: #FFFFFF;
+  background: var(--boss-bg);
   border-radius: 50%;
 }
 
 .artosku-ai-status {
   font-size: 9.5px;
-  color: #356846;
+  color: var(--boss-text-secondary);
   font-weight: 600;
-}
-
-[data-theme="dark"] .artosku-ai-status {
-  color: #6CE296;
 }
 
 .artosku-action-divider {
@@ -1164,21 +1182,128 @@ body {
   margin: 0 4px;
 }
 
+.ios-sticky-mini-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(56px + max(env(safe-area-inset-top, 0px), 0px));
+  padding-top: max(env(safe-area-inset-top, 0px), 0px);
+  padding-left: 18px;
+  padding-right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(14, 16, 21, 0.88);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 0.5px solid var(--boss-border);
+  z-index: 1040;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1), transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+}
+
+.ios-sticky-mini-header.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.ios-mini-header-inner {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ios-mini-icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--boss-card-inner);
+  border: 1px solid var(--boss-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--boss-text-primary);
+  font-size: 14px;
+}
+
+.ios-mini-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--boss-text-secondary);
+  display: block;
+  line-height: 1.1;
+}
+
+.ios-mini-balance {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--boss-text-primary);
+  letter-spacing: -0.3px;
+  display: block;
+}
+
+.ios-mini-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--boss-card-inner);
+  border: 1px solid var(--boss-border);
+  color: var(--boss-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.ios-mini-btn:active {
+  transform: scale(0.92);
+}
+
+.ios-mini-btn-primary {
+  background: var(--boss-btn-primary-bg);
+  color: var(--boss-btn-primary-text);
+  border: none;
+}
+
+#iosHeroHeader {
+  transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1), transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), filter 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform, filter;
+}
+
+[data-theme="light"] .ios-sticky-mini-header {
+  background: rgba(238, 241, 246, 0.92);
+}
+
 .ios-capsule-fab {
   width: 52px !important;
   height: 52px !important;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, #356846 0%, #274E34 100%) !important;
+  background: linear-gradient(135deg, #2D313D 0%, #161821 100%) !important;
   color: #FFFFFF !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  box-shadow: 0 8px 22px rgba(53, 104, 70, 0.45) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5) !important;
   transform: translateY(-14px) !important;
   border: 3.5px solid var(--boss-bg) !important;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease !important;
   flex: 0 0 52px !important;
   cursor: pointer !important;
+}
+
+[data-theme="light"] .ios-capsule-fab {
+  background: linear-gradient(135deg, #1C1D24 0%, #2E323D 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22) !important;
 }
 
 .ios-capsule-fab:active {
@@ -1194,18 +1319,21 @@ body {
   border-radius: 28px !important;
   border: 1px solid var(--boss-border) !important;
   background: var(--boss-card) !important;
+  box-shadow: var(--boss-neu-shadow) !important;
 }
 
 .artosku-modal-header {
-  background: linear-gradient(180deg, #356846 0%, #2A5437 100%);
-  color: #FFFFFF;
-  padding: 10px 16px 0 16px;
+  background: var(--boss-card);
+  color: var(--boss-text-primary);
+  padding: 12px 18px 14px 18px;
+  border-bottom: 1px solid var(--boss-border);
 }
 
 .artosku-sheet-grabber {
   width: 38px;
   height: 4.5px;
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--boss-text-muted);
+  opacity: 0.4;
   border-radius: 9999px;
   margin: 4px auto 14px auto;
 }
@@ -1214,9 +1342,9 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: #FFFFFF;
+  background: var(--boss-input-bg);
+  border: 1px solid var(--boss-border);
+  color: var(--boss-text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1227,26 +1355,27 @@ body {
 
 .artosku-modal-close:hover,
 .artosku-modal-close:active {
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--boss-card-inner);
 }
 
 .artosku-modal-badge {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--boss-input-bg);
+  border: 1px solid var(--boss-border);
   border-radius: 9999px;
   padding: 4px 12px;
   font-size: 11px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--boss-text-secondary);
 }
 
 .artosku-quick-badge-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
+  background: var(--boss-input-bg);
+  border: 1px solid var(--boss-border);
   border-radius: 9999px;
   padding: 4px 10px;
   font-size: 10.5px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: var(--boss-text-primary);
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1254,7 +1383,7 @@ body {
 }
 
 .artosku-quick-badge-btn:active {
-  background: rgba(255, 255, 255, 0.35);
+  background: var(--boss-card-inner);
 }
 
 .artosku-amount-input-box {
@@ -1262,6 +1391,7 @@ body {
   border: 1.5px solid var(--boss-border-active);
   border-radius: 18px;
   padding: 12px 16px;
+  box-shadow: var(--boss-neu-inset);
 }
 
 .artosku-rp-prefix {
@@ -1287,25 +1417,25 @@ body {
 }
 
 .artosku-btn-submit {
-  background: #356846;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 16px;
-  padding: 13px;
-  font-weight: 700;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 8px 20px rgba(53, 104, 70, 0.35);
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease;
+  background: var(--boss-btn-primary-bg) !important;
+  color: var(--boss-btn-primary-text) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  padding: 13px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, opacity 0.15s ease !important;
 }
 
 .artosku-btn-submit:active {
-  transform: scale(0.98);
-  background: #2B5539;
+  transform: scale(0.98) !important;
+  opacity: 0.9 !important;
 }
 
 @media (max-width: 767.98px) {
@@ -1320,11 +1450,12 @@ body {
     padding-bottom: calc(90px + max(env(safe-area-inset-bottom, 16px), 16px)) !important;
   }
 
-  .artosku-hero-banner {
+  .artosku-hero-banner,
+  .ios-neumorph-hero {
     border-radius: 0 0 32px 32px !important;
     padding: max(env(safe-area-inset-top, 24px), 24px) 20px 32px 20px !important;
     margin: 0 !important;
-    box-shadow: 0 10px 32px rgba(41, 83, 55, 0.25) !important;
+    box-shadow: var(--boss-neu-shadow) !important;
   }
 
   .artosku-mobile-sheet {
