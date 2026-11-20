@@ -34,6 +34,7 @@ CREATE TABLE `kategori` (
 -- 3. Tabel Transaksi Kas
 CREATE TABLE `transaksi` (
   `id_transaksi` INT NOT NULL AUTO_INCREMENT,
+  `id_user` INT NOT NULL DEFAULT 1,
   `id_kategori` INT NOT NULL,
   `tanggal` DATE NOT NULL,
   `judul` VARCHAR(150) NOT NULL,
@@ -42,7 +43,10 @@ CREATE TABLE `transaksi` (
   `catatan` TEXT DEFAULT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_transaksi`),
+  KEY `fk_transaksi_user` (`id_user`),
   KEY `fk_transaksi_kategori` (`id_kategori`),
+  CONSTRAINT `fk_transaksi_user` FOREIGN KEY (`id_user`) 
+    REFERENCES `users` (`id_user`) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT `fk_transaksi_kategori` FOREIGN KEY (`id_kategori`) 
     REFERENCES `kategori` (`id_kategori`) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

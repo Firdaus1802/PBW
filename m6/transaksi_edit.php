@@ -7,13 +7,14 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$user_id = (int)$_SESSION['user_id'];
 if ($id <= 0) {
     header("Location: " . base_url("index.php"));
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM transaksi WHERE id_transaksi = ?");
-$stmt->execute([$id]);
+$stmt = $pdo->prepare("SELECT * FROM transaksi WHERE id_transaksi = ? AND id_user = ?");
+$stmt->execute([$id, $user_id]);
 $trx = $stmt->fetch();
 
 if (!$trx) {
@@ -33,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) 
 
     if (!empty($judul) && $id_kategori > 0 && $jumlah > 0 && !empty($tanggal)) {
         try {
-            $stmt_update = $pdo->prepare("UPDATE transaksi SET id_kategori = ?, tanggal = ?, judul = ?, jenis = ?, jumlah = ?, catatan = ? WHERE id_transaksi = ?");
-            $stmt_update->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan, $id]);
+            $stmt_update = $pdo->prepare("UPDATE transaksi SET id_kategori = ?, tanggal = ?, judul = ?, jenis = ?, jumlah = ?, catatan = ? WHERE id_transaksi = ? AND id_user = ?");
+            $stmt_update->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan, $id, $user_id]);
             
             $redirect_target = (isset($_POST['from']) && $_POST['from'] === 'dashboard') 
                 ? 'dashboard.php?msg=updated#transaksiSection' 

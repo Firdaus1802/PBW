@@ -6,6 +6,27 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$user_id = (int)$_SESSION['user_id'];
+
+if (empty($_SESSION['username']) && isset($_SESSION['user_id'])) {
+    try {
+        $stmt_u = $pdo->prepare("SELECT username, nama_lengkap FROM users WHERE id_user = ?");
+        $stmt_u->execute([$user_id]);
+        $curr_u = $stmt_u->fetch();
+        if ($curr_u) {
+            $_SESSION['username'] = $curr_u['username'];
+            $_SESSION['nama_lengkap'] = $curr_u['nama_lengkap'];
+        }
+    } catch (Throwable $e) {}
+}
+
+$curr_nama = trim($_SESSION['nama_lengkap'] ?? 'Mahasiswa');
+$words = explode(' ', $curr_nama);
+$user_initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
+if (empty($user_initials)) {
+    $user_initials = strtoupper(substr($_SESSION['username'] ?? 'M', 0, 2));
+}
+
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $is_mobile_device = preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini)/i', $ua);
 if ($is_mobile_device && !isset($_GET['desktop'])) {
@@ -58,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) 
 
     if (!empty($judul) && $id_kategori > 0 && $jumlah > 0 && !empty($tanggal)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO transaksi (id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
+            $stmt = $pdo->prepare("INSERT INTO transaksi (id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$user_id, $id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
             header("Location: " . base_url("dashboard.php?msg=added#transaksiSection"));
             exit;
         } catch (PDOException $e) {
@@ -79,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) 
 
     if ($id_trx > 0 && !empty($judul) && $id_kategori > 0 && $jumlah > 0 && !empty($tanggal)) {
         try {
-            $stmt_up = $pdo->prepare("UPDATE transaksi SET id_kategori = ?, tanggal = ?, judul = ?, jenis = ?, jumlah = ?, catatan = ? WHERE id_transaksi = ?");
-            $stmt_up->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan, $id_trx]);
+            $stmt_up = $pdo->prepare("UPDATE transaksi SET id_kategori = ?, tanggal = ?, judul = ?, jenis = ?, jumlah = ?, catatan = ? WHERE id_transaksi = ? AND id_user = ?");
+            $stmt_up->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan, $id_trx, $user_id]);
             header("Location: " . base_url("dashboard.php?msg=updated#transaksiSection"));
             exit;
         } catch (PDOException $e) {
@@ -92,8 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) 
 if (isset($_GET['hapus_trx'])) {
     $id_trx_del = (int)$_GET['hapus_trx'];
     if ($id_trx_del > 0) {
-        $stmt_del = $pdo->prepare("DELETE FROM transaksi WHERE id_transaksi = ?");
-        $stmt_del->execute([$id_trx_del]);
+        $stmt_del = $pdo->prepare("DELETE FROM transaksi WHERE id_transaksi = ? AND id_user = ?");
+        $stmt_del->execute([$id_trx_del, $user_id]);
         header("Location: " . base_url("dashboard.php?msg=deleted#transaksiSection"));
         exit;
     }
@@ -131,10 +152,11 @@ if (isset($_GET['hapus_kat'])) {
     }
 }
 
-$stmt_stat = $pdo->query("SELECT 
+$stmt_stat = $pdo->prepare("SELECT 
     COALESCE(SUM(CASE WHEN jenis = 'Pemasukan' THEN jumlah ELSE 0 END), 0) AS total_masuk,
     COALESCE(SUM(CASE WHEN jenis = 'Pengeluaran' THEN jumlah ELSE 0 END), 0) AS total_keluar
-FROM transaksi");
+FROM transaksi WHERE id_user = ?");
+$stmt_stat->execute([$user_id]);
 $stat = $stmt_stat->fetch();
 $total_masuk  = (float)$stat['total_masuk'];
 $total_keluar = (float)$stat['total_keluar'];
@@ -145,27 +167,34 @@ $rasio_simpan = ($total_masuk > 0) ? max(0, min(100, round(($saldo_akhir / $tota
 $sql_trx = "SELECT t.*, k.nama_kategori, k.icon 
             FROM transaksi t 
             JOIN kategori k ON t.id_kategori = k.id_kategori 
+            WHERE t.id_user = ?
             ORDER BY t.tanggal DESC, t.id_transaksi DESC";
-$daftar_transaksi = $pdo->query($sql_trx)->fetchAll();
+$stmt_trx = $pdo->prepare($sql_trx);
+$stmt_trx->execute([$user_id]);
+$daftar_transaksi = $stmt_trx->fetchAll();
 $transaksi_list = $daftar_transaksi;
 
-$kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
+$stmt_kat = $pdo->prepare("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
                               FROM kategori k 
-                              LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori 
+                              LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori AND t.id_user = ? 
                               GROUP BY k.id_kategori 
-                              ORDER BY k.jenis ASC, k.nama_kategori ASC")->fetchAll();
+                              ORDER BY k.jenis ASC, k.nama_kategori ASC");
+$stmt_kat->execute([$user_id]);
+$kategori_list = $stmt_kat->fetchAll();
 
-$kat_expenses = $pdo->query("SELECT 
+$stmt_ke = $pdo->prepare("SELECT 
                                 k.id_kategori,
                                 k.nama_kategori, 
                                 k.icon,
                                 COALESCE(SUM(t.jumlah), 0) AS total,
                                 COUNT(t.id_transaksi) AS total_trx
                              FROM kategori k 
-                             LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori AND t.jenis = 'Pengeluaran'
+                             LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori AND t.jenis = 'Pengeluaran' AND t.id_user = ?
                              WHERE k.jenis = 'Pengeluaran' 
                              GROUP BY k.id_kategori, k.nama_kategori, k.icon 
-                             ORDER BY total DESC")->fetchAll();
+                             ORDER BY total DESC");
+$stmt_ke->execute([$user_id]);
+$kat_expenses = $stmt_ke->fetchAll();
 $donut_labels = [];
 $donut_values = [];
 foreach ($kat_expenses as $ke) {

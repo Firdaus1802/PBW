@@ -1,12 +1,18 @@
 <?php
 require_once __DIR__ . '/config/koneksi.php';
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: " . base_url("login.php"));
+    exit;
+}
+
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$user_id = (int)$_SESSION['user_id'];
 
 if ($id > 0) {
     try {
-        $stmt = $pdo->prepare("DELETE FROM transaksi WHERE id_transaksi = ?");
-        $stmt->execute([$id]);
+        $stmt = $pdo->prepare("DELETE FROM transaksi WHERE id_transaksi = ? AND id_user = ?");
+        $stmt->execute([$id, $user_id]);
         header("Location: " . base_url("index.php?msg=deleted"));
         exit;
     } catch (PDOException $e) {

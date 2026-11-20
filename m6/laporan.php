@@ -6,11 +6,16 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$user_id = (int)$_SESSION['user_id'];
+
 $sql = "SELECT t.*, k.nama_kategori 
         FROM transaksi t 
         JOIN kategori k ON t.id_kategori = k.id_kategori 
+        WHERE t.id_user = ?
         ORDER BY t.tanggal ASC, t.id_transaksi ASC";
-$transaksi_list = $pdo->query($sql)->fetchAll();
+$stmt_lap = $pdo->prepare($sql);
+$stmt_lap->execute([$user_id]);
+$transaksi_list = $stmt_lap->fetchAll();
 
 $total_masuk = 0;
 $total_keluar = 0;

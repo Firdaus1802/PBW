@@ -54,6 +54,7 @@ try {
                 );
                 CREATE TABLE IF NOT EXISTS transaksi (
                     id_transaksi INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id_user INTEGER DEFAULT 1,
                     id_kategori INTEGER,
                     tanggal TEXT,
                     judul TEXT,
@@ -86,6 +87,30 @@ try {
     } catch (Throwable $sqle) {
         die("Koneksi Database Gagal: " . $e->getMessage());
     }
+}
+
+if ($pdo) {
+    try {
+        $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        if ($driver === 'mysql') {
+            $col_check = $pdo->query("SHOW COLUMNS FROM transaksi LIKE 'id_user'")->fetch();
+            if (!$col_check) {
+                $pdo->exec("ALTER TABLE transaksi ADD COLUMN id_user INT NOT NULL DEFAULT 1 AFTER id_transaksi, ADD INDEX idx_transaksi_user (id_user)");
+            }
+        } elseif ($driver === 'sqlite') {
+            $cols = $pdo->query("PRAGMA table_info(transaksi)")->fetchAll();
+            $has_uid = false;
+            foreach ($cols as $c) {
+                if ($c['name'] === 'id_user') {
+                    $has_uid = true;
+                    break;
+                }
+            }
+            if (!$has_uid) {
+                $pdo->exec("ALTER TABLE transaksi ADD COLUMN id_user INTEGER DEFAULT 1");
+            }
+        }
+    } catch (Throwable $ignore_mig) {}
 }
 
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['dompetku_remember']) && $pdo) {

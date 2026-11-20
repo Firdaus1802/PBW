@@ -10,6 +10,25 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+if (empty($_SESSION['username']) && isset($_SESSION['user_id'])) {
+    try {
+        $stmt_u = $pdo->prepare("SELECT username, nama_lengkap FROM users WHERE id_user = ?");
+        $stmt_u->execute([(int)$_SESSION['user_id']]);
+        $curr_u = $stmt_u->fetch();
+        if ($curr_u) {
+            $_SESSION['username'] = $curr_u['username'];
+            $_SESSION['nama_lengkap'] = $curr_u['nama_lengkap'];
+        }
+    } catch (Throwable $e) {}
+}
+
+$curr_nama = trim($_SESSION['nama_lengkap'] ?? 'Mahasiswa');
+$words = explode(' ', $curr_nama);
+$user_initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
+if (empty($user_initials)) {
+    $user_initials = strtoupper(substr($_SESSION['username'] ?? 'M', 0, 2));
+}
+
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $is_mobile_device = (bool)preg_match('/(android|iphone|ipad|ipod|mobile|blackberry|iemobile|opera mini|webos)/i', $ua);
 
@@ -101,10 +120,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['tambah_transaksi']) 
         }
     }
 
+    $user_id = (int)$_SESSION['user_id'];
     if ($id_kategori > 0 && $jumlah > 0) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO transaksi (id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
+            $stmt = $pdo->prepare("INSERT INTO transaksi (id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$user_id, $id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
             $redir_view = $force_mobile ? 'view=mobile&' : '';
             header("Location: " . base_url("index.php?" . $redir_view . "msg=added#dompet"));
             exit;
@@ -115,6 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['tambah_transaksi']) 
         $alert_msg = '<div class="alert alert-warning rounded-4">Harap isi nominal transaksi dengan benar.</div>';
     }
 }
+
+$user_id = (int)($_SESSION['user_id'] ?? 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     $nama_kategori = sanitize($_POST['nama_kategori']);
@@ -133,10 +155,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
     }
 }
 
-$stmt_stat = $pdo->query("SELECT 
+$stmt_stat = $pdo->prepare("SELECT 
     COALESCE(SUM(CASE WHEN jenis = 'Pemasukan' THEN jumlah ELSE 0 END), 0) AS total_masuk,
     COALESCE(SUM(CASE WHEN jenis = 'Pengeluaran' THEN jumlah ELSE 0 END), 0) AS total_keluar
-FROM transaksi");
+FROM transaksi WHERE id_user = ?");
+$stmt_stat->execute([$user_id]);
 $stat = $stmt_stat->fetch();
 $total_masuk  = (float)$stat['total_masuk'];
 $total_keluar = (float)$stat['total_keluar'];
@@ -146,22 +169,29 @@ $rasio_simpan = ($total_masuk > 0) ? max(0, min(100, round(($saldo_akhir / $tota
 $sql = "SELECT t.*, k.nama_kategori, k.icon 
         FROM transaksi t 
         JOIN kategori k ON t.id_kategori = k.id_kategori 
+        WHERE t.id_user = ?
         ORDER BY t.tanggal DESC, t.id_transaksi DESC";
-$daftar_transaksi = $pdo->query($sql)->fetchAll();
+$stmt_trx = $pdo->prepare($sql);
+$stmt_trx->execute([$user_id]);
+$daftar_transaksi = $stmt_trx->fetchAll();
 $transaksi_list = $daftar_transaksi;
 
-$kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
+$stmt_kat = $pdo->prepare("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
                               FROM kategori k 
-                              LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori 
+                              LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori AND t.id_user = ? 
                               GROUP BY k.id_kategori 
-                              ORDER BY k.jenis ASC, k.nama_kategori ASC")->fetchAll();
+                              ORDER BY k.jenis ASC, k.nama_kategori ASC");
+$stmt_kat->execute([$user_id]);
+$kategori_list = $stmt_kat->fetchAll();
 
-$kat_expenses = $pdo->query("SELECT k.nama_kategori, COALESCE(SUM(t.jumlah), 0) AS total 
+$stmt_ke = $pdo->prepare("SELECT k.nama_kategori, COALESCE(SUM(t.jumlah), 0) AS total 
                              FROM kategori k 
                              JOIN transaksi t ON k.id_kategori = t.id_kategori 
-                             WHERE t.jenis = 'Pengeluaran' 
+                             WHERE t.jenis = 'Pengeluaran' AND t.id_user = ?
                              GROUP BY k.id_kategori 
-                             ORDER BY total DESC")->fetchAll();
+                             ORDER BY total DESC");
+$stmt_ke->execute([$user_id]);
+$kat_expenses = $stmt_ke->fetchAll();
 $chart_labels_kat = [];
 $chart_data_kat   = [];
 foreach ($kat_expenses as $ke) {
@@ -262,7 +292,7 @@ foreach ($kat_expenses as $ke) {
                     </div>
                     <div>
                         <h6 class="mb-0 fw-bold" id="navbarViewTitle" style="letter-spacing: -0.4px; font-size: 16px; color: var(--boss-text-primary);">DompetKu</h6>
-                        <small class="text-secondary" style="font-size: 11px;"><?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Firdaus Dhuha') ?></small>
+                        <small class="text-secondary" style="font-size: 11px;"><?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Mahasiswa') ?> <span style="opacity: 0.7;">(@<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?>)</span></small>
                     </div>
                 </div>
 
@@ -315,8 +345,8 @@ foreach ($kat_expenses as $ke) {
                 <div class="wallet-hero-card mb-3" id="iosHeroHeader">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <div class="artosku-greeting-text mb-0">Hi, <?= htmlspecialchars(explode(' ', trim($_SESSION['nama_lengkap'] ?? 'Ketua'))[0]) ?> 👋</div>
-                            <small class="text-secondary" style="font-size: 11px; font-weight: 500;">Bulan Berjalan • <?= date('F Y') ?></small>
+                            <div class="artosku-greeting-text mb-0">Hi, <?= htmlspecialchars(explode(' ', trim($_SESSION['nama_lengkap'] ?? 'Mahasiswa'))[0]) ?> 👋</div>
+                            <small class="text-secondary" style="font-size: 11px; font-weight: 500;">@<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?> • <?= tgl_indo(date('Y-m-d')) ?></small>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <button type="button" class="artosku-icon-btn" onclick="toggleTheme()" title="Ganti Mode Tampilan">
@@ -751,15 +781,20 @@ foreach ($kat_expenses as $ke) {
 
                 <div class="ios-card p-4 mb-3 text-center">
                     <div class="mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 72px; height: 72px; border-radius: 22px; background: var(--ios-center-circle-bg); color: var(--ios-center-circle-color); font-size: 24px; font-weight: 700; letter-spacing: -0.5px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);">
-                        FD
+                        <?= $user_initials ?>
                     </div>
                     <h5 class="fw-bold mb-1" style="color: var(--boss-text-primary); letter-spacing: -0.3px;">
-                        <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Firdaus Dhuha Prabowo') ?>
+                        <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Mahasiswa') ?>
                     </h5>
+                    <div class="mb-2">
+                        <span class="badge" style="background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border); font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 9999px;">
+                            @<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?>
+                        </span>
+                    </div>
                     <p class="text-secondary small mb-2.5" style="font-size: 12px;">Mahasiswa Sistem Informasi • Universitas Gunadarma</p>
                     <div class="d-flex align-items-center justify-content-center gap-1.5 flex-wrap">
-                        <span class="ios-badge-mono">Sesi Aktif</span>
-                        <span class="ios-badge-mono">Kelas 3KA31</span>
+                        <span class="ios-badge-mono">Sesi Aktif 30 Hari</span>
+                        <span class="ios-badge-mono">User ID #<?= (int)($_SESSION['user_id'] ?? 1) ?></span>
                         <span class="ios-badge-mono">MySQL Terhubung</span>
                     </div>
                 </div>
@@ -919,8 +954,12 @@ foreach ($kat_expenses as $ke) {
             <button type="button" class="ios-capsule-item" id="tabBtnAkun" onclick="switchIosTab('akun')">
                 <div class="capsule-icon-wrap">
                     <div class="capsule-avatar-circle">
-                        <img src="<?= base_url('assets/img/profile-firdaus.png') ?>" alt="Anda" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <span class="avatar-fallback" style="display:none;">FD</span>
+                        <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'admin'): ?>
+                            <img src="<?= base_url('assets/img/profile-firdaus.png') ?>" alt="Anda" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span class="avatar-fallback" style="display:none;"><?= $user_initials ?></span>
+                        <?php else: ?>
+                            <span class="avatar-fallback" style="display:flex;"><?= $user_initials ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <span class="capsule-label">Anda</span>
@@ -1117,7 +1156,7 @@ foreach ($kat_expenses as $ke) {
                                         <span class="text-secondary" style="font-size: 10px;">Terverifikasi</span>
                                     </div>
                                     <p class="text-secondary mb-0" style="font-size: 12px; line-height: 1.4;">
-                                        Login sebagai <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Firdaus Dhuha Prabowo') ?>. Sesi aktif hingga 30 hari.
+                                        Login sebagai <?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Mahasiswa') ?> (@<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?>). Sesi aktif hingga 30 hari.
                                     </p>
                                 </div>
                             </div>
