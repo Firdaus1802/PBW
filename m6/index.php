@@ -141,6 +141,7 @@ $stat = $stmt_stat->fetch();
 $total_masuk  = (float)$stat['total_masuk'];
 $total_keluar = (float)$stat['total_keluar'];
 $saldo_akhir  = $total_masuk - $total_keluar;
+$rasio_simpan = ($total_masuk > 0) ? max(0, min(100, round(($saldo_akhir / $total_masuk) * 100))) : 0;
 
 $sql = "SELECT t.*, k.nama_kategori, k.icon 
         FROM transaksi t 
@@ -381,8 +382,8 @@ foreach ($kat_expenses as $ke) {
                             <small class="text-secondary" style="font-size: 10.5px;">Rasio Tabungan Terjaga</small>
                             <small class="text-success fw-bold" style="font-size: 10.5px;"><?= $rasio_simpan ?>% Tersimpan</small>
                         </div>
-                        <div class="progress" style="height: 5px; background: rgba(255,255,255,0.08); border-radius: 10px;">
-                            <div class="progress-bar bg-success" style="width: <?= $rasio_simpan ?>%; border-radius: 10px;"></div>
+                        <div class="progress" style="height: 6px; background-color: rgba(120, 120, 128, 0.16); border-radius: 9999px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= $rasio_simpan ?>%; border-radius: 9999px;" aria-valuenow="<?= $rasio_simpan ?>" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                 </div>
