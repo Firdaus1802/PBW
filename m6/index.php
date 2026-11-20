@@ -368,8 +368,8 @@ foreach ($kat_expenses as $ke) {
                             <div class="row g-2 artosku-subcards-row mb-2">
                                 <div class="col-6">
                                     <div class="artosku-subcard" onclick="setInstantFilter('Pemasukan', 1)">
-                                        <div class="artosku-subcard-icon" style="background: rgba(52, 199, 89, 0.15); border-color: rgba(52, 199, 89, 0.25);">
-                                            <i class="bi bi-wallet2" style="color: var(--boss-green);"></i>
+                                        <div class="artosku-subcard-icon" style="background: var(--boss-segmented-bg); border: 1px solid var(--boss-border); color: var(--boss-text-primary);">
+                                            <i class="bi bi-arrow-down-left"></i>
                                         </div>
                                         <div class="min-w-0 flex-grow-1">
                                             <span class="artosku-subcard-title text-truncate">Wallet / Masuk</span>
@@ -379,8 +379,8 @@ foreach ($kat_expenses as $ke) {
                                 </div>
                                 <div class="col-6">
                                     <div class="artosku-subcard" onclick="setInstantFilter('Pengeluaran', 2)">
-                                        <div class="artosku-subcard-icon" style="background: rgba(255, 59, 48, 0.15); border-color: rgba(255, 59, 48, 0.25);">
-                                            <i class="bi bi-gem" style="color: var(--boss-red);"></i>
+                                        <div class="artosku-subcard-icon" style="background: var(--boss-segmented-bg); border: 1px solid var(--boss-border); color: var(--boss-text-primary);">
+                                            <i class="bi bi-arrow-up-right"></i>
                                         </div>
                                         <div class="min-w-0 flex-grow-1">
                                             <span class="artosku-subcard-title text-truncate">Aset / Keluar</span>
@@ -1080,8 +1080,8 @@ foreach ($kat_expenses as $ke) {
                     <div class="artosku-sheet-grabber"></div>
                     <div class="d-flex justify-content-between align-items-center mb-2 px-2">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="ios-icon-box" style="width: 34px; height: 34px; border-radius: 10px; background: rgba(255, 69, 58, 0.12); color: #FF453A;">
-                                <i class="bi bi-bell-fill"></i>
+                            <div class="ios-icon-box" style="width: 34px; height: 34px; border-radius: 10px; background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border);">
+                                <i class="bi bi-bell" style="font-size: 15px;"></i>
                             </div>
                             <div>
                                 <h5 class="fw-bold mb-0" id="modalNotifikasiLabel" style="color: var(--boss-text-primary); font-size: 16px;">Pusat Notifikasi</h5>
@@ -1098,8 +1098,8 @@ foreach ($kat_expenses as $ke) {
                     <div class="ios-card-group mb-3">
                         <div class="ios-list-row p-3">
                             <div class="d-flex align-items-start gap-3">
-                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(52, 199, 89, 0.15); color: #34C759;">
-                                    <i class="bi bi-check-circle-fill"></i>
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border);">
+                                    <i class="bi bi-shield-check" style="font-size: 16px;"></i>
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -1115,8 +1115,8 @@ foreach ($kat_expenses as $ke) {
 
                         <div class="ios-list-row p-3">
                             <div class="d-flex align-items-start gap-3">
-                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(0, 122, 255, 0.15); color: #007AFF;">
-                                    <i class="bi bi-receipt"></i>
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border);">
+                                    <i class="bi bi-arrow-repeat" style="font-size: 16px;"></i>
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -1132,8 +1132,8 @@ foreach ($kat_expenses as $ke) {
 
                         <div class="ios-list-row p-3">
                             <div class="d-flex align-items-start gap-3">
-                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(255, 149, 0, 0.15); color: #FF9500;">
-                                    <i class="bi bi-calendar-event-fill"></i>
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border);">
+                                    <i class="bi bi-calendar3" style="font-size: 15px;"></i>
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
@@ -1149,8 +1149,8 @@ foreach ($kat_expenses as $ke) {
 
                         <div class="ios-list-row p-3">
                             <div class="d-flex align-items-start gap-3">
-                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 11px; background: rgba(88, 86, 214, 0.15); color: #5856D6;">
-                                    <i class="bi bi-shield-lock-fill"></i>
+                                <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px; border-radius: 10px; background: var(--boss-segmented-bg); color: var(--boss-text-primary); border: 1px solid var(--boss-border);">
+                                    <i class="bi bi-person-badge" style="font-size: 15px;"></i>
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
