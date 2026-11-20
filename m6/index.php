@@ -194,7 +194,13 @@ foreach ($kat_expenses as $ke) {
     </script>
 
     <style>
-        
+        .rekap-table-container,
+        .table-responsive.rounded-4 {
+            background-color: var(--boss-card);
+            border: 1px solid var(--boss-neu-border) !important;
+            box-shadow: var(--boss-neu-shadow);
+            border-radius: 20px !important;
+        }
         .rekap-table th {
             background-color: var(--boss-table-th-bg);
             color: var(--boss-text-secondary);
@@ -204,31 +210,24 @@ foreach ($kat_expenses as $ke) {
             border-color: var(--boss-table-border);
         }
         .rekap-table td {
-            background-color: var(--boss-table-td-bg);
+            background-color: var(--boss-card);
             border-color: var(--boss-table-border);
             padding: 12px 14px;
             vertical-align: middle;
             color: var(--boss-text-primary) !important;
         }
-        .table-date-text { color: #F1F5F9 !important; font-size: 13px; font-weight: 600; }
-        .table-title-text { color: #FFFFFF !important; font-size: 14px; font-weight: 600; }
-        .table-notes-text { color: #94A3B8 !important; font-size: 11.5px; }
+        .table-date-text { color: var(--boss-text-secondary) !important; font-size: 13px; font-weight: 600; }
+        .table-title-text { color: var(--boss-text-primary) !important; font-size: 14px; font-weight: 600; }
+        .table-notes-text { color: var(--boss-text-muted) !important; font-size: 11.5px; }
         .badge-kategori-solid {
             font-size: 11px;
             font-weight: 600;
             padding: 4px 10px;
-            border-radius: 20px;
+            border-radius: 10px;
             background-color: var(--boss-card-inner);
-            color: #FFFFFF !important;
-            border: 1px solid var(--boss-border-active);
-        }
-        [data-theme="light"] .table-date-text { color: #1E293B !important; }
-        [data-theme="light"] .table-title-text { color: #0F172A !important; }
-        [data-theme="light"] .table-notes-text { color: #64748B !important; }
-        [data-theme="light"] .badge-kategori-solid {
-            background-color: #F1F5F9 !important;
-            color: #0F172A !important;
-            border-color: rgba(0, 0, 0, 0.12) !important;
+            color: var(--boss-text-primary) !important;
+            border: 1px solid var(--boss-neu-border);
+            box-shadow: var(--boss-neu-inset);
         }
 
         @media print {
@@ -303,28 +302,6 @@ foreach ($kat_expenses as $ke) {
 
             </div>
         </nav>
-
-        <div class="ios-sticky-mini-header" id="iosStickyMiniHeader">
-            <div class="ios-mini-header-inner">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="ios-mini-icon-circle">
-                        <i class="bi bi-wallet2"></i>
-                    </div>
-                    <div>
-                        <span class="ios-mini-title">DompetKu</span>
-                        <span class="ios-mini-balance" id="miniBalanceDisplay"><?= format_rupiah($saldo_akhir) ?></span>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                    <button type="button" onclick="toggleTheme()" class="ios-mini-btn" title="Ganti Mode Tampilan">
-                        <i class="theme-toggle-icon"></i>
-                    </button>
-                    <button type="button" class="ios-mini-btn ios-mini-btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah" title="Tambah Transaksi">
-                        <i class="bi bi-plus-lg"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
 
         <div class="ios-main-content">
             
@@ -714,7 +691,8 @@ foreach ($kat_expenses as $ke) {
 
             </div>
 
-            
+            </div>
+
             <div id="tabViewKategori" class="tab-view-panel">
                 
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -1749,47 +1727,6 @@ foreach ($kat_expenses as $ke) {
             }
             setInterval(updateLiveClock, 1000);
             updateLiveClock();
-
-            const heroHeaderEl = document.getElementById('iosHeroHeader');
-            const stickyMiniEl = document.getElementById('iosStickyMiniHeader');
-            if (heroHeaderEl || stickyMiniEl) {
-                let isScrollTicking = false;
-                const updateCollapsibleHeader = () => {
-                    const scrollPos = window.scrollY || window.pageYOffset || 0;
-                    if (heroHeaderEl) {
-                        const maxThreshold = 140;
-                        const progress = Math.min(Math.max(scrollPos / maxThreshold, 0), 1);
-                        const opacity = Math.max(1 - (progress * 1.3), 0);
-                        const translateY = -(progress * 26);
-                        const blurPx = (progress * 8).toFixed(1);
-
-                        heroHeaderEl.style.opacity = opacity;
-                        heroHeaderEl.style.transform = `translateY(${translateY}px) scale(${1 - (progress * 0.04)})`;
-                        heroHeaderEl.style.filter = `blur(${blurPx}px)`;
-                        heroHeaderEl.style.pointerEvents = opacity <= 0.05 ? 'none' : 'auto';
-                    }
-
-                    if (stickyMiniEl) {
-                        if (scrollPos > 70) {
-                            stickyMiniEl.classList.add('visible');
-                        } else {
-                            stickyMiniEl.classList.remove('visible');
-                        }
-                    }
-                };
-
-                window.addEventListener('scroll', () => {
-                    if (!isScrollTicking) {
-                        window.requestAnimationFrame(() => {
-                            updateCollapsibleHeader();
-                            isScrollTicking = false;
-                        });
-                        isScrollTicking = true;
-                    }
-                }, { passive: true });
-
-                updateCollapsibleHeader();
-            }
 
             const carousel = document.getElementById('heroCarouselWrap');
             if (carousel) {
