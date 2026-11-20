@@ -91,11 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#000000" id="metaThemeColor">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="<?= base_url('manifest.json') ?>">
-    <link rel="apple-touch-icon" href="<?= base_url('assets/icons/app-icon.png') ?>">
+    <meta name="theme-color" content="#0C0D12" id="metaThemeColor">
     <title>Masuk - DompetKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -104,39 +100,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <style>
         :root, [data-theme="dark"], [data-bs-theme="dark"] {
-            --ios-page-bg: #000000;
-            --ios-card-bg: rgba(28, 28, 30, 0.75);
-            --ios-card-border: rgba(255, 255, 255, 0.14);
-            --ios-card-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            --ios-grouped-bg: rgba(255, 255, 255, 0.08);
-            --ios-divider: rgba(255, 255, 255, 0.1);
-            --ios-text: #FFFFFF;
-            --ios-subtext: #8E8E93;
-            --ios-placeholder: #636366;
-            --ios-accent: #0A84FF;
-            --ios-btn-tint-bg: rgba(10, 132, 255, 0.16);
-            --ios-btn-tint-color: #0A84FF;
-            --ios-circle-btn-bg: rgba(255, 255, 255, 0.1);
-            --ios-circle-btn-color: #FFFFFF;
-            --ios-grabber: rgba(255, 255, 255, 0.25);
+            --auth-bg: #0C0D12;
+            --auth-card-bg: #141620;
+            --auth-border: rgba(255, 255, 255, 0.08);
+            --auth-border-focus: rgba(255, 255, 255, 0.28);
+            --auth-focus-ring: rgba(255, 255, 255, 0.06);
+            --auth-input-bg: #1A1D27;
+            --auth-text-title: #F8FAFC;
+            --auth-text-label: #94A3B8;
+            --auth-text-muted: #64748B;
+            --auth-text-body: #F8FAFC;
+            --auth-placeholder: #475569;
+            --auth-btn-primary-bg: #FFFFFF;
+            --auth-btn-primary-text: #090A0F;
+            --auth-btn-sec-bg: #1C1E2A;
+            --auth-btn-sec-text: #CBD5E1;
+            --auth-btn-sec-border: rgba(255, 255, 255, 0.08);
+            --auth-icon-bg: #1C1E2A;
+            --auth-icon-color: #F8FAFC;
+            --auth-icon-border: rgba(255, 255, 255, 0.1);
+            --auth-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
         }
 
         [data-theme="light"], [data-bs-theme="light"] {
-            --ios-page-bg: #F2F2F7;
-            --ios-card-bg: rgba(255, 255, 255, 0.85);
-            --ios-card-border: rgba(0, 0, 0, 0.08);
-            --ios-card-shadow: 0 20px 50px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.95);
-            --ios-grouped-bg: rgba(118, 118, 128, 0.12);
-            --ios-divider: rgba(60, 60, 67, 0.18);
-            --ios-text: #000000;
-            --ios-subtext: #8E8E93;
-            --ios-placeholder: #8E8E93;
-            --ios-accent: #007AFF;
-            --ios-btn-tint-bg: rgba(0, 122, 255, 0.12);
-            --ios-btn-tint-color: #007AFF;
-            --ios-circle-btn-bg: rgba(118, 118, 128, 0.12);
-            --ios-circle-btn-color: #000000;
-            --ios-grabber: rgba(60, 60, 67, 0.3);
+            --auth-bg: #F8F9FA;
+            --auth-card-bg: #FFFFFF;
+            --auth-border: #E2E8F0;
+            --auth-border-focus: #0F172A;
+            --auth-focus-ring: rgba(15, 23, 42, 0.06);
+            --auth-input-bg: #F8FAFC;
+            --auth-text-title: #0F172A;
+            --auth-text-label: #475569;
+            --auth-text-muted: #64748B;
+            --auth-text-body: #0F172A;
+            --auth-placeholder: #94A3B8;
+            --auth-btn-primary-bg: #0F172A;
+            --auth-btn-primary-text: #FFFFFF;
+            --auth-btn-sec-bg: #F1F5F9;
+            --auth-btn-sec-text: #334155;
+            --auth-btn-sec-border: #E2E8F0;
+            --auth-icon-bg: #F1F5F9;
+            --auth-icon-color: #0F172A;
+            --auth-icon-border: #E2E8F0;
+            --auth-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
         }
 
         * {
@@ -150,168 +156,134 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             align-items: center;
             justify-content: center;
             padding: 24px 16px;
-            background-color: var(--ios-page-bg);
-            color: var(--ios-text);
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            position: relative;
-            overflow-x: hidden;
+            background-color: var(--auth-bg);
+            color: var(--auth-text-body);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 380px;
-            height: 380px;
-            background: radial-gradient(circle, rgba(0, 122, 255, 0.12) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .ios-login-card {
+        .auth-container {
             width: 100%;
-            max-width: 400px;
-            background: var(--ios-card-bg);
-            backdrop-filter: blur(40px) saturate(190%);
-            -webkit-backdrop-filter: blur(40px) saturate(190%);
-            border: 0.5px solid var(--ios-card-border);
-            border-radius: 32px;
-            padding: 26px 24px 26px;
-            box-shadow: var(--ios-card-shadow);
-            position: relative;
-            z-index: 1;
-            animation: iosCardAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+            max-width: 390px;
         }
 
-        @keyframes iosCardAppear {
-            0% {
-                opacity: 0;
-                transform: scale(0.95) translateY(16px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+        .auth-card {
+            background-color: var(--auth-card-bg);
+            border: 1px solid var(--auth-border);
+            border-radius: 18px;
+            padding: 34px 28px;
+            box-shadow: var(--auth-shadow);
+            transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
-        .ios-sheet-grabber {
-            width: 36px;
-            height: 5px;
-            border-radius: 9999px;
-            background: var(--ios-grabber);
-            margin: 0 auto 16px;
-            transition: background 0.3s ease;
+        .auth-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
         }
 
-        .ios-theme-circle-btn {
+        .auth-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            background-color: var(--auth-icon-bg);
+            border: 1px solid var(--auth-icon-border);
+            color: var(--auth-icon-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .auth-brand-title {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin: 0;
+            color: var(--auth-text-title);
+            line-height: 1.2;
+        }
+
+        .auth-brand-subtitle {
+            font-size: 12px;
+            color: var(--auth-text-muted);
+            margin: 0;
+        }
+
+        .auth-theme-btn {
             width: 34px;
             height: 34px;
-            border-radius: 50%;
-            background: var(--ios-circle-btn-bg);
-            border: none;
-            color: var(--ios-circle-btn-color);
+            border-radius: 9px;
+            background-color: var(--auth-btn-sec-bg);
+            border: 1px solid var(--auth-btn-sec-border);
+            color: var(--auth-text-label);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.15s ease, background 0.2s ease;
+            transition: transform 0.15s ease, background-color 0.2s ease;
             outline: none;
         }
 
-        .ios-theme-circle-btn:active {
-            transform: scale(0.9);
+        .auth-theme-btn:active {
+            transform: scale(0.92);
         }
 
-        .ios-app-icon-squircle {
-            width: 72px;
-            height: 72px;
-            border-radius: 22.37%;
-            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
-            color: #FFFFFF;
+        .form-label-custom {
+            font-size: 11.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--auth-text-label);
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        .auth-input-group {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin: 0 auto 14px;
-            box-shadow: 0 10px 24px rgba(0, 122, 255, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.45);
+            background-color: var(--auth-input-bg);
+            border: 1px solid var(--auth-border);
+            border-radius: 10px;
+            padding: 0 14px;
+            height: 44px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .ios-app-title {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.4px;
-            margin-bottom: 2px;
-            color: var(--ios-text);
+        .auth-input-group:focus-within {
+            border-color: var(--auth-border-focus);
+            box-shadow: 0 0 0 3px var(--auth-focus-ring);
         }
 
-        .ios-app-subtitle {
-            font-size: 13px;
-            color: var(--ios-subtext);
-            margin-bottom: 0;
-        }
-
-        .ios-grouped-cells {
-            border-radius: 16px;
-            overflow: hidden;
-            background: var(--ios-grouped-bg);
-            margin-bottom: 20px;
-            border: 0.5px solid transparent;
-            transition: background 0.25s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-        }
-
-        .ios-grouped-cells:focus-within {
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.25);
-            border-color: var(--ios-accent);
-        }
-
-        .ios-cell {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            min-height: 48px;
-        }
-
-        .ios-cell-icon {
-            font-size: 18px;
-            color: var(--ios-subtext);
-            width: 24px;
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .ios-cell input {
+        .auth-input-group input {
             background: transparent;
             border: none;
             outline: none;
             width: 100%;
-            font-size: 15px;
-            color: var(--ios-text);
+            font-size: 14px;
+            color: var(--auth-text-body);
             font-family: inherit;
         }
 
-        .ios-cell input::placeholder {
-            color: var(--ios-placeholder);
+        .auth-input-group input::placeholder {
+            color: var(--auth-placeholder);
         }
 
-        .ios-cell-divider {
-            height: 0.5px;
-            background: var(--ios-divider);
-            margin-left: 52px;
-        }
-
-        .ios-eye-btn {
+        .auth-eye-btn {
             background: transparent;
             border: none;
             outline: none;
-            color: var(--ios-subtext);
-            padding: 4px;
+            color: var(--auth-text-muted);
+            padding: 2px 0 2px 8px;
             font-size: 16px;
             display: flex;
             align-items: center;
@@ -319,68 +291,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
         }
 
-        .ios-btn-primary {
-            background: var(--ios-accent);
-            color: #FFFFFF !important;
+        .btn-auth-primary {
+            background-color: var(--auth-btn-primary-bg);
+            color: var(--auth-btn-primary-text) !important;
             border: none;
-            border-radius: 14px;
-            height: 48px;
+            border-radius: 10px;
+            height: 44px;
             width: 100%;
-            font-size: 15.5px;
+            font-size: 14px;
             font-weight: 600;
-            letter-spacing: -0.2px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.3);
-            transition: transform 0.15s ease, opacity 0.15s ease;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            margin-top: 6px;
         }
 
-        .ios-btn-primary:active {
-            transform: scale(0.97);
+        .btn-auth-primary:hover {
+            opacity: 0.92;
+        }
+
+        .btn-auth-primary:active {
+            transform: scale(0.99);
+        }
+
+        .btn-auth-secondary {
+            background-color: var(--auth-btn-sec-bg);
+            color: var(--auth-btn-sec-text) !important;
+            border: 1px solid var(--auth-btn-sec-border);
+            border-radius: 10px;
+            height: 40px;
+            width: 100%;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: background-color 0.15s ease, transform 0.15s ease;
+            margin-top: 10px;
+        }
+
+        .btn-auth-secondary:hover {
             opacity: 0.9;
         }
 
-        .ios-btn-tinted {
-            background: var(--ios-btn-tint-bg);
-            color: var(--ios-btn-tint-color) !important;
-            border: none;
-            border-radius: 14px;
-            height: 44px;
-            width: 100%;
-            font-size: 13.5px;
-            font-weight: 600;
-            letter-spacing: -0.2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 10px;
-            cursor: pointer;
-            transition: transform 0.15s ease, opacity 0.15s ease;
+        .btn-auth-secondary:active {
+            transform: scale(0.99);
         }
 
-        .ios-btn-tinted:active {
-            transform: scale(0.97);
-            opacity: 0.85;
-        }
-
-        .ios-footnote {
-            font-size: 11.5px;
-            color: var(--ios-subtext);
+        .auth-footer {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid var(--auth-border);
             text-align: center;
-            margin-top: 20px;
-            letter-spacing: -0.1px;
+            font-size: 11.5px;
+            color: var(--auth-text-muted);
         }
 
-        .ios-overlay {
+        .auth-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(28px) saturate(180%);
-            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            background: rgba(12, 13, 18, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             z-index: 99999;
             display: flex;
             flex-direction: column;
@@ -388,10 +365,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.25s ease;
         }
 
-        .ios-overlay.show {
+        .auth-overlay.show {
             opacity: 1;
             pointer-events: all;
         }
@@ -399,77 +376,83 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-    <div class="ios-login-card">
-        <div class="ios-sheet-grabber"></div>
-
-        <div class="d-flex justify-content-end mb-1">
-            <button type="button" onclick="toggleTheme()" class="ios-theme-circle-btn" title="Mode Tampilan">
-                <i class="theme-toggle-icon fs-6"></i>
-            </button>
-        </div>
-
-        <div class="text-center mb-4">
-            <div class="ios-app-icon-squircle">
-                <i class="bi bi-wallet2"></i>
-            </div>
-            <h4 class="ios-app-title">DompetKu</h4>
-            <p class="ios-app-subtitle">Sistem Kas Mahasiswa Gunadarma</p>
-        </div>
-
-        <?php if (!empty($error_msg)): ?>
-            <div class="alert alert-danger rounded-4 py-2 small mb-3 border-0 d-flex align-items-center gap-2">
-                <i class="bi bi-exclamation-triangle-fill"></i> <?= $error_msg ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (!empty($success_msg)): ?>
-            <div class="alert alert-success rounded-4 py-2 small mb-3 border-0 d-flex align-items-center gap-2">
-                <i class="bi bi-check-circle-fill"></i> <?= $success_msg ?>
-            </div>
-        <?php endif; ?>
-
-        <form action="login.php" method="POST" id="loginForm">
-            <input type="hidden" name="client_is_mobile" id="clientIsMobile" value="0">
-
-            <div class="ios-grouped-cells">
-                <div class="ios-cell">
-                    <div class="ios-cell-icon"><i class="bi bi-person"></i></div>
-                    <input type="text" name="username" id="inputUsername" placeholder="Username" required autofocus>
+    <div class="auth-container">
+        <div class="auth-card">
+            
+            <div class="auth-header">
+                <div class="auth-brand">
+                    <div class="auth-brand-icon">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                    <div>
+                        <h1 class="auth-brand-title">DompetKu</h1>
+                        <p class="auth-brand-subtitle">Sistem Kas Mahasiswa</p>
+                    </div>
                 </div>
-                <div class="ios-cell-divider"></div>
-                <div class="ios-cell">
-                    <div class="ios-cell-icon"><i class="bi bi-lock"></i></div>
-                    <input type="password" name="password" id="inputPassword" placeholder="Kata Sandi" required>
-                    <button type="button" class="ios-eye-btn" onclick="togglePassVisibility()" tabindex="-1">
-                        <i class="bi bi-eye" id="toggleEyeIcon"></i>
-                    </button>
-                </div>
+
+                <button type="button" onclick="toggleTheme()" class="auth-theme-btn" title="Mode Tampilan">
+                    <i class="theme-toggle-icon fs-6"></i>
+                </button>
             </div>
 
-            <button type="submit" class="ios-btn-primary">
-                <i class="bi bi-arrow-right-circle-fill"></i> Masuk
-            </button>
+            <?php if (!empty($error_msg)): ?>
+                <div class="alert alert-danger rounded-3 py-2 px-3 small mb-3 border-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    <span><?= $error_msg ?></span>
+                </div>
+            <?php endif; ?>
 
-            <button type="button" class="ios-btn-tinted" onclick="autoFillDemoLogin()">
-                <i class="bi bi-lightning-charge-fill"></i> Akses Cepat Demo
-            </button>
-        </form>
+            <?php if (!empty($success_msg)): ?>
+                <div class="alert alert-success rounded-3 py-2 px-3 small mb-3 border-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span><?= $success_msg ?></span>
+                </div>
+            <?php endif; ?>
 
-        <div class="ios-footnote">
-            Database MySQL & SQLite • Bcrypt Hash
+            <form action="login.php" method="POST" id="loginForm">
+                <input type="hidden" name="client_is_mobile" id="clientIsMobile" value="0">
+
+                <div class="mb-3">
+                    <label class="form-label-custom">Username</label>
+                    <div class="auth-input-group">
+                        <input type="text" name="username" id="inputUsername" placeholder="Masukkan username" required autofocus>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label-custom">Kata Sandi</label>
+                    <div class="auth-input-group">
+                        <input type="password" name="password" id="inputPassword" placeholder="Masukkan kata sandi" required>
+                        <button type="button" class="auth-eye-btn" onclick="togglePassVisibility()" tabindex="-1">
+                            <i class="bi bi-eye" id="toggleEyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-auth-primary">
+                    <span>Masuk ke Sistem</span>
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+
+                <button type="button" class="btn-auth-secondary" onclick="autoFillDemoLogin()">
+                    <i class="bi bi-person-check"></i>
+                    <span>Akses Cepat Demo</span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Universitas Gunadarma • Sistem Informasi PBW
+            </div>
+
         </div>
     </div>
 
-    <div id="loginTransitionOverlay" class="ios-overlay">
+    <div id="loginTransitionOverlay" class="auth-overlay">
         <div class="text-center px-4">
-            <div class="ios-app-icon-squircle mx-auto mb-3" style="width: 64px; height: 64px; font-size: 28px;">
-                <i class="bi bi-wallet2"></i>
+            <div class="spinner-border text-light mb-3" style="width: 2.2rem; height: 2.2rem; border-width: 2.5px;" role="status">
+                <span class="visually-hidden">Memuat...</span>
             </div>
-            <h5 class="fw-bold text-white mb-1">Memverifikasi Sesi...</h5>
-            <p class="text-white text-opacity-75 small mb-3">Menyiapkan Dashboard DompetKu</p>
-            <div class="spinner-border text-white text-opacity-75" style="width: 2rem; height: 2rem; border-width: 2.5px;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+            <div class="fw-semibold text-white small">Memverifikasi Sesi...</div>
         </div>
     </div>
 
@@ -490,11 +473,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function triggerLoginTransition() {
             const overlay = document.getElementById('loginTransitionOverlay');
-            const card = document.querySelector('.ios-login-card');
-            if (card) {
-                card.style.transform = 'scale(0.96)';
-                card.style.opacity = '0.7';
-            }
             if (overlay) {
                 overlay.classList.add('show');
             }
@@ -509,7 +487,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             triggerLoginTransition();
             setTimeout(function() {
                 document.getElementById('loginForm').submit();
-            }, 350);
+            }, 300);
         }
 
         document.getElementById('loginForm').addEventListener('submit', function() {
