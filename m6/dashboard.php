@@ -1124,7 +1124,7 @@ foreach ($kat_expenses as $ke) {
 </head>
 <body>
 
-<div class="macos-reveal-overlay">
+<div class="macos-reveal-overlay" style="pointer-events: none !important;">
     <div class="apple-wallet-showcase">
         <div class="haptic-ring haptic-ring-1"></div>
         <div class="haptic-ring haptic-ring-2"></div>
@@ -2228,6 +2228,13 @@ foreach ($kat_expenses as $ke) {
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.querySelector('.macos-reveal-overlay');
+        if (overlay) {
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.remove();
+            }, 1800);
+        }
         renderCharts();
     });
 

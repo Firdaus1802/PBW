@@ -531,7 +531,18 @@ body {
   border-radius: 20px;
   border: 1px solid var(--boss-neu-border);
   box-shadow: var(--boss-neu-shadow);
-  overflow: hidden;
+  overflow: visible !important;
+}
+
+.ios-card-group > .ios-list-row:first-child {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.ios-card-group > .ios-list-row:last-child {
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom: none;
 }
 
 .ios-list-row {
@@ -555,10 +566,31 @@ body {
   background-color: var(--boss-card-inner);
 }
 
+.trx-card-item {
+  position: relative;
+  transition: z-index 0.1s ease;
+}
+
+.trx-card-item:hover,
+.trx-card-item:focus-within {
+  z-index: 40 !important;
+}
+
+.trx-card-item .dropdown {
+  position: relative;
+  z-index: 10;
+}
+
+.trx-card-item .dropdown-menu {
+  z-index: 1060 !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25) !important;
+}
+
 .ios-action-dots-btn {
-  width: 28px !important;
-  height: 28px !important;
-  min-width: 28px !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
   padding: 0 !important;
   margin: 0 !important;
   border-radius: 50% !important;
@@ -575,8 +607,11 @@ body {
   justify-content: center !important;
   cursor: pointer !important;
   flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 5 !important;
   transition: all 0.15s ease !important;
   -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation !important;
 }
 
 .ios-action-dots-btn i {
@@ -1608,11 +1643,17 @@ body {
     -webkit-overflow-scrolling: touch !important;
   }
 
+  #tabViewDompet,
   #tabViewKategori,
   #tabViewLaporan,
   #tabViewAkun {
-    padding: max(env(safe-area-inset-top, 20px), 20px) 0 100px 0 !important;
+    padding: max(env(safe-area-inset-top, 20px), 20px) 0 135px 0 !important;
   }
+}
+
+.ios-reveal-overlay,
+.ios-reveal-overlay * {
+  pointer-events: none !important;
 }
 
 .ios-reveal-overlay {

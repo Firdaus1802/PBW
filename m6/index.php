@@ -54,7 +54,7 @@ if (isset($_GET['msg'])) {
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     } elseif ($_GET['msg'] === 'updated') {
-        $alert_msg = '<div class="alert alert-info alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
+        $alert_msg = '<div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i> Transaksi berhasil diperbarui!
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
@@ -78,6 +78,38 @@ if (isset($_GET['msg'])) {
             <i class="bi bi-shield-exclamation me-2"></i> Kategori tidak dapat dihapus karena masih digunakan pada data transaksi.
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) {
+    $id_trx      = (int)($_POST['id_transaksi'] ?? 0);
+    $id_kategori = (int)($_POST['id_kategori'] ?? 0);
+    $tanggal     = sanitize($_POST['tanggal'] ?? date('Y-m-d'));
+    $judul       = sanitize($_POST['judul'] ?? '');
+    $jenis       = sanitize($_POST['jenis'] ?? 'Pengeluaran');
+    if (!in_array($jenis, ['Pemasukan', 'Pengeluaran'])) $jenis = 'Pengeluaran';
+    
+    $raw_jumlah = $_POST['jumlah'] ?? 0;
+    if (is_string($raw_jumlah)) {
+        $cleaned = preg_replace('/[^0-9.]/', '', str_replace(',', '.', $raw_jumlah));
+        $jumlah = (float)$cleaned;
+    } else {
+        $jumlah = (float)$raw_jumlah;
+    }
+    $catatan = sanitize($_POST['catatan'] ?? '');
+    $user_id = (int)$_SESSION['user_id'];
+
+    if ($id_trx > 0 && $id_kategori > 0 && $jumlah > 0 && !empty($judul)) {
+        try {
+            $stmt_u = $pdo->prepare("UPDATE transaksi SET id_kategori = ?, tanggal = ?, judul = ?, jenis = ?, jumlah = ?, catatan = ? WHERE id_transaksi = ? AND id_user = ?");
+            $stmt_u->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan, $id_trx, $user_id]);
+            dompetku_sync_trx_cookie($pdo, $user_id);
+            $redir_view = $force_mobile ? 'view=mobile&' : '';
+            header("Location: " . base_url("index.php?" . $redir_view . "msg=updated#dompet"));
+            exit;
+        } catch (PDOException $e) {
+            $alert_msg = '<div class="alert alert-danger rounded-4">Gagal memperbarui transaksi: ' . $e->getMessage() . '</div>';
+        }
     }
 }
 
@@ -280,7 +312,7 @@ foreach ($kat_expenses as $ke) {
 </head>
 <body>
 
-<div class="ios-reveal-overlay">
+<div class="ios-reveal-overlay" style="pointer-events: none !important;">
     <div class="apple-wallet-showcase">
         <div class="haptic-ring haptic-ring-1"></div>
         <div class="haptic-ring haptic-ring-2"></div>
@@ -544,18 +576,20 @@ foreach ($kat_expenses as $ke) {
                                             </small>
                                         </div>
                                         <div class="dropdown flex-shrink-0">
-                                            <button type="button" class="ios-action-dots-btn" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Opsi" style="width: 28px; height: 28px; min-width: 28px; padding: 0; margin: 0; border: none !important; outline: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; box-shadow: none !important; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--boss-text-secondary);">
-                                                <i class="bi bi-three-dots-vertical" style="font-size: 15px; line-height: 1; pointer-events: none;"></i>
+                                            <button type="button" class="ios-action-dots-btn" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Menu Opsi" style="width: 36px; height: 36px; min-width: 36px; min-height: 36px; padding: 0; margin: 0; border: none !important; outline: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; box-shadow: none !important; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--boss-text-secondary); position: relative; z-index: 5; touch-action: manipulation;">
+                                                <i class="bi bi-three-dots-vertical" style="font-size: 17px; line-height: 1; pointer-events: none;"></i>
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2">
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2" style="min-width: 165px; z-index: 1060;">
                                                 <li>
-                                                    <a class="dropdown-item rounded-3 py-2 small" href="javascript:void(0)" onclick='openEditModal(<?= json_encode($trx, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>)'>
-                                                        <i class="bi bi-pencil-square me-2 text-primary"></i> Edit Data
+                                                    <a class="dropdown-item rounded-3 py-2 small d-flex align-items-center gap-2" href="javascript:void(0)" onclick='openEditModal(<?= json_encode($trx, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>)'>
+                                                        <i class="bi bi-pencil-square text-primary" style="font-size: 15px;"></i>
+                                                        <span class="fw-medium">Edit Data</span>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item rounded-3 py-2 text-danger small" href="<?= base_url('transaksi_hapus.php?id=' . $trx['id_transaksi']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?');">
-                                                        <i class="bi bi-trash3 me-2"></i> Hapus
+                                                    <a class="dropdown-item rounded-3 py-2 text-danger small d-flex align-items-center gap-2" href="<?= base_url('transaksi_hapus.php?id=' . $trx['id_transaksi']) ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?');">
+                                                        <i class="bi bi-trash3" style="font-size: 15px;"></i>
+                                                        <span class="fw-medium">Hapus</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -1253,6 +1287,84 @@ foreach ($kat_expenses as $ke) {
         </div>
     </div>
 
+    <div class="modal fade" id="modalEditTrx" tabindex="-1" aria-labelledby="modalEditTrxLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content artosku-modal-sheet p-0 overflow-hidden">
+                <div class="artosku-modal-header">
+                    <div class="artosku-sheet-grabber"></div>
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                        <div>
+                            <h5 class="fw-bold mb-0" id="modalEditTrxLabel" style="color: var(--boss-text-primary);">Sunting Transaksi</h5>
+                            <small class="text-secondary" style="font-size: 11px;">Perbarui Rincian Catatan Kas</small>
+                        </div>
+                        <button type="button" class="artosku-modal-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <form action="<?= base_url('index.php') ?>" method="POST" id="formEditTrx">
+                    <input type="hidden" name="update_transaksi" value="1">
+                    <input type="hidden" name="id_transaksi" id="editTrxId">
+                    <input type="hidden" name="jenis" id="editTrxJenis" value="Pengeluaran">
+                    <div class="modal-body p-3 p-md-4">
+                        <div class="mb-3 text-center">
+                            <div class="btn-group w-100 p-1" style="background-color: var(--boss-segmented-bg); border-radius: 12px;" role="group">
+                                <input type="radio" class="btn-check" name="edit_jenis_radio" id="editRadioPengeluaran" value="Pengeluaran" onchange="selectEditJenis('Pengeluaran')">
+                                <label class="btn btn-outline-danger border-0 fw-semibold rounded-3" for="editRadioPengeluaran">
+                                    <i class="bi bi-arrow-up-right me-1"></i> Pengeluaran
+                                </label>
+                                <input type="radio" class="btn-check" name="edit_jenis_radio" id="editRadioPemasukan" value="Pemasukan" onchange="selectEditJenis('Pemasukan')">
+                                <label class="btn btn-outline-success border-0 fw-semibold rounded-3" for="editRadioPemasukan">
+                                    <i class="bi bi-arrow-down-left me-1"></i> Pemasukan
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small fw-medium mb-1">Nominal (Rp) <span class="text-danger">*</span></label>
+                            <input type="number" name="jumlah" id="editTrxJumlah" class="form-control ios-input-control" min="100" step="100" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small fw-medium mb-1">Kategori <span class="text-danger">*</span></label>
+                            <select name="id_kategori" id="editTrxKategori" class="form-select ios-input-control" required>
+                                <option value="">-- Pilih Kategori --</option>
+                                <?php foreach ($kategori_list as $kat): ?>
+                                    <option value="<?= $kat['id_kategori'] ?>" data-jenis="<?= $kat['jenis'] ?>">
+                                        [<?= $kat['jenis'] ?>] <?= htmlspecialchars($kat['nama_kategori']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small fw-medium mb-1">Keterangan / Judul <span class="text-danger">*</span></label>
+                            <input type="text" name="judul" id="editTrxJudul" class="form-control ios-input-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small fw-medium mb-1">Tanggal Transaksi <span class="text-danger">*</span></label>
+                            <input type="date" name="tanggal" id="editTrxTanggal" class="form-control ios-input-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-secondary small fw-medium mb-1">Catatan Tambahan (Opsional)</label>
+                            <textarea name="catatan" id="editTrxCatatan" class="form-control ios-input-control" rows="2"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-ios-primary w-100 py-2.5 rounded-3 fw-semibold">
+                            Simpan Perubahan
+                        </button>
+                        <button type="button" class="btn btn-link text-secondary text-decoration-none w-100 mt-2 small" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -1504,7 +1616,65 @@ foreach ($kat_expenses as $ke) {
             if (el) el.value = '';
         }
 
+        function openEditModal(trx) {
+            if (!trx) return;
+            document.getElementById('editTrxId').value = trx.id_transaksi;
+            document.getElementById('editTrxJumlah').value = trx.jumlah;
+            document.getElementById('editTrxJudul').value = trx.judul;
+            document.getElementById('editTrxTanggal').value = trx.tanggal;
+            document.getElementById('editTrxCatatan').value = trx.catatan || '';
+            selectEditJenis(trx.jenis);
+            document.getElementById('editTrxKategori').value = trx.id_kategori;
+            
+            const modalEl = document.getElementById('modalEditTrx');
+            if (modalEl) {
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
+            }
+        }
+
+        function selectEditJenis(jenis) {
+            document.getElementById('editTrxJenis').value = jenis;
+            if (jenis === 'Pemasukan') {
+                document.getElementById('editRadioPemasukan').checked = true;
+            } else {
+                document.getElementById('editRadioPengeluaran').checked = true;
+            }
+            const sel = document.getElementById('editTrxKategori');
+            const opts = sel.querySelectorAll('option');
+            let matched = false;
+            opts.forEach(opt => {
+                if (!opt.value) return;
+                if (opt.getAttribute('data-jenis') === jenis) {
+                    opt.style.display = 'block';
+                    if (!matched) {
+                        sel.value = opt.value;
+                        matched = true;
+                    }
+                } else {
+                    opt.style.display = 'none';
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.querySelector('.ios-reveal-overlay');
+            if (overlay) {
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    overlay.remove();
+                }, 1800);
+            }
+
+            document.addEventListener('show.bs.dropdown', (e) => {
+                const row = e.target.closest('.trx-card-item');
+                if (row) row.style.zIndex = '60';
+            });
+            document.addEventListener('hidden.bs.dropdown', (e) => {
+                const row = e.target.closest('.trx-card-item');
+                if (row) row.style.zIndex = '';
+            });
+
             const inpJml = document.getElementById('inputJumlah');
             if (inpJml) {
                 inpJml.addEventListener('keydown', function(e) {
@@ -1539,10 +1709,6 @@ foreach ($kat_expenses as $ke) {
             }
             setInterval(updateLiveClock, 1000);
             updateLiveClock();
-
-
-
-            
         });
     </script>
 </body>
