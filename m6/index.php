@@ -125,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['tambah_transaksi']) 
         try {
             $stmt = $pdo->prepare("INSERT INTO transaksi (id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$user_id, $id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
+            dompetku_sync_trx_cookie($pdo, $user_id);
             $redir_view = $force_mobile ? 'view=mobile&' : '';
             header("Location: " . base_url("index.php?" . $redir_view . "msg=added#dompet"));
             exit;

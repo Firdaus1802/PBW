@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) 
         try {
             $stmt_update = $pdo->prepare("UPDATE transaksi SET id_kategori = ?, tanggal = ?, judul = ?, jenis = ?, jumlah = ?, catatan = ? WHERE id_transaksi = ? AND id_user = ?");
             $stmt_update->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan, $id, $user_id]);
+            dompetku_sync_trx_cookie($pdo, $user_id);
             
             $redirect_target = (isset($_POST['from']) && $_POST['from'] === 'dashboard') 
                 ? 'dashboard.php?msg=updated#transaksiSection' 

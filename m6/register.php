@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_msg = 'Konfirmasi kata sandi tidak cocok.';
     } else {
         try {
-            $stmt_check = $pdo->prepare("SELECT id_user FROM users WHERE username = ?");
+            $stmt_check = $pdo->prepare("SELECT id_user FROM users WHERE LOWER(username) = LOWER(?)");
             $stmt_check->execute([$username]);
             if ($stmt_check->fetch()) {
                 $error_msg = 'Username sudah terdaftar, silakan gunakan username lain.';
@@ -48,13 +48,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt_ins = $pdo->prepare("INSERT INTO users (username, password, nama_lengkap) VALUES (?, ?, ?)");
                 $stmt_ins->execute([$username, $hash, $nama_lengkap]);
                 $new_id = (int)$pdo->lastInsertId();
+                if ($new_id <= 0) {
+                    $u_fetch = $pdo->prepare("SELECT id_user FROM users WHERE LOWER(username) = LOWER(?)");
+                    $u_fetch->execute([$username]);
+                    $new_id = (int)$u_fetch->fetchColumn();
+                }
 
                 $_SESSION['user_id']      = $new_id;
                 $_SESSION['username']     = $username;
                 $_SESSION['nama_lengkap'] = $nama_lengkap;
 
+                $sess_payload = [
+                    'id_user'       => (int)$new_id,
+                    'username'      => $username,
+                    'nama_lengkap'  => $nama_lengkap,
+                    'password_hash' => $hash,
+                    'exp'           => time() + (86400 * 30)
+                ];
+                dompetku_set_secure_cookie('dompetku_session', dompetku_sign_payload($sess_payload));
+
                 $remember_token = hash('sha256', $new_id . $hash . 'dompetku_pbw_secret');
-                setcookie('dompetku_remember', $new_id . ':' . $remember_token, time() + (86400 * 30), '/', '', false, true);
+                dompetku_set_secure_cookie('dompetku_remember', $new_id . ':' . $remember_token, time() + (86400 * 30));
+                dompetku_sync_trx_cookie($pdo, $new_id);
 
                 $client_is_mobile = (isset($_POST['client_is_mobile']) && $_POST['client_is_mobile'] === '1') || $is_mobile_device;
 
@@ -375,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-3">
                     <label class="form-label-custom">Username</label>
                     <div class="auth-input-group">
-                        <input type="text" name="username" id="inputUsername" placeholder="cth: firdaus (huruf kecil & angka)" value="<?= htmlspecialchars($val_user) ?>" autocomplete="username" required>
+                        <input type="text" name="username" id="inputUsername" placeholder="cth: firdaus (huruf kecil & angka)" value="<?= htmlspecialchars($val_user) ?>" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
                     </div>
                 </div>
 

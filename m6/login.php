@@ -19,6 +19,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['dompetku_remember'])) {
                     $_SESSION['user_id']      = $u_auto['id_user'];
                     $_SESSION['username']     = $u_auto['username'];
                     $_SESSION['nama_lengkap'] = $u_auto['nama_lengkap'];
+                    dompetku_sync_trx_cookie($pdo, $u_auto['id_user']);
                     
                     if ($is_mobile_device) {
                         header("Location: " . base_url("index.php"));
@@ -52,22 +53,46 @@ if (isset($_GET['msg']) && $_GET['msg'] === 'logged_out') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = sanitize($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
+    $username = strtolower(trim(sanitize($_POST['username'] ?? '')));
+    $password = trim($_POST['password'] ?? '');
 
     if (!empty($username) && !empty($password)) {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE LOWER(username) = LOWER(?)");
             $stmt->execute([$username]);
             $user = $stmt->fetch();
 
+            if (!$user && isset($_COOKIE['dompetku_session'])) {
+                $cached_sess = dompetku_verify_payload($_COOKIE['dompetku_session']);
+                if ($cached_sess && strtolower($cached_sess['username'] ?? '') === $username) {
+                    $u_restore = $pdo->prepare("INSERT OR REPLACE INTO users (id_user, username, password, nama_lengkap) VALUES (?, ?, ?, ?)");
+                    $u_restore->execute([$cached_sess['id_user'], $cached_sess['username'], $cached_sess['password_hash'], $cached_sess['nama_lengkap']]);
+                    $user = [
+                        'id_user'      => $cached_sess['id_user'],
+                        'username'     => $cached_sess['username'],
+                        'nama_lengkap' => $cached_sess['nama_lengkap'],
+                        'password'     => $cached_sess['password_hash']
+                    ];
+                }
+            }
+
             if ($user && password_verify($password, $user['password'])) {
-                $_SESSION['user_id']      = $user['id_user'];
+                $_SESSION['user_id']      = (int)$user['id_user'];
                 $_SESSION['username']     = $user['username'];
                 $_SESSION['nama_lengkap'] = $user['nama_lengkap'];
 
+                $sess_payload = [
+                    'id_user'       => (int)$user['id_user'],
+                    'username'      => $user['username'],
+                    'nama_lengkap'  => $user['nama_lengkap'],
+                    'password_hash' => $user['password'],
+                    'exp'           => time() + (86400 * 30)
+                ];
+                dompetku_set_secure_cookie('dompetku_session', dompetku_sign_payload($sess_payload));
+
                 $remember_token = hash('sha256', $user['id_user'] . $user['password'] . 'dompetku_pbw_secret');
-                setcookie('dompetku_remember', $user['id_user'] . ':' . $remember_token, time() + (86400 * 30), '/', '', false, true);
+                dompetku_set_secure_cookie('dompetku_remember', $user['id_user'] . ':' . $remember_token, time() + (86400 * 30));
+                dompetku_sync_trx_cookie($pdo, $user['id_user']);
                 
                 $client_is_mobile = (isset($_POST['client_is_mobile']) && $_POST['client_is_mobile'] === '1') || $is_mobile_device;
 
@@ -78,13 +103,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 exit;
             } else {
-                $error_msg = 'Username atau password tidak sesuai. Coba lagi.';
+                $error_msg = 'Username atau kata sandi tidak sesuai. Silakan periksa kembali.';
             }
         } catch (PDOException $e) {
             $error_msg = 'Terjadi kesalahan sistem: ' . $e->getMessage();
         }
     } else {
-        $error_msg = 'Silakan isi username dan password.';
+        $error_msg = 'Silakan isi username dan kata sandi.';
     }
 }
 ?>
@@ -417,7 +442,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-3">
                     <label class="form-label-custom">Username</label>
                     <div class="auth-input-group">
-                        <input type="text" name="username" id="inputUsername" placeholder="Masukkan username" autocomplete="username" required autofocus>
+                        <input type="text" name="username" id="inputUsername" placeholder="Masukkan username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required autofocus>
                     </div>
                 </div>
 

@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) 
         try {
             $stmt = $pdo->prepare("INSERT INTO transaksi (id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$user_id, $id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
+            dompetku_sync_trx_cookie($pdo, $user_id);
             header("Location: " . base_url("dashboard.php?msg=added#transaksiSection"));
             exit;
         } catch (PDOException $e) {
@@ -102,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) 
         try {
             $stmt_up = $pdo->prepare("UPDATE transaksi SET id_kategori = ?, tanggal = ?, judul = ?, jenis = ?, jumlah = ?, catatan = ? WHERE id_transaksi = ? AND id_user = ?");
             $stmt_up->execute([$id_kategori, $tanggal, $judul, $jenis, $jumlah, $catatan, $id_trx, $user_id]);
+            dompetku_sync_trx_cookie($pdo, $user_id);
             header("Location: " . base_url("dashboard.php?msg=updated#transaksiSection"));
             exit;
         } catch (PDOException $e) {
@@ -115,6 +117,7 @@ if (isset($_GET['hapus_trx'])) {
     if ($id_trx_del > 0) {
         $stmt_del = $pdo->prepare("DELETE FROM transaksi WHERE id_transaksi = ? AND id_user = ?");
         $stmt_del->execute([$id_trx_del, $user_id]);
+        dompetku_sync_trx_cookie($pdo, $user_id);
         header("Location: " . base_url("dashboard.php?msg=deleted#transaksiSection"));
         exit;
     }

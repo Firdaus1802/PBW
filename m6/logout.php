@@ -10,7 +10,13 @@ session_unset();
 session_destroy();
 
 if (isset($_COOKIE['dompetku_remember'])) {
-    setcookie('dompetku_remember', '', time() - 3600, '/');
+    dompetku_set_secure_cookie('dompetku_remember', '', time() - 3600);
+}
+if (isset($_COOKIE['dompetku_session'])) {
+    dompetku_set_secure_cookie('dompetku_session', '', time() - 3600);
+}
+if (isset($_COOKIE['dompetku_trx_cache'])) {
+    dompetku_set_secure_cookie('dompetku_trx_cache', '', time() - 3600);
 }
 
 header("Location: " . base_url("login.php?msg=logged_out"));

@@ -13,6 +13,7 @@ if ($id > 0) {
     try {
         $stmt = $pdo->prepare("DELETE FROM transaksi WHERE id_transaksi = ? AND id_user = ?");
         $stmt->execute([$id, $user_id]);
+        dompetku_sync_trx_cookie($pdo, $user_id);
         header("Location: " . base_url("index.php?msg=deleted"));
         exit;
     } catch (PDOException $e) {
