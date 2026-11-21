@@ -564,6 +564,10 @@ body {
   border-radius: 50% !important;
   border: none !important;
   outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
   background: transparent !important;
   color: var(--boss-text-secondary) !important;
   display: inline-flex !important;
@@ -1624,58 +1628,161 @@ body {
   pointer-events: none;
 }
 
-.ios-reveal-spinner {
-  width: 96px;
-  height: 96px;
-  border-radius: 26px;
-  background: var(--ios-center-circle-bg);
-  color: var(--ios-center-circle-color);
+.apple-wallet-showcase {
+  position: relative;
+  width: 110px;
+  height: 104px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+  perspective: 600px;
 }
 
-.ios-wallet-svg {
-  transform-origin: center bottom;
-  animation: walletHapticSpring 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+.haptic-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.apple-cash-bill {
-  transform-origin: center center;
-  animation: insertCashIntoWallet 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+.haptic-ring-1 {
+  width: 80px;
+  height: 80px;
+  animation: hapticWave1 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
-@keyframes insertCashIntoWallet {
-  0% {
-    transform: translateY(-20px);
+.haptic-ring-2 {
+  width: 105px;
+  height: 105px;
+  animation: hapticWave2 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes hapticWave1 {
+  0%, 55% {
+    transform: scale(0.65);
     opacity: 0;
   }
-  20% {
-    opacity: 1;
+  62% {
+    opacity: 0.55;
   }
-  70% {
-    transform: translateY(20px);
-    opacity: 1;
+  82% {
+    transform: scale(1.15);
+    opacity: 0;
   }
   100% {
-    transform: translateY(24px);
     opacity: 0;
   }
 }
 
-@keyframes walletHapticSpring {
-  0%, 35% {
-    transform: scale(1);
+@keyframes hapticWave2 {
+  0%, 60% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  68% {
+    opacity: 0.35;
+  }
+  90% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.apple-wallet-svg {
+  position: relative;
+  z-index: 1;
+  transform-origin: center bottom;
+  animation: awWalletBounce 2.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.aw-money-item {
+  transform-origin: center center;
+  animation: awInsertMoney 2.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes awInsertMoney {
+  0% {
+    transform: translateY(-26px) scale(0.92) rotate(-2deg);
+    opacity: 0;
+  }
+  22% {
+    opacity: 1;
+    transform: translateY(-16px) scale(1) rotate(0deg);
   }
   60% {
-    transform: scale(1.06, 0.95);
+    transform: translateY(22px) scale(0.96);
+    opacity: 1;
   }
-  78% {
-    transform: scale(0.98, 1.02);
+  85% {
+    transform: translateY(27px) scale(0.92);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(30px) scale(0.88);
+    opacity: 0;
+  }
+}
+
+@keyframes awWalletBounce {
+  0%, 50% {
+    transform: scale(1);
+  }
+  62% {
+    transform: scale(1.06, 0.94);
+  }
+  75% {
+    transform: scale(0.97, 1.02);
+  }
+  88% {
+    transform: scale(1.01, 0.99);
   }
   100% {
     transform: scale(1);
+  }
+}
+
+.aw-card-shimmer {
+  animation: awShimmerSweep 2.2s ease-in-out infinite;
+}
+
+@keyframes awShimmerSweep {
+  0%, 25% {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+  45% {
+    opacity: 0.6;
+  }
+  65% {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.aw-clasp-gleam {
+  animation: awClaspSparkle 2.2s ease-in-out infinite;
+}
+
+@keyframes awClaspSparkle {
+  0%, 60% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  85%, 100% {
+    opacity: 0.2;
+    transform: scale(0.8);
   }
 }
 

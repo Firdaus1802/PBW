@@ -281,39 +281,68 @@ foreach ($kat_expenses as $ke) {
 <body>
 
 <div class="ios-reveal-overlay">
-    <div class="ios-reveal-spinner">
-        <svg class="ios-wallet-svg" viewBox="0 0 100 90" width="76" height="68" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div class="apple-wallet-showcase">
+        <div class="haptic-ring haptic-ring-1"></div>
+        <div class="haptic-ring haptic-ring-2"></div>
+        <svg class="apple-wallet-svg" viewBox="0 0 120 110" width="104" height="96" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="splashWalletBody" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#282A36"/>
-                    <stop offset="100%" stop-color="#14151D"/>
-                </linearGradient>
-                <linearGradient id="splashWalletFront" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#1D1F29"/>
+                    <stop offset="0%" stop-color="#2D303D"/>
+                    <stop offset="50%" stop-color="#1B1C24"/>
                     <stop offset="100%" stop-color="#101117"/>
                 </linearGradient>
-                <linearGradient id="splashCashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#FFFFFF"/>
-                    <stop offset="50%" stop-color="#E2E8F0"/>
-                    <stop offset="100%" stop-color="#CBD5E1"/>
+                <linearGradient id="splashWalletFront" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#242633"/>
+                    <stop offset="50%" stop-color="#161820"/>
+                    <stop offset="100%" stop-color="#0B0C10"/>
                 </linearGradient>
-                <linearGradient id="splashMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="splashCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="40%" stop-color="#F1F5F9"/>
+                    <stop offset="70%" stop-color="#CBD5E1"/>
                     <stop offset="100%" stop-color="#94A3B8"/>
                 </linearGradient>
+                <linearGradient id="splashGoldChip" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FDE68A"/>
+                    <stop offset="50%" stop-color="#D97706"/>
+                    <stop offset="100%" stop-color="#78350F"/>
+                </linearGradient>
+                <linearGradient id="splashPlatinumClasp" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="50%" stop-color="#E2E8F0"/>
+                    <stop offset="100%" stop-color="#64748B"/>
+                </linearGradient>
+                <linearGradient id="splashShimmerBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+                    <stop offset="50%" stop-color="rgba(255,255,255,0.7)"/>
+                    <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                </linearGradient>
+                <filter id="splashBillShadow" x="-10%" y="-10%" width="120%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>
+                </filter>
             </defs>
-            <rect x="14" y="28" width="72" height="54" rx="14" fill="url(#splashWalletBody)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
-            <g class="apple-cash-bill">
-                <rect x="25" y="8" width="50" height="32" rx="6" fill="url(#splashCashGrad)" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
-                <circle cx="50" cy="24" r="6" stroke="#64748B" stroke-width="1.5" fill="none"/>
-                <line x1="32" y1="18" x2="38" y2="18" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="32" y1="30" x2="38" y2="30" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="62" y1="18" x2="68" y2="18" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="62" y1="30" x2="68" y2="30" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+            <ellipse cx="60" cy="72" rx="46" ry="16" fill="rgba(255,255,255,0.05)"/>
+            <g class="aw-wallet-back-group">
+                <rect x="18" y="38" width="84" height="60" rx="16" fill="url(#splashWalletBody)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+                <rect x="22" y="42" width="76" height="52" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="2 3"/>
             </g>
-            <path d="M14 46 C14 40 18 40 25 40 L75 40 C82 40 86 40 86 46 L86 68 C86 75.7 79.7 82 72 82 L28 82 C20.3 82 14 75.7 14 68 Z" fill="url(#splashWalletFront)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-            <rect x="42" y="37" width="16" height="8" rx="4" fill="url(#splashMetal)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
-            <circle cx="50" cy="41" r="1.5" fill="#0F172A"/>
+            <g class="aw-money-item" filter="url(#splashBillShadow)">
+                <rect x="30" y="10" width="60" height="38" rx="7" fill="url(#splashCardGrad)" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
+                <rect x="37" y="18" width="10" height="8" rx="2" fill="url(#splashGoldChip)" stroke="rgba(0,0,0,0.15)" stroke-width="0.5"/>
+                <text x="76" y="25" font-family="-apple-system, SF Pro Text, sans-serif" font-size="9" font-weight="800" fill="#334155" text-anchor="middle" letter-spacing="0.5">RP</text>
+                <circle cx="76" cy="22" r="7" stroke="#64748B" stroke-width="0.8" fill="none" opacity="0.6"/>
+                <line x1="37" y1="31" x2="52" y2="31" stroke="#64748B" stroke-width="1" stroke-linecap="round"/>
+                <line x1="37" y1="34" x2="47" y2="34" stroke="#94A3B8" stroke-width="1" stroke-linecap="round"/>
+                <line x1="70" y1="34" x2="82" y2="34" stroke="#94A3B8" stroke-width="1" stroke-linecap="round"/>
+                <rect class="aw-card-shimmer" x="30" y="10" width="60" height="38" rx="7" fill="url(#splashShimmerBeam)" opacity="0.45"/>
+            </g>
+            <g class="aw-wallet-front-group">
+                <path d="M18 56 C18 50 24 50 32 50 L46 50 C50 50 54 55 60 55 C66 55 70 50 74 50 L88 50 C96 50 102 50 102 56 L102 82 C102 91 93 98 84 98 L36 98 C27 98 18 91 18 82 Z" fill="url(#splashWalletFront)" stroke="rgba(255,255,255,0.24)" stroke-width="1.5"/>
+                <path d="M22 60 L44 60 C49 60 53 64 60 64 C67 64 71 60 76 60 L98 60" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="2 3"/>
+                <rect class="aw-clasp" x="51" y="47" width="18" height="10" rx="5" fill="url(#splashPlatinumClasp)" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+                <circle cx="60" cy="52" r="2" fill="#0F172A"/>
+                <circle class="aw-clasp-gleam" cx="54" cy="50" r="1.5" fill="#FFFFFF" opacity="0.9"/>
+            </g>
         </svg>
     </div>
 </div>
@@ -486,8 +515,8 @@ foreach ($kat_expenses as $ke) {
                                     $sign = $is_masuk ? '+' : '-';
                                     $amount_class = $is_masuk ? 'amount-income' : 'amount-expense';
                                 ?>
-                                <div class="ios-list-row trx-card-item" data-jenis="<?= $trx['jenis'] ?>" data-search="<?= strtolower(htmlspecialchars($trx['judul'] . ' ' . $trx['nama_kategori'] . ' ' . $trx['catatan'])) ?>" style="padding: 10px 10px; gap: 6px;">
-                                    <div class="d-flex align-items-center gap-2 min-w-0 flex-grow-1" style="overflow: hidden;">
+                                <div class="ios-list-row trx-card-item" data-jenis="<?= $trx['jenis'] ?>" data-search="<?= strtolower(htmlspecialchars($trx['judul'] . ' ' . $trx['nama_kategori'] . ' ' . $trx['catatan'])) ?>" style="padding: 11px 14px; gap: 8px;">
+                                    <div class="d-flex align-items-center gap-2.5 min-w-0 flex-grow-1" style="overflow: hidden;">
                                         <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px;">
                                             <i class="bi <?= htmlspecialchars($trx['icon']) ?>"></i>
                                         </div>
@@ -495,28 +524,28 @@ foreach ($kat_expenses as $ke) {
                                             <div class="fw-semibold text-truncate mb-0" style="font-size: 13.5px; letter-spacing: -0.2px; color: var(--boss-text-primary);">
                                                 <?= htmlspecialchars($trx['judul']) ?>
                                             </div>
-                                            <div class="d-flex align-items-center gap-1 mt-0.5 text-truncate">
-                                                <span class="ios-badge-mono text-truncate" style="max-width: 85px;">
+                                            <div class="d-flex align-items-center gap-1.5 mt-0.5 text-truncate">
+                                                <span class="ios-badge-mono text-truncate" style="max-width: 90px;">
                                                     <?= htmlspecialchars($trx['nama_kategori']) ?>
                                                 </span>
-                                                <span class="text-secondary flex-shrink-0" style="font-size: 10px;">
+                                                <span class="text-secondary flex-shrink-0" style="font-size: 10.5px;">
                                                     • <?= tgl_indo($trx['tanggal']) ?>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-1.5 flex-shrink-0 ms-auto">
+                                    <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto">
                                         <div class="text-end">
-                                            <div class="fw-bold <?= $amount_class ?>" style="font-size: 13px; letter-spacing: -0.3px; white-space: nowrap;">
+                                            <div class="fw-bold <?= $amount_class ?>" style="font-size: 13.5px; letter-spacing: -0.3px; white-space: nowrap;">
                                                 <?= $sign ?> <?= format_rupiah($trx['jumlah']) ?>
                                             </div>
-                                            <small class="text-uppercase text-secondary d-block" style="font-size: 9px; font-weight: 600; letter-spacing: 0.2px; line-height: 1;">
+                                            <small class="text-uppercase text-secondary d-block" style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.3px; line-height: 1.1;">
                                                 <?= $trx['jenis'] ?>
                                             </small>
                                         </div>
                                         <div class="dropdown flex-shrink-0">
-                                            <button type="button" class="ios-action-dots-btn" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Opsi">
-                                                <i class="bi bi-three-dots-vertical"></i>
+                                            <button type="button" class="ios-action-dots-btn" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Opsi" style="width: 28px; height: 28px; min-width: 28px; padding: 0; margin: 0; border: none !important; outline: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; box-shadow: none !important; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--boss-text-secondary);">
+                                                <i class="bi bi-three-dots-vertical" style="font-size: 15px; line-height: 1; pointer-events: none;"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2">
                                                 <li>

@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at 50% 36%, rgba(255, 255, 255, 0.05) 0%, rgba(9, 10, 15, 0) 70%), #090A0F;
+            background: radial-gradient(circle at 50% 32%, rgba(255, 255, 255, 0.06) 0%, rgba(9, 10, 15, 0) 70%), #090A0F;
             color: #F8FAFC;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, sans-serif;
             overflow: hidden;
@@ -100,107 +100,201 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 24px;
         }
         [data-theme="light"] body, [data-bs-theme="light"] body {
-            background: radial-gradient(circle at 50% 36%, rgba(0, 0, 0, 0.03) 0%, rgba(248, 250, 252, 0) 70%), #F8FAFC;
+            background: radial-gradient(circle at 50% 32%, rgba(0, 0, 0, 0.04) 0%, rgba(248, 250, 252, 0) 70%), #F8FAFC;
             color: #0F172A;
         }
         .auth-vault-card {
             background: rgba(18, 20, 28, 0.88);
-            backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 28px;
-            padding: 38px 28px;
+            backdrop-filter: blur(36px);
+            -webkit-backdrop-filter: blur(36px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 30px;
+            padding: 40px 28px;
             text-align: center;
             max-width: 380px;
             width: 100%;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.16);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.2);
             animation: authCardScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
             position: relative;
         }
         [data-theme="light"] .auth-vault-card, [data-bs-theme="light"] .auth-vault-card {
-            background: rgba(255, 255, 255, 0.94);
+            background: rgba(255, 255, 255, 0.95);
             border: 1px solid rgba(0, 0, 0, 0.08);
             box-shadow: 0 24px 50px rgba(100, 116, 139, 0.16), inset 0 1px 1px #FFFFFF;
         }
-        .ios-wallet-anim-stage {
+        .apple-wallet-showcase {
             position: relative;
-            width: 88px;
-            height: 84px;
-            margin: 0 auto 18px auto;
+            width: 110px;
+            height: 104px;
+            margin: 0 auto 20px auto;
             display: flex;
             align-items: center;
             justify-content: center;
+            perspective: 600px;
         }
-        .ios-wallet-svg {
-            transform-origin: center bottom;
-            animation: walletHapticSpring 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+        .haptic-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255, 255, 255, 0.45);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
         }
-        .apple-cash-bill {
-            transform-origin: center center;
-            animation: insertCashIntoWallet 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+        .haptic-ring-1 {
+            width: 80px;
+            height: 80px;
+            animation: hapticWave1 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
         }
-        @keyframes insertCashIntoWallet {
-            0% {
-                transform: translateY(-20px);
+        .haptic-ring-2 {
+            width: 105px;
+            height: 105px;
+            animation: hapticWave2 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        }
+        @keyframes hapticWave1 {
+            0%, 55% {
+                transform: scale(0.65);
                 opacity: 0;
             }
-            20% {
-                opacity: 1;
+            62% {
+                opacity: 0.55;
             }
-            70% {
-                transform: translateY(20px);
-                opacity: 1;
+            82% {
+                transform: scale(1.15);
+                opacity: 0;
             }
             100% {
-                transform: translateY(24px);
                 opacity: 0;
             }
         }
-        @keyframes walletHapticSpring {
-            0%, 35% {
-                transform: scale(1);
+        @keyframes hapticWave2 {
+            0%, 60% {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+            68% {
+                opacity: 0.35;
+            }
+            90% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        .apple-wallet-svg {
+            position: relative;
+            z-index: 1;
+            transform-origin: center bottom;
+            animation: awWalletBounce 2.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+        }
+        .aw-money-item {
+            transform-origin: center center;
+            animation: awInsertMoney 2.2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+        }
+        @keyframes awInsertMoney {
+            0% {
+                transform: translateY(-26px) scale(0.92) rotate(-2deg);
+                opacity: 0;
+            }
+            22% {
+                opacity: 1;
+                transform: translateY(-16px) scale(1) rotate(0deg);
             }
             60% {
-                transform: scale(1.06, 0.95);
+                transform: translateY(22px) scale(0.96);
+                opacity: 1;
             }
-            78% {
-                transform: scale(0.98, 1.02);
+            85% {
+                transform: translateY(27px) scale(0.92);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(30px) scale(0.88);
+                opacity: 0;
+            }
+        }
+        @keyframes awWalletBounce {
+            0%, 50% {
+                transform: scale(1);
+            }
+            62% {
+                transform: scale(1.06, 0.94);
+            }
+            75% {
+                transform: scale(0.97, 1.02);
+            }
+            88% {
+                transform: scale(1.01, 0.99);
             }
             100% {
                 transform: scale(1);
             }
         }
-        .auth-status-pill {
+        .aw-card-shimmer {
+            animation: awShimmerSweep 2.2s ease-in-out infinite;
+        }
+        @keyframes awShimmerSweep {
+            0%, 25% {
+                transform: translateX(-40px);
+                opacity: 0;
+            }
+            45% {
+                opacity: 0.6;
+            }
+            65% {
+                transform: translateX(40px);
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        .aw-clasp-gleam {
+            animation: awClaspSparkle 2.2s ease-in-out infinite;
+        }
+        @keyframes awClaspSparkle {
+            0%, 60% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+            85%, 100% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+        }
+        .apple-sec-badge {
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            padding: 5px 14px;
+            padding: 6px 16px;
             border-radius: 99px;
             background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             font-size: 10.5px;
             font-weight: 700;
-            letter-spacing: 1.2px;
-            color: #F8FAFC;
-            margin-bottom: 14px;
+            letter-spacing: 1.4px;
+            color: #FFFFFF;
+            margin-bottom: 16px;
             text-transform: uppercase;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        [data-theme="light"] .auth-status-pill, [data-bs-theme="light"] .auth-status-pill {
+        [data-theme="light"] .apple-sec-badge, [data-bs-theme="light"] .apple-sec-badge {
             background: rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(0, 0, 0, 0.14);
             color: #0F172A;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        .auth-status-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #FFFFFF;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
-            animation: dotGlow 1.2s ease-in-out infinite alternate;
+        .apple-sec-icon {
+            font-size: 12px;
+            color: #CBD5E1;
         }
-        [data-theme="light"] .auth-status-dot, [data-bs-theme="light"] .auth-status-dot {
-            background: #0F172A;
-            box-shadow: 0 0 8px rgba(15, 23, 42, 0.5);
+        [data-theme="light"] .apple-sec-icon, [data-bs-theme="light"] .apple-sec-icon {
+            color: #475569;
         }
         .auth-title {
             font-size: 21px;
@@ -218,7 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         .auth-progress-track {
             width: 100%;
-            height: 4px;
+            height: 4.5px;
             border-radius: 99px;
             background: rgba(255, 255, 255, 0.08);
             overflow: hidden;
@@ -230,18 +324,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .auth-progress-bar {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, #FFFFFF 50%, rgba(255, 255, 255, 0.2) 100%);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, #FFFFFF 50%, rgba(255, 255, 255, 0.9) 100%);
             border-radius: 99px;
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
-            animation: fillLaserProgress 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.85);
+            animation: fillLaserProgress 1.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         [data-theme="light"] .auth-progress-bar, [data-bs-theme="light"] .auth-progress-bar {
-            background: linear-gradient(90deg, rgba(15, 23, 42, 0.2) 0%, #0F172A 50%, rgba(15, 23, 42, 0.2) 100%);
-            box-shadow: 0 0 10px rgba(15, 23, 42, 0.4);
-        }
-        @keyframes dotGlow {
-            0% { opacity: 0.4; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.15); }
+            background: linear-gradient(90deg, rgba(15, 23, 42, 0.2) 0%, #0F172A 50%, rgba(15, 23, 42, 0.9) 100%);
+            box-shadow: 0 0 10px rgba(15, 23, 42, 0.5);
         }
         @keyframes authCardScale {
             0% { opacity: 0; transform: scale(0.92) translateY(16px); }
@@ -255,45 +345,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="auth-vault-card">
-        <div class="ios-wallet-anim-stage">
-            <svg class="ios-wallet-svg" viewBox="0 0 100 90" width="84" height="76" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="apple-wallet-showcase">
+            <div class="haptic-ring haptic-ring-1"></div>
+            <div class="haptic-ring haptic-ring-2"></div>
+            <svg class="apple-wallet-svg" viewBox="0 0 120 110" width="100" height="92" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <linearGradient id="appleWalletBodyReg" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#282A36"/>
-                        <stop offset="100%" stop-color="#14151D"/>
-                    </linearGradient>
-                    <linearGradient id="appleWalletFrontReg" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#1D1F29"/>
+                    <linearGradient id="awLeatherBackReg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#2D303D"/>
+                        <stop offset="50%" stop-color="#1B1C24"/>
                         <stop offset="100%" stop-color="#101117"/>
                     </linearGradient>
-                    <linearGradient id="appleCashGradReg" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#FFFFFF"/>
-                        <stop offset="50%" stop-color="#E2E8F0"/>
-                        <stop offset="100%" stop-color="#CBD5E1"/>
+                    <linearGradient id="awLeatherFrontReg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#242633"/>
+                        <stop offset="50%" stop-color="#161820"/>
+                        <stop offset="100%" stop-color="#0B0C10"/>
                     </linearGradient>
-                    <linearGradient id="appleMetalReg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="awCardGradReg" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="40%" stop-color="#F1F5F9"/>
+                        <stop offset="70%" stop-color="#CBD5E1"/>
                         <stop offset="100%" stop-color="#94A3B8"/>
                     </linearGradient>
+                    <linearGradient id="awGoldChipReg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FDE68A"/>
+                        <stop offset="50%" stop-color="#D97706"/>
+                        <stop offset="100%" stop-color="#78350F"/>
+                    </linearGradient>
+                    <linearGradient id="awPlatinumClaspReg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="50%" stop-color="#E2E8F0"/>
+                        <stop offset="100%" stop-color="#64748B"/>
+                    </linearGradient>
+                    <linearGradient id="shimmerBeamReg" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+                        <stop offset="50%" stop-color="rgba(255,255,255,0.7)"/>
+                        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                    </linearGradient>
+                    <filter id="billShadowReg" x="-10%" y="-10%" width="120%" height="140%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>
+                    </filter>
                 </defs>
-                <ellipse cx="50" cy="52" rx="36" ry="24" fill="rgba(255,255,255,0.06)"/>
-                <rect x="14" y="28" width="72" height="54" rx="14" fill="url(#appleWalletBodyReg)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
-                <g class="apple-cash-bill">
-                    <rect x="25" y="8" width="50" height="32" rx="6" fill="url(#appleCashGradReg)" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
-                    <circle cx="50" cy="24" r="6" stroke="#64748B" stroke-width="1.5" fill="none"/>
-                    <line x1="32" y1="18" x2="38" y2="18" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="32" y1="30" x2="38" y2="30" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="62" y1="18" x2="68" y2="18" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
-                    <line x1="62" y1="30" x2="68" y2="30" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+                <ellipse cx="60" cy="72" rx="46" ry="16" fill="rgba(255,255,255,0.05)"/>
+                <g class="aw-wallet-back-group">
+                    <rect x="18" y="38" width="84" height="60" rx="16" fill="url(#awLeatherBackReg)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+                    <rect x="22" y="42" width="76" height="52" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="2 3"/>
                 </g>
-                <path d="M14 46 C14 40 18 40 25 40 L75 40 C82 40 86 40 86 46 L86 68 C86 75.7 79.7 82 72 82 L28 82 C20.3 82 14 75.7 14 68 Z" fill="url(#appleWalletFrontReg)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-                <rect x="42" y="37" width="16" height="8" rx="4" fill="url(#appleMetalReg)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
-                <circle cx="50" cy="41" r="1.5" fill="#0F172A"/>
+                <g class="aw-money-item" filter="url(#billShadowReg)">
+                    <rect x="30" y="10" width="60" height="38" rx="7" fill="url(#awCardGradReg)" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
+                    <rect x="37" y="18" width="10" height="8" rx="2" fill="url(#awGoldChipReg)" stroke="rgba(0,0,0,0.15)" stroke-width="0.5"/>
+                    <text x="76" y="25" font-family="-apple-system, SF Pro Text, sans-serif" font-size="9" font-weight="800" fill="#334155" text-anchor="middle" letter-spacing="0.5">RP</text>
+                    <circle cx="76" cy="22" r="7" stroke="#64748B" stroke-width="0.8" fill="none" opacity="0.6"/>
+                    <line x1="37" y1="31" x2="52" y2="31" stroke="#64748B" stroke-width="1" stroke-linecap="round"/>
+                    <line x1="37" y1="34" x2="47" y2="34" stroke="#94A3B8" stroke-width="1" stroke-linecap="round"/>
+                    <line x1="70" y1="34" x2="82" y2="34" stroke="#94A3B8" stroke-width="1" stroke-linecap="round"/>
+                    <rect class="aw-card-shimmer" x="30" y="10" width="60" height="38" rx="7" fill="url(#shimmerBeamReg)" opacity="0.45"/>
+                </g>
+                <g class="aw-wallet-front-group">
+                    <path d="M18 56 C18 50 24 50 32 50 L46 50 C50 50 54 55 60 55 C66 55 70 50 74 50 L88 50 C96 50 102 50 102 56 L102 82 C102 91 93 98 84 98 L36 98 C27 98 18 91 18 82 Z" fill="url(#awLeatherFrontReg)" stroke="rgba(255,255,255,0.24)" stroke-width="1.5"/>
+                    <path d="M22 60 L44 60 C49 60 53 64 60 64 C67 64 71 60 76 60 L98 60" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="2 3"/>
+                    <rect class="aw-clasp" x="51" y="47" width="18" height="10" rx="5" fill="url(#awPlatinumClaspReg)" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+                    <circle cx="60" cy="52" r="2" fill="#0F172A"/>
+                    <circle class="aw-clasp-gleam" cx="54" cy="50" r="1.5" fill="#FFFFFF" opacity="0.9"/>
+                </g>
             </svg>
         </div>
         <div>
-            <span class="auth-status-pill">
-                <span class="auth-status-dot"></span>
+            <span class="apple-sec-badge">
+                <span class="apple-sec-icon"><i class="bi bi-shield-check"></i></span>
                 Pendaftaran Sukses
             </span>
         </div>
@@ -306,7 +424,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         setTimeout(function() {
             window.location.replace("<?= $target_url ?>");
-        }, 1950);
+        }, 2100);
     </script>
 </body>
 </html>
