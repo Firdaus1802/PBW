@@ -1,11 +1,6 @@
--- Database: db_kas_mahasiswa
--- Sistem Pencatatan Kas & Pengeluaran Mahasiswa (iOS Style)
--- Mata Kuliah: Pemrograman Berbasis Web (PBW)
-
 CREATE DATABASE IF NOT EXISTS `db_kas_mahasiswa` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `db_kas_mahasiswa`;
 
--- 1. Tabel Pengguna (Admin / Mahasiswa)
 DROP TABLE IF EXISTS `kredit_paylater`;
 DROP TABLE IF EXISTS `transaksi`;
 DROP TABLE IF EXISTS `kategori`;
@@ -21,7 +16,6 @@ CREATE TABLE `users` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2. Tabel Master Kategori (Relasi 1:N ke Transaksi)
 CREATE TABLE `kategori` (
   `id_kategori` INT NOT NULL AUTO_INCREMENT,
   `nama_kategori` VARCHAR(100) NOT NULL,
@@ -31,7 +25,6 @@ CREATE TABLE `kategori` (
   PRIMARY KEY (`id_kategori`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Tabel Transaksi Kas
 CREATE TABLE `transaksi` (
   `id_transaksi` INT NOT NULL AUTO_INCREMENT,
   `id_user` INT NOT NULL DEFAULT 1,
@@ -51,15 +44,9 @@ CREATE TABLE `transaksi` (
     REFERENCES `kategori` (`id_kategori`) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ====================================================
--- SEED DATA (DATA AWAL OTENTIK)
--- ====================================================
-
--- Data Pengguna: username 'admin', password 'admin123' (Bcrypt Hash)
 INSERT INTO `users` (`id_user`, `username`, `password`, `nama_lengkap`) VALUES
 (1, 'admin', '$2y$10$1Zeb6yV0L3w2l3A55sPBgeAVcS8gxoYiTEYQS5Yy7RvEnVF4cYAgC', 'Firdaus Dhuha Prabowo');
 
--- Data Master Kategori (Pemasukan & Pengeluaran Mahasiswa)
 INSERT INTO `kategori` (`id_kategori`, `nama_kategori`, `jenis`, `icon`, `warna`) VALUES
 (1, 'Uang Saku / Kiriman Ortu', 'Pemasukan', 'bi-wallet2', '#34C759'),
 (2, 'Gaji / Project Freelance', 'Pemasukan', 'bi-laptop', '#007AFF'),
