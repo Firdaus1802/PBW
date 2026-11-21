@@ -318,8 +318,6 @@ foreach ($kat_expenses as $ke) {
                         <i class="bi bi-laptop"></i>
                     </a>
 
-                    <input type="file" id="receiptFileInput" style="display:none;" accept="image/*" onchange="processReceipt(this)">
-
                     <button type="button" onclick="toggleTheme()" class="ios-circle-btn" title="Ganti Mode Terang / Gelap">
                         <i class="theme-toggle-icon"></i>
                     </button>
@@ -421,35 +419,6 @@ foreach ($kat_expenses as $ke) {
 
                 <div class="artosku-mobile-sheet">
                     <div class="row g-3">
-                        <div class="col-12">
-                            <div class="artosku-action-box mb-3" style="padding: 10px 14px; border-radius: 18px;">
-                                <div class="row g-2 align-items-center">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center gap-2 cursor-pointer p-1" onclick="startVoiceInput()" title="Bicara untuk catat transaksi">
-                                            <div class="artosku-action-icon ai-bot-icon" style="width: 36px; height: 36px; min-width: 36px; border-radius: 11px;">
-                                                <i class="bi bi-mic-fill" id="smartVoiceMicIcon" style="font-size: 16px;"></i>
-                                            </div>
-                                            <div class="min-w-0">
-                                                <div class="fw-bold" style="font-size: 13px; color: var(--boss-text-primary);">Suara AI</div>
-                                                <small class="text-secondary d-block text-truncate" style="font-size: 10px;">Contoh: "Makan 30k"</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center gap-2 cursor-pointer p-1 border-start border-secondary border-opacity-10 ps-2" onclick="triggerReceiptScan()" title="Pindai foto struk">
-                                            <div class="artosku-action-icon scan-icon" style="width: 36px; height: 36px; min-width: 36px; border-radius: 11px;">
-                                                <i class="bi bi-qr-code-scan" style="font-size: 16px;"></i>
-                                            </div>
-                                            <div class="min-w-0">
-                                                <div class="fw-bold" style="font-size: 13px; color: var(--boss-text-primary);">Scan Struk</div>
-                                                <small class="text-secondary d-block text-truncate" style="font-size: 10px;">Auto-deteksi foto</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="col-12">
                             <div class="ios-search-wrapper mb-2">
                                 <i class="bi bi-search ios-search-icon"></i>
@@ -987,18 +956,10 @@ foreach ($kat_expenses as $ke) {
                         </button>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-between px-2 pb-3">
+                    <div class="px-2 pb-3">
                         <span class="artosku-modal-badge">
                             <i class="bi bi-calendar3 me-1"></i> <?= tgl_indo(date('Y-m-d')) ?>
                         </span>
-                        <div class="d-flex align-items-center gap-1">
-                            <button type="button" class="artosku-quick-badge-btn" onclick="startVoiceInput()" title="Input Suara">
-                                <i class="bi bi-mic-fill"></i> Suara
-                            </button>
-                            <button type="button" class="artosku-quick-badge-btn" onclick="triggerReceiptScan()" title="Scan Struk">
-                                <i class="bi bi-camera-fill"></i> 1 struk
-                            </button>
-                        </div>
                     </div>
                 </div>
                 
@@ -1225,51 +1186,6 @@ foreach ($kat_expenses as $ke) {
         </div>
     </div>
 
-    
-    <div class="modal fade" id="modalScanStruk" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content ios-modal p-2">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold" style="letter-spacing: -0.3px;">Pemindai Struk Otomatis</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body py-3">
-                    <div class="scan-laser-box p-3 text-center mb-3">
-                        <div class="scan-laser-beam"></div>
-                        <img id="receiptPreviewImg" src="" alt="Pratinjau Struk" class="img-fluid rounded-3 mb-2" style="max-height: 220px; display: none;">
-                        <div id="scanStatusText" class="text-secondary small fw-medium py-3">
-                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
-                            Menganalisis teks & nominal pada struk...
-                        </div>
-                    </div>
-
-                    <div id="scanResultBox" class="p-3 rounded-3" style="background-color: var(--boss-stat-bg); border: 1px solid var(--boss-border); display: none;">
-                        <h6 class="fw-bold mb-2 text-success"><i class="bi bi-check-circle-fill me-1"></i> Struk Terdeteksi!</h6>
-                        <div class="d-flex justify-content-between small py-1 border-bottom border-secondary border-opacity-10">
-                            <span class="text-secondary">Judul Terbaca:</span>
-                            <strong id="detectedJudul" style="color: var(--boss-text-primary);">-</strong>
-                        </div>
-                        <div class="d-flex justify-content-between small py-1 border-bottom border-secondary border-opacity-10">
-                            <span class="text-secondary">Nominal Terbaca:</span>
-                            <strong id="detectedNominal" class="text-danger fw-bold">-</strong>
-                        </div>
-                        <div class="d-flex justify-content-between small py-1">
-                            <span class="text-secondary">Kategori Rekomendasi:</span>
-                            <span id="detectedKategori" class="badge bg-secondary">-</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-ios-secondary w-100 mb-1" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-ios-primary w-100" id="btnApplyReceipt" onclick="applyReceiptToForm()" style="display: none;">
-                        Terapkan ke Catatan Transaksi
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -1507,212 +1423,6 @@ foreach ($kat_expenses as $ke) {
                     opt.style.display = 'none';
                 }
             });
-        }
-
-        function triggerReceiptScan() {
-            document.getElementById('receiptFileInput').click();
-        }
-
-        let parsedReceiptData = null;
-
-        function processReceipt(input) {
-            if (!input.files || !input.files[0]) return;
-            const file = input.files[0];
-            const reader = new FileReader();
-
-            const scanModal = new bootstrap.Modal(document.getElementById('modalScanStruk'));
-            scanModal.show();
-
-            const previewImg = document.getElementById('receiptPreviewImg');
-            const statusText = document.getElementById('scanStatusText');
-            const resultBox  = document.getElementById('scanResultBox');
-            const applyBtn   = document.getElementById('btnApplyReceipt');
-
-            resultBox.style.display = 'none';
-            applyBtn.style.display = 'none';
-            statusText.style.display = 'block';
-
-            reader.onload = function(e) {
-                previewImg.src = e.target.result;
-                previewImg.style.display = 'inline-block';
-
-                setTimeout(() => {
-                    statusText.style.display = 'none';
-                    resultBox.style.display = 'block';
-                    applyBtn.style.display = 'block';
-
-                    const sampleStores = [
-                        { judul: 'Struk Belanja Minimarket Kos', nominal: 38500, id_kat: 4, kat: 'Makanan & Minuman' },
-                        { judul: 'Fotokopi Bahan Tugas PBW & Jilid', nominal: 24000, id_kat: 5, kat: 'Kuliah & Buku Pelajaran' },
-                        { judul: 'Struk Pengisian Bensin Pertalite', nominal: 35000, id_kat: 6, kat: 'Transportasi & Bensin' },
-                        { judul: 'Kopi Susu & Snack Nugas', nominal: 28000, id_kat: 8, kat: 'Hiburan & Ngopi' }
-                    ];
-                    parsedReceiptData = sampleStores[Math.floor(Math.random() * sampleStores.length)];
-
-                    document.getElementById('detectedJudul').innerText = parsedReceiptData.judul;
-                    document.getElementById('detectedNominal').innerText = 'Rp ' + parsedReceiptData.nominal.toLocaleString('id-ID');
-                    document.getElementById('detectedKategori').innerText = parsedReceiptData.kat;
-                }, 1600);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function applyReceiptToForm() {
-            if (!parsedReceiptData) return;
-
-            const scanModalEl = document.getElementById('modalScanStruk');
-            const scanModal = bootstrap.Modal.getInstance(scanModalEl);
-            if (scanModal) scanModal.hide();
-
-            selectModalJenis('Pengeluaran');
-
-            document.getElementById('inputJudul').value = parsedReceiptData.judul;
-            document.getElementById('inputJumlah').value = parsedReceiptData.nominal;
-            document.getElementById('selectKategori').value = parsedReceiptData.id_kat;
-            document.getElementById('inputCatatan').value = 'Diisi otomatis dari pemindaian foto struk.';
-
-            setTimeout(() => {
-                const addModal = new bootstrap.Modal(document.getElementById('modalTambah'));
-                addModal.show();
-            }, 300);
-        }
-
-        let isListening = false;
-        function startVoiceInput() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const navMic = document.getElementById('actionTileMicIcon') || document.getElementById('navVoiceIcon');
-
-            if (!SpeechRecognition) {
-                alert('Browser Anda belum mendukung Web Speech Recognition. Gunakan Chrome di laptop atau HP.');
-                return;
-            }
-
-            if (isListening) return;
-
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'id-ID';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            if (navMic) navMic.classList.add('mic-pulse');
-            isListening = true;
-
-            const toastEl = document.createElement('div');
-            toastEl.id = 'voiceToast';
-            toastEl.className = 'position-fixed bottom-0 start-50 translate-middle-x mb-5 p-3 rounded-4 shadow-lg text-white d-flex align-items-center gap-2';
-            toastEl.style.cssText = 'background: rgba(16, 18, 26, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,69,58,0.5); z-index: 9999;';
-            toastEl.innerHTML = '<i class="bi bi-mic-fill text-danger fs-5 mic-pulse"></i> <span>Mendengarkan... Katakan: <em>"Makan siang tiga puluh ribu"</em></span>';
-            document.body.appendChild(toastEl);
-
-            recognition.start();
-
-            function parseIndoVoiceAmount(transcript) {
-                const text = transcript.toLowerCase();
-                const jtMatch = text.match(/(\d+(?:[.,]\d+)?)\s*(?:jt|juta)/);
-                if (jtMatch) return Math.round(parseFloat(jtMatch[1].replace(',', '.')) * 1000000);
-
-                const rbMatch = text.match(/(\d+(?:[.,]\d+)?)\s*(?:k|rb|ribu)/);
-                if (rbMatch) return Math.round(parseFloat(rbMatch[1].replace(',', '.')) * 1000);
-
-                const wordsMap = [
-                    { w: 'setengah juta', v: 500000 }, { w: 'satu juta', v: 1000000 }, { w: 'dua juta', v: 2000000 },
-                    { w: 'tiga juta', v: 3000000 }, { w: 'lima juta', v: 5000000 }, { w: 'seratus lima puluh ribu', v: 150000 },
-                    { w: 'seratus ribu', v: 100000 }, { w: 'dua ratus ribu', v: 200000 }, { w: 'tiga ratus ribu', v: 300000 },
-                    { w: 'lima ratus ribu', v: 500000 }, { w: 'sembilan puluh ribu', v: 90000 }, { w: 'delapan puluh ribu', v: 80000 },
-                    { w: 'tujuh puluh lima ribu', v: 75000 }, { w: 'tujuh puluh ribu', v: 70000 }, { w: 'enam puluh lima ribu', v: 65000 },
-                    { w: 'enam puluh ribu', v: 60000 }, { w: 'lima puluh lima ribu', v: 55000 }, { w: 'lima puluh ribu', v: 50000 },
-                    { w: 'empat puluh lima ribu', v: 45000 }, { w: 'empat puluh ribu', v: 40000 }, { w: 'tiga puluh lima ribu', v: 35000 },
-                    { w: 'tiga puluh ribu', v: 30000 }, { w: 'dua puluh lima ribu', v: 25000 }, { w: 'dua puluh ribu', v: 20000 },
-                    { w: 'sembilan belas ribu', v: 19000 }, { w: 'delapan belas ribu', v: 18000 }, { w: 'tujuh belas ribu', v: 17000 },
-                    { w: 'enam belas ribu', v: 16000 }, { w: 'lima belas ribu', v: 15000 }, { w: 'empat belas ribu', v: 14000 },
-                    { w: 'tiga belas ribu', v: 13000 }, { w: 'dua belas ribu', v: 12000 }, { w: 'sebelas ribu', v: 11000 },
-                    { w: 'sepuluh ribu', v: 10000 }, { w: 'sembilan ribu', v: 9000 }, { w: 'delapan ribu', v: 8000 },
-                    { w: 'tujuh ribu', v: 7000 }, { w: 'enam ribu', v: 6000 }, { w: 'lima ribu', v: 5000 },
-                    { w: 'empat ribu', v: 4000 }, { w: 'tiga ribu', v: 3000 }, { w: 'dua ribu', v: 2000 }, { w: 'seribu', v: 1000 }
-                ];
-                for (const item of wordsMap) {
-                    if (text.includes(item.w)) return item.v;
-                }
-
-                const numMatches = text.match(/\d+/g);
-                if (numMatches) {
-                    const rawNum = parseInt(numMatches.join(''), 10);
-                    if (text.includes('ribu') || text.includes('rb') || text.includes(' k') || text.includes('k ') || text.endsWith('k')) {
-                        return rawNum < 1000 ? rawNum * 1000 : rawNum;
-                    }
-                    if (rawNum < 1000) return rawNum * 1000;
-                    return rawNum;
-                }
-
-                return 30000;
-            }
-
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript.toLowerCase();
-                if (navMic) navMic.classList.remove('mic-pulse');
-                isListening = false;
-                const tEl = document.getElementById('voiceToast');
-                if (tEl) tEl.remove();
-
-                const detectedNum = parseIndoVoiceAmount(transcript);
-
-                let cleanJudul = transcript
-                    .replace(/(\d+(?:[.,]\d+)?)\s*(?:jt|juta|k|rb|ribu)/gi, '')
-                    .replace(/\b(seratus|dua ratus|tiga ratus|empat ratus|lima ratus|sepuluh|sebelas|dua belas|tiga belas|empat belas|lima belas|enam belas|tujuh belas|delapan belas|sembilan belas|dua puluh|tiga puluh|empat puluh|lima puluh|enam puluh|tujuh puluh|delapan puluh|sembilan puluh|ribu|juta|rupiah|perak|rb|k)\b/gi, '')
-                    .replace(/\d+/g, '')
-                    .replace(/\s+/g, ' ')
-                    .trim();
-                if (cleanJudul.length < 3) cleanJudul = 'Pengeluaran Suara: ' + transcript;
-
-                selectModalJenis('Pengeluaran');
-
-                const catEl = document.getElementById('selectKategori');
-                if (catEl) {
-                    const textLower = transcript.toLowerCase();
-                    for (let i = 0; i < catEl.options.length; i++) {
-                        const optText = catEl.options[i].text.toLowerCase();
-                        if ((textLower.includes('makan') || textLower.includes('minum') || textLower.includes('kopi') || textLower.includes('snack') || textLower.includes('lunch') || textLower.includes('sarapan')) && optText.includes('makan')) {
-                            catEl.selectedIndex = i;
-                            break;
-                        } else if ((textLower.includes('bensin') || textLower.includes('pertalite') || textLower.includes('gojek') || textLower.includes('grab') || textLower.includes('ongkos') || textLower.includes('transport')) && (optText.includes('transport') || optText.includes('bensin'))) {
-                            catEl.selectedIndex = i;
-                            break;
-                        } else if ((textLower.includes('buku') || textLower.includes('makalah') || textLower.includes('fotokopi') || textLower.includes('print') || textLower.includes('tugas') || textLower.includes('kuliah')) && (optText.includes('kuliah') || optText.includes('buku'))) {
-                            catEl.selectedIndex = i;
-                            break;
-                        } else if ((textLower.includes('kos') || textLower.includes('wifi') || textLower.includes('listrik') || textLower.includes('pulsa') || textLower.includes('paket')) && (optText.includes('tagihan') || optText.includes('kos'))) {
-                            catEl.selectedIndex = i;
-                            break;
-                        } else if ((textLower.includes('gaji') || textLower.includes('freelance') || textLower.includes('kiriman') || textLower.includes('saku') || textLower.includes('transfer')) && (optText.includes('gaji') || optText.includes('kiriman') || optText.includes('pemasukan'))) {
-                            catEl.selectedIndex = i;
-                            selectModalJenis('Pemasukan');
-                            break;
-                        }
-                    }
-                }
-
-                document.getElementById('inputJudul').value = cleanJudul.charAt(0).toUpperCase() + cleanJudul.slice(1);
-                document.getElementById('inputJumlah').value = detectedNum;
-                document.getElementById('inputCatatan').value = 'Diinput via perintah suara: "' + transcript + '"';
-
-                const addModal = new bootstrap.Modal(document.getElementById('modalTambah'));
-                addModal.show();
-            };
-
-            recognition.onerror = function() {
-                if (navMic) navMic.classList.remove('mic-pulse');
-                isListening = false;
-                const tEl = document.getElementById('voiceToast');
-                if (tEl) tEl.remove();
-                alert('Suara tidak tertangkap atau mikrofon dinonaktifkan.');
-            };
-
-            recognition.onend = function() {
-                if (navMic) navMic.classList.remove('mic-pulse');
-                isListening = false;
-                const tEl = document.getElementById('voiceToast');
-                if (tEl) tEl.remove();
-            };
         }
 
         function addQuickAmount(val) {
