@@ -1620,32 +1620,186 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: iosRevealFadeOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.28s forwards;
+  animation: iosRevealFadeOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
   pointer-events: none;
 }
 
 .ios-reveal-spinner {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+  width: 68px;
+  height: 68px;
+  border-radius: 22px;
   background: var(--ios-center-circle-bg);
   color: var(--ios-center-circle-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  animation: iosRevealPulse 1.2s ease-in-out infinite;
+  font-size: 30px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4), 0 0 35px rgba(99, 102, 241, 0.28);
+  animation: iosRevealPulse 1s ease-in-out infinite;
 }
 
 @keyframes iosRevealFadeOut {
-  0% { opacity: 1; visibility: visible; }
-  100% { opacity: 0; visibility: hidden; }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+    visibility: hidden;
+  }
 }
 
 @keyframes iosRevealPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.08); opacity: 0.88; }
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.88;
+  }
+}
+
+.ios-navbar {
+  animation: iosNavSlideDown 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes iosNavSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wallet-hero-card {
+  animation: iosHeroEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+}
+
+@keyframes iosHeroEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.artosku-main-balance {
+  animation: iosBalancePop 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
+}
+
+@keyframes iosBalancePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.artosku-subcards-row .col-6:nth-child(1) .artosku-subcard {
+  animation: iosSubcardSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+}
+
+.artosku-subcards-row .col-6:nth-child(2) .artosku-subcard {
+  animation: iosSubcardSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both;
+}
+
+@keyframes iosSubcardSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ios-search-wrapper {
+  animation: iosFilterEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.48s both;
+}
+
+.ios-segmented-control-slider-wrap {
+  animation: iosFilterEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
+}
+
+@keyframes iosFilterEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.trx-card-item {
+  animation: iosTrxItemSlide 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.trx-card-item:nth-child(1) { animation-delay: 0.54s; }
+.trx-card-item:nth-child(2) { animation-delay: 0.59s; }
+.trx-card-item:nth-child(3) { animation-delay: 0.64s; }
+.trx-card-item:nth-child(4) { animation-delay: 0.69s; }
+.trx-card-item:nth-child(5) { animation-delay: 0.74s; }
+.trx-card-item:nth-child(6) { animation-delay: 0.79s; }
+.trx-card-item:nth-child(n+7) { animation-delay: 0.84s; }
+
+@keyframes iosTrxItemSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ios-tab-bar {
+    animation: iosTabBarEntranceMobile 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+  }
+}
+
+@media (min-width: 768px) {
+  .ios-tab-bar {
+    animation: iosTabBarEntranceDesktop 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+  }
+}
+
+@keyframes iosTabBarEntranceMobile {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iosTabBarEntranceDesktop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .ios-main-content {

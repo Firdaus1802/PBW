@@ -145,7 +145,7 @@ if ($fails['count'] >= 5 && (time() - $fails['last_time']) < 60) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Masuk Berhasil - DompetKu</title>
+    <title>Mengautentikasi - DompetKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
@@ -157,104 +157,193 @@ if ($fails['count'] >= 5 && (time() - $fails['last_time']) < 60) {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #0C0D12;
+            background: radial-gradient(ellipse at 50% 38%, rgba(99, 102, 241, 0.16) 0%, rgba(6, 182, 212, 0.06) 45%, rgba(7, 8, 14, 0) 75%), #07080E;
             color: #F8FAFC;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
             overflow: hidden;
             margin: 0;
-            padding: 20px;
+            padding: 24px;
         }
         [data-theme="light"] body, [data-bs-theme="light"] body {
-            background: #F8FAFC;
+            background: radial-gradient(ellipse at 50% 38%, rgba(99, 102, 241, 0.12) 0%, rgba(6, 182, 212, 0.05) 45%, rgba(248, 250, 252, 0) 75%), #F8FAFC;
             color: #0F172A;
         }
-        .login-success-card {
-            background: #141620;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 36px 28px;
+        .auth-vault-card {
+            background: rgba(18, 20, 30, 0.88);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 40px 30px;
             text-align: center;
             max-width: 380px;
             width: 100%;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            animation: cardScaleIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 45px rgba(99, 102, 241, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            animation: authCardScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+            position: relative;
         }
-        [data-theme="light"] .login-success-card, [data-bs-theme="light"] .login-success-card {
-            background: #FFFFFF;
+        [data-theme="light"] .auth-vault-card, [data-bs-theme="light"] .auth-vault-card {
+            background: rgba(255, 255, 255, 0.92);
             border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 24px 50px rgba(100, 116, 139, 0.18), 0 0 35px rgba(99, 102, 241, 0.12), inset 0 1px 1px #FFFFFF;
         }
-        .success-icon-wrap {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: rgba(16, 185, 129, 0.14);
-            color: #10B981;
-            display: inline-flex;
+        .auth-crest-wrap {
+            position: relative;
+            width: 84px;
+            height: 84px;
+            margin: 0 auto 22px auto;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 34px;
-            margin-bottom: 20px;
-            animation: iconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
-        .success-title {
-            font-size: 20px;
+        .auth-crest-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #6366F1, #38BDF8, #A855F7, #6366F1);
+            animation: ringRotate 2.5s linear infinite;
+            filter: blur(3px);
+            opacity: 0.75;
+        }
+        .auth-crest-inner {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #0E1018;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 0, 0, 0.5);
+            animation: crestPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        [data-theme="light"] .auth-crest-inner, [data-bs-theme="light"] .auth-crest-inner {
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(100, 116, 139, 0.2);
+        }
+        .auth-crest-icon {
+            font-size: 38px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 45%, #38BDF8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.4));
+        }
+        [data-theme="light"] .auth-crest-icon, [data-bs-theme="light"] .auth-crest-icon {
+            background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #0284C7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 6px rgba(99, 102, 241, 0.3));
+        }
+        .auth-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 14px;
+            border-radius: 99px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            font-size: 10.5px;
             font-weight: 700;
+            letter-spacing: 1.2px;
+            color: #A5B4FC;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+        }
+        [data-theme="light"] .auth-status-pill, [data-bs-theme="light"] .auth-status-pill {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: #4F46E5;
+        }
+        .auth-status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #38BDF8;
+            box-shadow: 0 0 10px #38BDF8;
+            animation: dotGlow 1.2s ease-in-out infinite alternate;
+        }
+        .auth-title {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
             margin-bottom: 6px;
         }
-        .success-subtitle {
-            font-size: 13.5px;
+        .auth-subtitle {
+            font-size: 13px;
             color: #94A3B8;
-            margin-bottom: 22px;
+            margin-bottom: 24px;
         }
-        .success-progress-track {
+        [data-theme="light"] .auth-subtitle, [data-bs-theme="light"] .auth-subtitle {
+            color: #64748B;
+        }
+        .auth-progress-track {
             width: 100%;
-            height: 5px;
-            border-radius: 10px;
+            height: 4px;
+            border-radius: 99px;
             background: rgba(255, 255, 255, 0.08);
             overflow: hidden;
             position: relative;
         }
-        [data-theme="light"] .success-progress-track, [data-bs-theme="light"] .success-progress-track {
+        [data-theme="light"] .auth-progress-track, [data-bs-theme="light"] .auth-progress-track {
             background: rgba(0, 0, 0, 0.06);
         }
-        .success-progress-bar {
+        .auth-progress-bar {
             height: 100%;
             width: 0%;
-            background: #10B981;
-            border-radius: 10px;
-            animation: fillProgress 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            background: linear-gradient(90deg, #6366F1 0%, #38BDF8 50%, #A855F7 100%);
+            border-radius: 99px;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.85), 0 0 6px #6366F1;
+            animation: fillLaserProgress 0.82s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        @keyframes cardScaleIn {
-            0% { opacity: 0; transform: scale(0.92) translateY(12px); }
+        @keyframes ringRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes dotGlow {
+            0% { opacity: 0.5; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.15); }
+        }
+        @keyframes authCardScale {
+            0% { opacity: 0; transform: scale(0.92) translateY(16px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-        @keyframes iconPop {
-            0% { opacity: 0; transform: scale(0.4) rotate(-20deg); }
-            70% { transform: scale(1.15) rotate(5deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        @keyframes crestPop {
+            0% { opacity: 0; transform: scale(0.5); }
+            70% { transform: scale(1.12); }
+            100% { opacity: 1; transform: scale(1); }
         }
-        @keyframes fillProgress {
+        @keyframes fillLaserProgress {
             0% { width: 0%; }
             100% { width: 100%; }
         }
     </style>
 </head>
 <body>
-    <div class="login-success-card">
-        <div class="success-icon-wrap">
-            <i class="bi bi-check2"></i>
+    <div class="auth-vault-card">
+        <div class="auth-crest-wrap">
+            <div class="auth-crest-ring"></div>
+            <div class="auth-crest-inner">
+                <i class="bi bi-shield-lock-fill auth-crest-icon"></i>
+            </div>
         </div>
-        <div class="success-title">Selamat Datang, <?= $sel_name ?></div>
-        <div class="success-subtitle">Menyiapkan dompet dan transaksi Anda...</div>
-        <div class="success-progress-track">
-            <div class="success-progress-bar"></div>
+        <div>
+            <span class="auth-status-pill">
+                <span class="auth-status-dot"></span>
+                Akses Diberikan
+            </span>
+        </div>
+        <div class="auth-title">Selamat Datang, <?= $sel_name ?></div>
+        <div class="auth-subtitle">Membuka brankas keuangan Anda...</div>
+        <div class="auth-progress-track">
+            <div class="auth-progress-bar"></div>
         </div>
     </div>
     <script>
         setTimeout(function() {
             window.location.replace("<?= $target_url ?>");
-        }, 750);
+        }, 850);
     </script>
 </body>
 </html>
