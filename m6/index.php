@@ -280,6 +280,12 @@ foreach ($kat_expenses as $ke) {
 </head>
 <body>
 
+<div class="ios-reveal-overlay">
+    <div class="ios-reveal-spinner">
+        <i class="bi bi-wallet2"></i>
+    </div>
+</div>
+
     <div class="ios-app-shell">
 
         

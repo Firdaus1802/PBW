@@ -72,12 +72,128 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 dompetku_sync_trx_cookie($pdo, $new_id);
 
                 $client_is_mobile = (isset($_POST['client_is_mobile']) && $_POST['client_is_mobile'] === '1') || $is_mobile_device;
-
-                if ($client_is_mobile) {
-                    header("Location: " . base_url("index.php"));
-                } else {
-                    header("Location: " . base_url("dashboard.php"));
-                }
+                $target_url = $client_is_mobile ? base_url("index.php") : base_url("dashboard.php");
+                $reg_name = htmlspecialchars($nama_lengkap ?: $username);
+                ?>
+<!DOCTYPE html>
+<html lang="id" data-theme="dark" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Pendaftaran Berhasil - DompetKu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="<?= base_url('assets/css/ios-theme.css?v=' . time()) ?>" rel="stylesheet">
+    <script src="<?= base_url('assets/js/theme.js') ?>"></script>
+    <noscript><meta http-equiv="refresh" content="1;url=<?= $target_url ?>"></noscript>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0C0D12;
+            color: #F8FAFC;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            overflow: hidden;
+            margin: 0;
+            padding: 20px;
+        }
+        [data-theme="light"] body, [data-bs-theme="light"] body {
+            background: #F8FAFC;
+            color: #0F172A;
+        }
+        .login-success-card {
+            background: #141620;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 36px 28px;
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: cardScaleIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        [data-theme="light"] .login-success-card, [data-bs-theme="light"] .login-success-card {
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+        .success-icon-wrap {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.14);
+            color: #10B981;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin-bottom: 20px;
+            animation: iconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        .success-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .success-subtitle {
+            font-size: 13.5px;
+            color: #94A3B8;
+            margin-bottom: 22px;
+        }
+        .success-progress-track {
+            width: 100%;
+            height: 5px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+        [data-theme="light"] .success-progress-track, [data-bs-theme="light"] .success-progress-track {
+            background: rgba(0, 0, 0, 0.06);
+        }
+        .success-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #10B981;
+            border-radius: 10px;
+            animation: fillProgress 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes cardScaleIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(12px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes iconPop {
+            0% { opacity: 0; transform: scale(0.4) rotate(-20deg); }
+            70% { transform: scale(1.15) rotate(5deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-success-card">
+        <div class="success-icon-wrap">
+            <i class="bi bi-check2"></i>
+        </div>
+        <div class="success-title">Akun Berhasil Dibuat!</div>
+        <div class="success-subtitle">Menyiapkan dompet untuk <?= $reg_name ?>...</div>
+        <div class="success-progress-track">
+            <div class="success-progress-bar"></div>
+        </div>
+    </div>
+    <script>
+        setTimeout(function() {
+            window.location.replace("<?= $target_url ?>");
+        }, 750);
+    </script>
+</body>
+</html>
+<?php
                 exit;
             }
         } catch (PDOException $e) {
