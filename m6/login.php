@@ -52,7 +52,14 @@ if (isset($_GET['msg']) && $_GET['msg'] === 'logged_out') {
     $success_msg = 'Akun berhasil dibuat! Silakan masuk dengan akun baru Anda.';
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+$fail_key = 'login_fails_' . md5($ip);
+$fails = $_SESSION[$fail_key] ?? ['count' => 0, 'last_time' => 0];
+
+if ($fails['count'] >= 5 && (time() - $fails['last_time']) < 60) {
+    $remaining = 60 - (time() - $fails['last_time']);
+    $error_msg = 'Terlalu banyak percobaan login gagal. Mohon tunggu ' . $remaining . ' detik demi keamanan.';
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = strtolower(trim(sanitize($_POST['username'] ?? '')));
     $password = trim($_POST['password'] ?? '');
 
@@ -61,6 +68,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("SELECT * FROM users WHERE LOWER(username) = LOWER(?)");
             $stmt->execute([$username]);
             $user = $stmt->fetch();
+
+            if (!$user && isset($_COOKIE['dompetku_vault'])) {
+                $cached_vault = dompetku_verify_payload($_COOKIE['dompetku_vault']);
+                if ($cached_vault && strtolower($cached_vault['username'] ?? '') === $username) {
+                    if (password_verify($password, $cached_vault['password_hash'])) {
+                        $u_restore = $pdo->prepare("INSERT OR REPLACE INTO users (id_user, username, password, nama_lengkap) VALUES (?, ?, ?, ?)");
+                        $u_restore->execute([$cached_vault['id_user'], $cached_vault['username'], $cached_vault['password_hash'], $cached_vault['nama_lengkap']]);
+                        $user = [
+                            'id_user'      => $cached_vault['id_user'],
+                            'username'     => $cached_vault['username'],
+                            'nama_lengkap' => $cached_vault['nama_lengkap'],
+                            'password'     => $cached_vault['password_hash']
+                        ];
+                        if (!empty($cached_vault['items'])) {
+                            $ins_v = $pdo->prepare("INSERT OR IGNORE INTO transaksi (id_transaksi, id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                            foreach ($cached_vault['items'] as $item) {
+                                $ins_v->execute([
+                                    $item['id_transaksi'],
+                                    (int)$cached_vault['id_user'],
+                                    $item['id_kategori'],
+                                    $item['tanggal'],
+                                    $item['judul'],
+                                    $item['jenis'],
+                                    $item['jumlah'],
+                                    $item['catatan'] ?? ''
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
 
             if (!$user && isset($_COOKIE['dompetku_session'])) {
                 $cached_sess = dompetku_verify_payload($_COOKIE['dompetku_session']);
@@ -77,6 +115,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($user && password_verify($password, $user['password'])) {
+                unset($_SESSION[$fail_key]);
+                session_regenerate_id(true);
+
                 $_SESSION['user_id']      = (int)$user['id_user'];
                 $_SESSION['username']     = $user['username'];
                 $_SESSION['nama_lengkap'] = $user['nama_lengkap'];
@@ -93,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $remember_token = hash('sha256', $user['id_user'] . $user['password'] . 'dompetku_pbw_secret');
                 dompetku_set_secure_cookie('dompetku_remember', $user['id_user'] . ':' . $remember_token, time() + (86400 * 30));
                 dompetku_sync_trx_cookie($pdo, $user['id_user']);
+                dompetku_sync_vault($pdo, $user['id_user']);
                 
                 $client_is_mobile = (isset($_POST['client_is_mobile']) && $_POST['client_is_mobile'] === '1') || $is_mobile_device;
 
@@ -103,6 +145,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 exit;
             } else {
+                $fails['count'] = (time() - $fails['last_time'] > 60) ? 1 : ($fails['count'] + 1);
+                $fails['last_time'] = time();
+                $_SESSION[$fail_key] = $fails;
                 $error_msg = 'Username atau kata sandi tidak sesuai. Silakan periksa kembali.';
             }
         } catch (PDOException $e) {

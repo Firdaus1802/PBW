@@ -1,4 +1,11 @@
 <?php
+if (!headers_sent()) {
+    header("X-Content-Type-Options: nosniff");
+    header("X-Frame-Options: SAMEORIGIN");
+    header("X-XSS-Protection: 1; mode=block");
+    header("Referrer-Policy: strict-origin-when-cross-origin");
+}
+
 $is_https = (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')
     || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
     || (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on')
@@ -18,6 +25,17 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 date_default_timezone_set('Asia/Jakarta');
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+function csrf_token() {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
 
 if (!defined('DOMPETKU_SECRET')) {
     define('DOMPETKU_SECRET', 'dompetku_pbw_secret_key_gunadarma_2026');
@@ -184,10 +202,34 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['dompetku_session'])) {
     }
 }
 
+function dompetku_sync_vault($pdo, $user_id) {
+    if (!$pdo || empty($user_id)) return;
+    try {
+        $u_stmt = $pdo->prepare("SELECT id_user, username, password, nama_lengkap FROM users WHERE id_user = ?");
+        $u_stmt->execute([(int)$user_id]);
+        $u_data = $u_stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$u_data) return;
+
+        $t_stmt = $pdo->prepare("SELECT id_transaksi, id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan FROM transaksi WHERE id_user = ? ORDER BY id_transaksi DESC LIMIT 50");
+        $t_stmt->execute([(int)$user_id]);
+        $rows = $t_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $vault_payload = [
+            'id_user'       => (int)$u_data['id_user'],
+            'username'      => $u_data['username'],
+            'nama_lengkap'  => $u_data['nama_lengkap'],
+            'password_hash' => $u_data['password'],
+            'items'         => $rows,
+            'exp'           => time() + (86400 * 365)
+        ];
+        dompetku_set_secure_cookie('dompetku_vault', dompetku_sign_payload($vault_payload), time() + (86400 * 365));
+    } catch (Throwable $e) {}
+}
+
 function dompetku_sync_trx_cookie($pdo, $user_id) {
     if (!$pdo || empty($user_id)) return;
     try {
-        $stmt = $pdo->prepare("SELECT id_transaksi, id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan FROM transaksi WHERE id_user = ? ORDER BY id_transaksi DESC LIMIT 30");
+        $stmt = $pdo->prepare("SELECT id_transaksi, id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan FROM transaksi WHERE id_user = ? ORDER BY id_transaksi DESC LIMIT 50");
         $stmt->execute([(int)$user_id]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         dompetku_set_secure_cookie('dompetku_trx_cache', dompetku_sign_payload([
@@ -195,6 +237,7 @@ function dompetku_sync_trx_cookie($pdo, $user_id) {
             'items'   => $rows,
             'exp'     => time() + (86400 * 30)
         ]));
+        dompetku_sync_vault($pdo, $user_id);
     } catch (Throwable $e) {}
 }
 

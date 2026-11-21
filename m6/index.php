@@ -479,35 +479,35 @@ foreach ($kat_expenses as $ke) {
                                     $sign = $is_masuk ? '+' : '-';
                                     $amount_class = $is_masuk ? 'amount-income' : 'amount-expense';
                                 ?>
-                                <div class="ios-list-row trx-card-item" data-jenis="<?= $trx['jenis'] ?>" data-search="<?= strtolower(htmlspecialchars($trx['judul'] . ' ' . $trx['nama_kategori'] . ' ' . $trx['catatan'])) ?>" style="padding: 12px 14px;">
-                                    <div class="d-flex align-items-center gap-2 min-w-0 flex-grow-1 me-2">
-                                        <div class="ios-icon-box flex-shrink-0" style="width: 38px; height: 38px;">
+                                <div class="ios-list-row trx-card-item" data-jenis="<?= $trx['jenis'] ?>" data-search="<?= strtolower(htmlspecialchars($trx['judul'] . ' ' . $trx['nama_kategori'] . ' ' . $trx['catatan'])) ?>" style="padding: 10px 10px; gap: 6px;">
+                                    <div class="d-flex align-items-center gap-2 min-w-0 flex-grow-1" style="overflow: hidden;">
+                                        <div class="ios-icon-box flex-shrink-0" style="width: 36px; height: 36px;">
                                             <i class="bi <?= htmlspecialchars($trx['icon']) ?>"></i>
                                         </div>
-                                        <div class="min-w-0 flex-grow-1">
-                                            <div class="fw-semibold text-truncate mb-0" style="font-size: 14px; letter-spacing: -0.2px; color: var(--boss-text-primary);">
+                                        <div class="min-w-0 flex-grow-1" style="overflow: hidden;">
+                                            <div class="fw-semibold text-truncate mb-0" style="font-size: 13.5px; letter-spacing: -0.2px; color: var(--boss-text-primary);">
                                                 <?= htmlspecialchars($trx['judul']) ?>
                                             </div>
                                             <div class="d-flex align-items-center gap-1 mt-0.5 text-truncate">
-                                                <span class="ios-badge-mono text-truncate" style="max-width: 105px;">
+                                                <span class="ios-badge-mono text-truncate" style="max-width: 85px;">
                                                     <?= htmlspecialchars($trx['nama_kategori']) ?>
                                                 </span>
-                                                <span class="text-secondary flex-shrink-0" style="font-size: 10.5px;">
+                                                <span class="text-secondary flex-shrink-0" style="font-size: 10px;">
                                                     • <?= tgl_indo($trx['tanggal']) ?>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center gap-1.5 flex-shrink-0">
+                                    <div class="d-flex align-items-center gap-1.5 flex-shrink-0 ms-auto">
                                         <div class="text-end">
-                                            <div class="fw-bold <?= $amount_class ?>" style="font-size: 13.5px; letter-spacing: -0.3px; white-space: nowrap;">
+                                            <div class="fw-bold <?= $amount_class ?>" style="font-size: 13px; letter-spacing: -0.3px; white-space: nowrap;">
                                                 <?= $sign ?> <?= format_rupiah($trx['jumlah']) ?>
                                             </div>
-                                            <small class="text-uppercase text-secondary" style="font-size: 9.5px; font-weight: 600; letter-spacing: 0.3px;">
+                                            <small class="text-uppercase text-secondary d-block" style="font-size: 9px; font-weight: 600; letter-spacing: 0.2px; line-height: 1;">
                                                 <?= $trx['jenis'] ?>
                                             </small>
                                         </div>
-                                        <div class="dropdown">
+                                        <div class="dropdown flex-shrink-0">
                                             <button type="button" class="ios-action-dots-btn" data-bs-toggle="dropdown" aria-expanded="false" title="Menu Opsi">
                                                 <i class="bi bi-three-dots-vertical"></i>
                                             </button>

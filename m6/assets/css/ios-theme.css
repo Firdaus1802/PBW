@@ -535,7 +535,7 @@ body {
 }
 
 .ios-list-row {
-  padding: 13px 16px;
+  padding: 11px 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -543,6 +543,8 @@ body {
   transition: background-color 0.15s ease;
   text-decoration: none;
   color: inherit;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .ios-list-row:last-child {
@@ -551,6 +553,52 @@ body {
 
 .ios-list-row:active {
   background-color: var(--boss-card-inner);
+}
+
+.ios-action-dots-btn {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  color: var(--boss-text-secondary) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  transition: all 0.15s ease !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.ios-action-dots-btn i {
+  font-size: 16px !important;
+  line-height: 1 !important;
+  color: inherit !important;
+}
+
+.ios-action-dots-btn:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--boss-text-primary) !important;
+}
+
+[data-theme="dark"] .ios-action-dots-btn:hover,
+[data-bs-theme="dark"] .ios-action-dots-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.ios-action-dots-btn:active {
+  transform: scale(0.9) !important;
+  background: rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="dark"] .ios-action-dots-btn:active,
+[data-bs-theme="dark"] .ios-action-dots-btn:active {
+  background: rgba(255, 255, 255, 0.12) !important;
 }
 
 .ios-search-wrapper {

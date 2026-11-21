@@ -14,8 +14,10 @@ if ($path === '' || $path === 'index.php') {
     exit;
 }
 
-$file = __DIR__ . '/../m6/' . $path;
-if (file_exists($file) && is_file($file) && pathinfo($file, PATHINFO_EXTENSION) === 'php') {
+$base_dir = realpath(__DIR__ . '/../m6');
+$file = realpath($base_dir . '/' . $path);
+
+if ($file && strpos($file, $base_dir) === 0 && is_file($file) && pathinfo($file, PATHINFO_EXTENSION) === 'php') {
     require $file;
     exit;
 }
