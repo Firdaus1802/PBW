@@ -1620,7 +1620,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: iosRevealFadeOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+  animation: iosRevealFadeOut 0.65s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
   pointer-events: none;
 }
 
@@ -1638,12 +1638,12 @@ body {
 
 .ios-wallet-svg {
   transform-origin: center bottom;
-  animation: walletHapticSpring 1.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: walletHapticSpring 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
 .apple-cash-bill {
   transform-origin: center center;
-  animation: insertCashIntoWallet 1.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: insertCashIntoWallet 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
 @keyframes insertCashIntoWallet {
@@ -1704,7 +1704,7 @@ body {
 }
 
 .ios-navbar {
-  animation: iosNavSlideDown 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  animation: iosNavSlideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.15s both;
 }
 
 @keyframes iosNavSlideDown {
@@ -1719,7 +1719,7 @@ body {
 }
 
 .wallet-hero-card {
-  animation: iosHeroEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+  animation: iosHeroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.22s both;
 }
 
 @keyframes iosHeroEntrance {
@@ -1734,7 +1734,7 @@ body {
 }
 
 .artosku-main-balance {
-  animation: iosBalancePop 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
+  animation: iosBalancePop 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.34s both;
 }
 
 @keyframes iosBalancePop {
@@ -1749,11 +1749,11 @@ body {
 }
 
 .artosku-subcards-row .col-6:nth-child(1) .artosku-subcard {
-  animation: iosSubcardSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+  animation: iosSubcardSlide 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.40s both;
 }
 
 .artosku-subcards-row .col-6:nth-child(2) .artosku-subcard {
-  animation: iosSubcardSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both;
+  animation: iosSubcardSlide 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.46s both;
 }
 
 @keyframes iosSubcardSlide {
@@ -1768,11 +1768,11 @@ body {
 }
 
 .ios-search-wrapper {
-  animation: iosFilterEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.48s both;
+  animation: iosFilterEntrance 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.52s both;
 }
 
 .ios-segmented-control-slider-wrap {
-  animation: iosFilterEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
+  animation: iosFilterEntrance 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.58s both;
 }
 
 @keyframes iosFilterEntrance {
@@ -1787,16 +1787,16 @@ body {
 }
 
 .trx-card-item {
-  animation: iosTrxItemSlide 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: iosTrxItemSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.trx-card-item:nth-child(1) { animation-delay: 0.54s; }
-.trx-card-item:nth-child(2) { animation-delay: 0.59s; }
-.trx-card-item:nth-child(3) { animation-delay: 0.64s; }
-.trx-card-item:nth-child(4) { animation-delay: 0.69s; }
-.trx-card-item:nth-child(5) { animation-delay: 0.74s; }
-.trx-card-item:nth-child(6) { animation-delay: 0.79s; }
-.trx-card-item:nth-child(n+7) { animation-delay: 0.84s; }
+.trx-card-item:nth-child(1) { animation-delay: 1.64s; }
+.trx-card-item:nth-child(2) { animation-delay: 1.70s; }
+.trx-card-item:nth-child(3) { animation-delay: 1.76s; }
+.trx-card-item:nth-child(4) { animation-delay: 1.82s; }
+.trx-card-item:nth-child(5) { animation-delay: 1.88s; }
+.trx-card-item:nth-child(6) { animation-delay: 1.94s; }
+.trx-card-item:nth-child(n+7) { animation-delay: 2.00s; }
 
 @keyframes iosTrxItemSlide {
   0% {
@@ -1811,13 +1811,13 @@ body {
 
 @media (max-width: 767.98px) {
   .ios-tab-bar {
-    animation: iosTabBarEntranceMobile 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+    animation: iosTabBarEntranceMobile 0.65s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
   }
 }
 
 @media (min-width: 768px) {
   .ios-tab-bar {
-    animation: iosTabBarEntranceDesktop 0.58s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+    animation: iosTabBarEntranceDesktop 0.65s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
   }
 }
 

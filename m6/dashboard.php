@@ -923,7 +923,7 @@ foreach ($kat_expenses as $ke) {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            animation: macosRevealFadeOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+            animation: macosRevealFadeOut 0.65s cubic-bezier(0.16, 1, 0.3, 1) 1.25s forwards;
             pointer-events: none;
         }
 
@@ -941,12 +941,12 @@ foreach ($kat_expenses as $ke) {
 
         .ios-wallet-svg {
             transform-origin: center bottom;
-            animation: walletHapticSpring 1.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+            animation: walletHapticSpring 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
         }
 
         .apple-cash-bill {
             transform-origin: center center;
-            animation: insertCashIntoWallet 1.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+            animation: insertCashIntoWallet 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
         }
 
         @keyframes insertCashIntoWallet {
@@ -1001,22 +1001,22 @@ foreach ($kat_expenses as $ke) {
         }
 
         .macos-sidebar {
-            animation: macosSidebarSlide 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+            animation: macosSidebarSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.15s both;
         }
 
         .macos-topbar {
-            animation: macosTopbarSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both;
+            animation: macosTopbarSlide 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.22s both;
         }
 
         .ios-hero-banner {
-            animation: macosCardCascade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+            animation: macosCardCascade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.30s both;
         }
 
-        .col-sm-6:nth-child(1) .ios-kpi-card { animation: macosCardCascade 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both; }
-        .col-sm-6:nth-child(2) .ios-kpi-card { animation: macosCardCascade 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both; }
-        .col-sm-6:nth-child(3) .ios-kpi-card { animation: macosCardCascade 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both; }
-        .col-sm-6:nth-child(4) .ios-kpi-card { animation: macosCardCascade 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.50s both; }
-        .ios-section-card { animation: macosCardCascade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.54s both; }
+        .col-sm-6:nth-child(1) .ios-kpi-card { animation: macosCardCascade 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.38s both; }
+        .col-sm-6:nth-child(2) .ios-kpi-card { animation: macosCardCascade 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.45s both; }
+        .col-sm-6:nth-child(3) .ios-kpi-card { animation: macosCardCascade 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.52s both; }
+        .col-sm-6:nth-child(4) .ios-kpi-card { animation: macosCardCascade 0.55s cubic-bezier(0.16, 1, 0.3, 1) 1.59s both; }
+        .ios-section-card { animation: macosCardCascade 0.65s cubic-bezier(0.16, 1, 0.3, 1) 1.65s both; }
     </style>
 </head>
 <body>

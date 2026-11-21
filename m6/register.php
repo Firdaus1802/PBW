@@ -133,11 +133,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         .ios-wallet-svg {
             transform-origin: center bottom;
-            animation: walletHapticSpring 1.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+            animation: walletHapticSpring 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
         }
         .apple-cash-bill {
             transform-origin: center center;
-            animation: insertCashIntoWallet 1.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+            animation: insertCashIntoWallet 1.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
         }
         @keyframes insertCashIntoWallet {
             0% {
@@ -233,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, #FFFFFF 50%, rgba(255, 255, 255, 0.2) 100%);
             border-radius: 99px;
             box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
-            animation: fillLaserProgress 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fillLaserProgress 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         [data-theme="light"] .auth-progress-bar, [data-bs-theme="light"] .auth-progress-bar {
             background: linear-gradient(90deg, rgba(15, 23, 42, 0.2) 0%, #0F172A 50%, rgba(15, 23, 42, 0.2) 100%);
@@ -306,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         setTimeout(function() {
             window.location.replace("<?= $target_url ?>");
-        }, 900);
+        }, 1950);
     </script>
 </body>
 </html>
