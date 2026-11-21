@@ -40,11 +40,14 @@ if (isset($_GET['hapus'])) {
     }
 }
 
-$kategori_list = $pdo->query("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
+$user_id = (int)$_SESSION['user_id'];
+$stmt_kat = $pdo->prepare("SELECT k.*, COUNT(t.id_transaksi) AS total_trx 
                               FROM kategori k 
-                              LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori 
+                              LEFT JOIN transaksi t ON k.id_kategori = t.id_kategori AND t.id_user = ? 
                               GROUP BY k.id_kategori 
-                              ORDER BY k.jenis ASC, k.nama_kategori ASC")->fetchAll();
+                              ORDER BY k.jenis ASC, k.nama_kategori ASC");
+$stmt_kat->execute([$user_id]);
+$kategori_list = $stmt_kat->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="id" data-theme="dark" data-bs-theme="dark">

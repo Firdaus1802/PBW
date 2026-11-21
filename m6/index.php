@@ -932,21 +932,23 @@ foreach ($kat_expenses as $ke) {
             <button type="button" class="ios-capsule-item" id="tabBtnKategori" onclick="switchIosTab('kategori')">
                 <div class="capsule-icon-wrap">
                     <i class="bi bi-tags tab-icon"></i>
-                    <span class="capsule-badge"><?= count($kategori_list ?? []) ?></span>
+                    <?php if (!empty($kategori_list) && count($kategori_list) > 0): ?>
+                        <span class="capsule-badge"><?= count($kategori_list) ?></span>
+                    <?php endif; ?>
                 </div>
                 <span class="capsule-label">Kategori</span>
             </button>
 
-            
             <button type="button" class="ios-capsule-fab" id="tabBtnCatat" data-bs-toggle="modal" data-bs-target="#modalTambah" title="Catat Transaksi Cepat">
                 <i class="bi bi-plus-lg"></i>
             </button>
 
-            
             <button type="button" class="ios-capsule-item" id="tabBtnLaporan" onclick="switchIosTab('laporan')">
                 <div class="capsule-icon-wrap">
                     <i class="bi bi-file-earmark-text tab-icon"></i>
-                    <span class="capsule-badge"><?= count($transaksi_list ?? []) ?></span>
+                    <?php if (!empty($transaksi_list) && count($transaksi_list) > 0): ?>
+                        <span class="capsule-badge"><?= count($transaksi_list) ?></span>
+                    <?php endif; ?>
                 </div>
                 <span class="capsule-label">Laporan</span>
             </button>

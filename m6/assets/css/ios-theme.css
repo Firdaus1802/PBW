@@ -723,12 +723,12 @@ body {
   max-width: 440px !important;
   margin: 0 auto !important;
   height: 64px !important;
-  background: rgba(22, 23, 27, 0.92) !important;
+  background: rgba(22, 25, 32, 0.94) !important;
   backdrop-filter: blur(28px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   border-radius: 9999px !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 10px 14px 28px rgba(0, 0, 0, 0.7), -6px -6px 20px rgba(255, 255, 255, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
@@ -736,7 +736,7 @@ body {
   z-index: 1040 !important;
   user-select: none !important;
   -webkit-tap-highlight-color: transparent !important;
-  transition: transform 0.25s ease, background 0.3s ease, border-color 0.3s ease !important;
+  transition: transform 0.25s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
 }
 
 @media (min-width: 768px) {
@@ -775,9 +775,9 @@ body {
 [data-bs-theme="light"] .ios-capsule-navbar,
 [data-theme="light"] .ios-tab-bar,
 [data-bs-theme="light"] .ios-tab-bar {
-  background: rgba(248, 249, 252, 0.94) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  background: rgba(238, 242, 248, 0.96) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 10px 14px 28px rgba(166, 178, 198, 0.55), -8px -8px 24px #FFFFFF, inset 0 1px 2px rgba(255, 255, 255, 1) !important;
 }
 
 .ios-main-content {
@@ -809,47 +809,48 @@ body {
   align-items: center !important;
   justify-content: center !important;
   background: transparent !important;
-  border: none !important;
+  border: 1px solid transparent !important;
   outline: none !important;
   padding: 6px 4px !important;
   height: 52px !important;
   border-radius: 9999px !important;
-  color: rgba(255, 255, 255, 0.68) !important;
+  color: rgba(255, 255, 255, 0.65) !important;
   text-decoration: none !important;
   cursor: pointer !important;
-  transition: background 0.1s ease, color 0.1s ease !important;
   position: relative !important;
-  transform: none !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 [data-theme="light"] .ios-capsule-item,
 [data-bs-theme="light"] .ios-capsule-item,
 [data-theme="light"] .ios-tab-item,
 [data-bs-theme="light"] .ios-tab-item {
-  color: rgba(0, 0, 0, 0.58) !important;
+  color: #64748B !important;
 }
 
 .ios-capsule-item:active,
 .ios-tab-item:active {
-  transform: none !important;
-  opacity: 0.75 !important;
+  transform: scale(0.94) !important;
+  opacity: 0.8 !important;
 }
 
 .ios-capsule-item.active,
 .ios-tab-item.active {
-  background: rgba(255, 255, 255, 0.16) !important;
-  color: #FFFFFF !important;
+  background: #171922 !important;
+  color: #38BDF8 !important;
   font-weight: 700 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-  transform: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.65), inset -2px -2px 5px rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
 [data-theme="light"] .ios-capsule-item.active,
 [data-bs-theme="light"] .ios-capsule-item.active,
 [data-theme="light"] .ios-tab-item.active,
 [data-bs-theme="light"] .ios-tab-item.active {
-  background: rgba(0, 122, 255, 0.12) !important;
-  color: #007AFF !important;
+  background: #E3E9F2 !important;
+  color: #0284C7 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: inset 3px 3px 6px rgba(166, 178, 198, 0.7), inset -3px -3px 6px #FFFFFF, 0 1px 2px rgba(255, 255, 255, 0.9) !important;
 }
 
 .capsule-icon-wrap {
@@ -890,7 +891,7 @@ body {
   position: absolute !important;
   top: -4px !important;
   right: -8px !important;
-  background-color: #FF3B30 !important;
+  background: linear-gradient(135deg, #FF453A 0%, #D70015 100%) !important;
   color: #FFFFFF !important;
   font-size: 10px !important;
   font-weight: 800 !important;
@@ -902,19 +903,19 @@ body {
   align-items: center !important;
   justify-content: center !important;
   line-height: 1 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
-  border: 1.5px solid rgba(22, 23, 27, 0.95) !important;
+  box-shadow: 2px 2px 6px rgba(215, 0, 21, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
+  border: 1.5px solid #161821 !important;
   pointer-events: none !important;
 }
 
 [data-theme="light"] .capsule-badge,
 [data-bs-theme="light"] .capsule-badge {
-  border-color: #FFFFFF !important;
+  border-color: #EEF1F6 !important;
 }
 
 .capsule-avatar-circle {
-  width: 23px !important;
-  height: 23px !important;
+  width: 24px !important;
+  height: 24px !important;
   border-radius: 50% !important;
   overflow: hidden !important;
   display: flex !important;
@@ -922,7 +923,13 @@ body {
   justify-content: center !important;
   border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
   background: #1C1E2A !important;
-  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-theme="light"] .capsule-avatar-circle {
+  border-color: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 2px 2px 5px rgba(166, 178, 198, 0.6), -2px -2px 5px #FFFFFF !important;
 }
 
 .capsule-avatar-circle img {
@@ -1328,28 +1335,34 @@ body {
   width: 52px !important;
   height: 52px !important;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, #2D313D 0%, #161821 100%) !important;
+  background: linear-gradient(145deg, #2D313D 0%, #171922 100%) !important;
   color: #FFFFFF !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 6px 8px 18px rgba(0, 0, 0, 0.6), -4px -4px 12px rgba(255, 255, 255, 0.05), inset 1px 1px 2px rgba(255, 255, 255, 0.2) !important;
   transform: translateY(-14px) !important;
-  border: 3.5px solid var(--boss-bg) !important;
+  border: 3.5px solid #161821 !important;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease !important;
   flex: 0 0 52px !important;
   cursor: pointer !important;
 }
 
 [data-theme="light"] .ios-capsule-fab {
-  background: linear-gradient(135deg, #1C1D24 0%, #2E323D 100%) !important;
+  background: linear-gradient(145deg, #2E3340 0%, #171922 100%) !important;
   color: #FFFFFF !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22) !important;
+  border: 3.5px solid #EEF1F6 !important;
+  box-shadow: 6px 8px 18px rgba(166, 178, 198, 0.75), -5px -5px 14px #FFFFFF, inset 1px 1px 2px rgba(255, 255, 255, 0.3) !important;
 }
 
 .ios-capsule-fab:active {
-  transform: translateY(-14px) !important;
-  opacity: 0.8 !important;
+  transform: translateY(-12px) scale(0.93) !important;
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.6), inset -2px -2px 4px rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="light"] .ios-capsule-fab:active {
+  transform: translateY(-12px) scale(0.93) !important;
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.55), inset -2px -2px 4px rgba(255, 255, 255, 0.2) !important;
 }
 
 .ios-capsule-fab i {
