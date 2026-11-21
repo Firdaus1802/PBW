@@ -928,17 +928,58 @@ foreach ($kat_expenses as $ke) {
         }
 
         .macos-reveal-spinner {
-            width: 68px;
-            height: 68px;
-            border-radius: 22px;
+            width: 96px;
+            height: 96px;
+            border-radius: 26px;
             background: var(--app-brand-icon-bg);
             color: var(--app-brand-icon-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4), 0 0 35px rgba(99, 102, 241, 0.28);
-            animation: macosRevealPulse 1s ease-in-out infinite;
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+        }
+
+        .ios-wallet-svg {
+            transform-origin: center bottom;
+            animation: walletHapticSpring 1.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+        }
+
+        .apple-cash-bill {
+            transform-origin: center center;
+            animation: insertCashIntoWallet 1.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+        }
+
+        @keyframes insertCashIntoWallet {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            70% {
+                transform: translateY(20px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(24px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes walletHapticSpring {
+            0%, 35% {
+                transform: scale(1);
+            }
+            60% {
+                transform: scale(1.06, 0.95);
+            }
+            78% {
+                transform: scale(0.98, 1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         @keyframes macosRevealFadeOut {
@@ -982,7 +1023,39 @@ foreach ($kat_expenses as $ke) {
 
 <div class="macos-reveal-overlay">
     <div class="macos-reveal-spinner">
-        <i class="bi bi-wallet2"></i>
+        <svg class="ios-wallet-svg" viewBox="0 0 100 90" width="76" height="68" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="splashWalletBodyMac" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#282A36"/>
+                    <stop offset="100%" stop-color="#14151D"/>
+                </linearGradient>
+                <linearGradient id="splashWalletFrontMac" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1D1F29"/>
+                    <stop offset="100%" stop-color="#101117"/>
+                </linearGradient>
+                <linearGradient id="splashCashGradMac" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="50%" stop-color="#E2E8F0"/>
+                    <stop offset="100%" stop-color="#CBD5E1"/>
+                </linearGradient>
+                <linearGradient id="splashMetalMac" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="100%" stop-color="#94A3B8"/>
+                </linearGradient>
+            </defs>
+            <rect x="14" y="28" width="72" height="54" rx="14" fill="url(#splashWalletBodyMac)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+            <g class="apple-cash-bill">
+                <rect x="25" y="8" width="50" height="32" rx="6" fill="url(#splashCashGradMac)" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+                <circle cx="50" cy="24" r="6" stroke="#64748B" stroke-width="1.5" fill="none"/>
+                <line x1="32" y1="18" x2="38" y2="18" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="32" y1="30" x2="38" y2="30" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="62" y1="18" x2="68" y2="18" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="62" y1="30" x2="68" y2="30" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+            </g>
+            <path d="M14 46 C14 40 18 40 25 40 L75 40 C82 40 86 40 86 46 L86 68 C86 75.7 79.7 82 72 82 L28 82 C20.3 82 14 75.7 14 68 Z" fill="url(#splashWalletFrontMac)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+            <rect x="42" y="37" width="16" height="8" rx="4" fill="url(#splashMetalMac)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+            <circle cx="50" cy="41" r="1.5" fill="#0F172A"/>
+        </svg>
     </div>
 </div>
 
