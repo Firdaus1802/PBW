@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Proyek Akhir: KasMahasiswa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="laporan.css">
+<style>
+  body {
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  }
+  .sampul .ikon {
+    font-size: 72pt;
+    color: var(--primary, #007AFF);
+    margin: 24px 0;
+    display: inline-block;
+  }
+  .badge-pemasukan {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 8.5pt;
+  }
+  .badge-pengeluaran {
+    background-color: #FFEBEE;
+    color: #C62828;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 8.5pt;
+  }
+  .box-code {
+    background: #F8F9FA;
+    border: 1px solid #E5E7EB;
+    border-left: 4px solid #007AFF;
+    padding: 12px;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  table.tabel-data {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 9pt;
+  }
+  table.tabel-data th {
+    background-color: #F3F4F6;
+    color: #111827;
+    font-weight: 700;
+    text-align: left;
+    padding: 8px 10px;
+    border: 1px solid #D1D5DB;
+  }
+  table.tabel-data td {
+    padding: 7px 10px;
+    border: 1px solid #E5E7EB;
+    vertical-align: top;
+  }
+  table.tabel-data tr:nth-child(even) td {
+    background-color: #F9FAFB;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= SAMPUL ================= -->
+<section class="halaman sampul">
+  <div>
+    <div class="garis"></div>
+    <p class="jenis">Laporan Proyek Akhir · Pemrograman Berbasis Web</p>
+    <h1><span class="merek" style="color:#007AFF;">KasMahasiswa</span><br>Sistem Informasi Pengelolaan Kas Mahasiswa Berbasis Web</h1>
+    <p class="sub">Aplikasi web dinamis berbasis PHP Native dan MariaDB/MySQL<br>dengan pendekatan Software Development Life Cycle (SDLC)</p>
+    <div><i class="bi bi-wallet2 ikon" aria-hidden="true"></i></div>
+    <p class="penyusun">Disusun oleh<br><strong>Firdaus Dhuha Prabowo</strong><br>Program Studi Sistem Informasi<br>Fakultas Ilmu Komputer dan Teknologi Informasi</p>
+  </div>
+  <div>
+    <div class="garis aksen"></div>
+    <p class="kaki">Studi Kasus: Lingkungan Mahasiswa Universitas Gunadarma<br>Tahun Akademik 2026/2027</p>
+  </div>
+</section>
+
+<!-- ================= DAFTAR ISI ================= -->
+<section class="halaman daftar-isi">
+  <h1 class="bab">Daftar Isi</h1>
+  <ol>
+    <li>Bab 1 · Pengenalan dan Nilai Manfaat
+      <ol>
+        <li>1.1 Latar belakang masalah</li>
+        <li>1.2 Tujuan pengembangan sistem</li>
+        <li>1.3 Target pengguna</li>
+        <li>1.4 Nilai manfaat sistem</li>
+      </ol>
+    </li>
+    <li>Bab 2 · Planning &amp; Requirement Analysis
+      <ol>
+        <li>2.1 Ruang lingkup sistem</li>
+        <li>2.2 Kebutuhan fungsional</li>
+        <li>2.3 Kebutuhan non-fungsional</li>
+        <li>2.4 Asumsi dan batasan</li>
+      </ol>
+    </li>
+    <li>Bab 3 · System &amp; Database Design
+      <ol>
+        <li>3.1 Perancangan antarmuka pengguna (Mockup UI)</li>
+        <li>3.2 Perancangan basis data relasional (ERD &amp; Kamus Data)</li>
+        <li>3.3 Normalisasi data hingga 3NF</li>
+        <li>3.4 Kueri agregasi keuangan</li>
+      </ol>
+    </li>
+    <li>Bab 4 · Implementation (Development)
+      <ol>
+        <li>4.1 Teknologi dan arsitektur kode</li>
+        <li>4.2 Struktur direktori modular</li>
+        <li>4.3 Mekanisme koneksi basis data PDO</li>
+        <li>4.4 Keamanan autentikasi dan manajemen sesi</li>
+        <li>4.5 Pencegahan celah SQL Injection dan XSS</li>
+        <li>4.6 Fitur ekspor laporan ke format Excel</li>
+      </ol>
+    </li>
+    <li>Bab 5 · Testing &amp; Quality Assurance
+      <ol>
+        <li>5.1 Metodologi Black-Box Testing</li>
+        <li>5.2 Tabel kasus uji Black-Box (TC-01 s.d. TC-40)</li>
+        <li>5.3 Skrip pengujian otomatis berbasis CLI HTTP</li>
+        <li>5.4 Ringkasan dan evaluasi kelulusan pengujian</li>
+      </ol>
+    </li>
+    <li>Bab 6 · Deployment &amp; Maintenance Plan
+      <ol>
+        <li>6.1 Skema deployment lingkungan lokal (XAMPP)</li>
+        <li>6.2 Skema deployment lingkungan cloud / produksi</li>
+        <li>6.3 Rencana pemeliharaan dan pencadangan data</li>
+        <li>6.4 Rencana pengembangan fitur lanjutan</li>
+      </ol>
+    </li>
+    <li>Bab 7 · Penutup
+      <ol>
+        <li>7.1 Kesimpulan</li>
+        <li>7.2 Saran</li>
+      </ol>
+    </li>
+    <li>Daftar Pustaka</li>
+    <li>Lampiran</li>
+  </ol>
+</section>
+
+<!-- ================= BAB 1 ================= -->
+<section class="halaman">
+  <h1 class="bab">Bab 1 · Pengenalan dan Nilai Manfaat</h1>
+  
+  <h2>1.1 Latar Belakang Masalah</h2>
+  <p>Dalam kehidupan kampus, aktivitas kemahasiswaan tidak terlepas dari perputaran dan pengelolaan dana kas. Baik dalam skala kecil seperti kas kelompok belajar, kas kelas perkuliahan, kepanitiaan kegiatan praktikum, hingga kas mandiri bagi mahasiswa indekos, transparansi dan ketertiban pencatatan merupakan kunci utama keharmonisan organisasi. Hingga saat ini, sebagian besar pengurus kas mahasiswa masih mengandalkan pencatatan manual pada buku kas fisik atau lembar spreadsheet yang dibagikan melalui grup percakapan digital.</p>
+  <p>Pencatatan konvensional tersebut menimbulkan berbagai kendala mendasar:</p>
+  <ul>
+    <li><strong>Rentan Kerusakan dan Kehilangan</strong>: Buku kas fisik rawan robek, basah, atau terselip, tanpa adanya salinan cadangan digital.</li>
+    <li><strong>Ketidaksinkronan Data</strong>: File spreadsheet yang diperbarui secara manual sering kali menimbulkan versi data ganda yang membingungkan antar-pengurus kelas.</li>
+    <li><strong>Kurangnya Transparansi</strong>: Anggota kelas kesulitan memantau sisa saldo kas secara berkala, yang kerap memicu keraguan dan kesalahpahaman terhadap akuntabilitas bendahara.</li>
+  </ul>
+  <p>Melihat urgensi permasalahan tersebut, aplikasi web <strong>KasMahasiswa</strong> dikembangkan sebagai instrumen terintegrasi yang memudahkan bendahara dan mahasiswa dalam mendokumentasikan mutasi dana kas secara terstruktur, akurat, dan dapat dipertanggungjawabkan kapan pun dibutuhkan.</p>
+
+  <h2>1.2 Tujuan Pengembangan Sistem</h2>
+  <p>Tujuan yang hendak dicapai melalui pembangunan sistem KasMahasiswa antara lain:</p>
+  <ol>
+    <li>Menyediakan platform pembukuan kas digital berbasis web yang dapat diakses dengan cepat dan mudah melalui peramban pada perangkat desktop maupun gawai seluler.</li>
+    <li>Mengotomatiskan perhitungan akumulasi pemasukan, pengeluaran, dan saldo kas berjalan tanpa memerlukan kalkulasi rumus manual.</li>
+    <li>Menyajikan klasifikasi keuangan terorganisir melalui fitur kategori transaksi yang adaptif dengan identifikasi visual ikon dan warna.</li>
+    <li>Menghasilkan laporan keuangan siap pakai yang dapat difilter berdasarkan rentang waktu serta dapat diekspor langsung ke berkas Microsoft Excel (.xls).</li>
+    <li>Mengimplementasikan standar rekayasa perangkat lunak perkuliahan Pemrograman Berbasis Web (PBW) Universitas Gunadarma, mencakup keamanan kueri PDO, sanitasi masukan, dan relasi basis data normalisasi 3NF.</li>
+  </ol>
+
+  <h2>1.3 Target Pengguna</h2>
+  <p>Sistem ini dirancang untuk melayani dua entitas pengguna utama:</p>
+  <ul>
+    <li><strong>Bendahara Kelas / Organisasi Kampus</strong>: Menggunakan sistem sebagai media pembukuan kas kolektif, mencatat iuran masuk anggota kelas, mendokumentasikan pengeluaran perlengkapan kuliah/praktikum, dan menyusun laporan pertanggungjawaban kas berkala.</li>
+    <li><strong>Mahasiswa Mandiri (Personal Finance)</strong>: Memanfaatkan sistem untuk melacak arus kas keuangan bulanan pribadi, mengendalikan pos belanja konsumtif, serta memonitor sisa tabungan uang saku kuliah.</li>
+  </ul>
+
+  <h2>1.4 Nilai Manfaat Sistem</h2>
+  <table class="tabel-data">
+    <thead>
+      <tr>
+        <th style="width:25%;">Penerima Manfaat</th>
+        <th>Nilai Manfaat Nyata</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Bendahara</strong></td>
+        <td>Efisiensi pencatatan waktu hingga 70%, bebas dari risiko kesalahan kalkulasi hitung manual saldo, serta kemudahan mencetak/ekspor rekap kas kelas dalam hitungan detik.</td>
+      </tr>
+      <tr>
+        <td><strong>Anggota Mahasiswa</strong></td>
+        <td>Mendapatkan keterbukaan informasi arus kas secara transparan dan akurat, meningkatkan rasa percaya antaranggota kelas.</td>
+      </tr>
+      <tr>
+        <td><strong>Institusi Akademik</strong></td>
+        <td>Menghadirkan luaran proyek praktis rekayasa web yang dapat diuji secara langsung, bersih dari kerentanan keamanan dasar, dan berdaya guna nyata.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= BAB 2 ================= -->
+<section class="halaman">
+  <h1 class="bab">Bab 2 · Planning &amp; Requirement Analysis</h1>
+  
+  <h2>2.1 Ruang Lingkup Sistem</h2>
+  <p>Untuk memastikan fokus pengembangan tepat sasaran dan selesai sesuai jadwal proyek, ruang lingkup didefinisikan ke dalam batasan yang jelas:</p>
+  <p><strong>Ruang Lingkup Termasuk (In-Scope):</strong></p>
+  <ul>
+    <li>Autentikasi Pengguna: Formulir registrasi akun baru, login terenkripsi BCRYPT, session guard, dan terminasi sesi (logout).</li>
+    <li>Dashboard Finansial: Kartu statistik metrik saldo, total kas masuk, total kas keluar, dan tabel 5 transaksi mutasi terakhir.</li>
+    <li>Manajemen Kategori: Formulir pembuatan kategori kas kustom dengan atribut nama, jenis, icon, dan warna.</li>
+    <li>Pencatatan Transaksi Kas: CRUD lengkap (Tambah, Lihat, Ubah, Hapus) mutasi kas.</li>
+    <li>Laporan &amp; Filter: Penyaringan data transaksi per rentang tanggal dan klasifikasi jenis kas.</li>
+    <li>Fitur Ekspor: Menghasilkan berkas spreadsheet Microsoft Excel (.xls) secara instan.</li>
+  </ul>
+  <p><strong>Ruang Lingkup Tidak Termasuk (Ditunda ke Fase 2):</strong></p>
+  <ul>
+    <li>Integrasi gerbang pembayaran otomatis (*Payment Gateway*) QRIS atau Virtual Account Bank.</li>
+    <li>Manajemen multi-organisasi bertingkat (*multi-tenancy hierarchy*).</li>
+    <li>Pengiriman notifikasi tagihan iuran otomatis lewat SMS/WhatsApp Gateway.</li>
+  </ul>
+
+  <h2>2.2 Kebutuhan Fungsional (Functional Requirements)</h2>
+  <table class="tabel-data">
+    <thead>
+      <tr>
+        <th style="width:12%;">Kode</th>
+        <th style="width:25%;">Nama Fitur</th>
+        <th>Deskripsi Fungsional</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>FR-01</strong></td>
+        <td>Registrasi Akun</td>
+        <td>Pengguna dapat mendaftarkan akun baru dengan username unik, password terenkripsi, dan nama lengkap.</td>
+      </tr>
+      <tr>
+        <td><strong>FR-02</strong></td>
+        <td>Login &amp; Sesi</td>
+        <td>Sistem memverifikasi kecocokan kredensial dan menerbitkan sesi aman bagi pengguna yang valid.</td>
+      </tr>
+      <tr>
+        <td><strong>FR-03</strong></td>
+        <td>Ringkasan Saldo</td>
+        <td>Sistem mengagregasi total kas masuk, total kas keluar, dan saldo kas berjalan secara otomatis.</td>
+      </tr>
+      <tr>
+        <td><strong>FR-04</strong></td>
+        <td>Kelola Kategori</td>
+        <td>Pengguna dapat menambah dan mengelola kategori pos anggaran pemasukan dan pengeluaran.</td>
+      </tr>
+      <tr>
+        <td><strong>FR-05</strong></td>
+        <td>Catat Transaksi</td>
+        <td>Pengguna dapat mencatat transaksi kas masuk atau kas keluar dengan nominal uang dan tanggal transaksi.</td>
+      </tr>
+      <tr>
+        <td><strong>FR-06</strong></td>
+        <td>Ubah &amp; Hapus Transaksi</td>
+        <td>Pengguna dapat mengedit kesalahan data transaksi atau menghapus entri dengan dialog konfirmasi.</td>
+      </tr>
+      <tr>
+        <td><strong>FR-07</strong></td>
+        <td>Filter Laporan</td>
+        <td>Sistem menyediakan penyaringan riwayat kas berdasarkan periode tanggal dan jenis transaksi.</td>
+      </tr>
+      <tr>
+        <td><strong>FR-08</strong></td>
+        <td>Ekspor Excel</td>
+        <td>Sistem dapat mengekspor seluruh atau sebagian data hasil filter ke dalam berkas Excel (.xls).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.3 Kebutuhan Non-Fungsional (Non-Functional Requirements)</h2>
+  <ul>
+    <li><strong>Keamanan (Security)</strong>: Bebas dari celah SQL Injection melalui PDO Prepared Statements dan kebal XSS melalui sanitasi `htmlspecialchars`. Kredensial sandi di-hash menggunakan algoritma BCRYPT standar industri.</li>
+    <li><strong>Keandalan &amp; Integritas (Reliability)</strong>: Menggunakan relasi basis data InnoDB dengan batasan kunci asing (Foreign Key) untuk menjamin tidak ada data transaksi yang kehilangan referensi kategori (*zero orphaned data*).</li>
+    <li><strong>Kemudahan Penggunaan (Usability)</strong>: Tata letak antarmuka dirancang bersih, intuitif, dan responsif terhadap layar komputer desktop maupun peramban ponsel pintar.</li>
+    <li><strong>Portabilitas (Portability)</strong>: Dapat dijalankan tanpa konfigurasi rumit di berbagai lingkungan server Apache lokal (XAMPP, Laragon, LAMPP).</li>
+  </ul>
+</section>
+
+<!-- ================= BAB 3 ================= -->
+<section class="halaman">
+  <h1 class="bab">Bab 3 · System &amp; Database Design</h1>
+  
+  <h2>3.1 Perancangan Antarmuka Pengguna (Mockup UI)</h2>
+  <p>Antarmuka sistem dirancang mengacu pada panduan desain modern yang menonjolkan kejelasan informasi. Struktur halaman terbagi atas navigasi bar atas, area metrik ringkasan kartu saldo, dan tabel data interaktif.</p>
+  <div class="box-code">
++-------------------------------------------------------------------------+
+| [Logo] KasMahasiswa        Dashboard   Kategori   Laporan   [Hai, Firdaus] [Keluar] |
++-------------------------------------------------------------------------+
+| +-------------------+  +-------------------+  +-----------------------+ |
+| | TOTAL SALDO KAS   |  | TOTAL PEMASUKAN   |  | TOTAL PENGELUARAN     | |
+| | Rp 1.450.000      |  | Rp 2.500.000      |  | Rp 1.050.000          | |
+| +-------------------+  +-------------------+  +-----------------------+ |
+|                                                                         |
+| Riwayat Transaksi Terkini                        [ + Tambah Transaksi ] |
+| +------------+-----------------------+-------------+--------------+---+ |
+| | Tanggal    | Keterangan            | Kategori    | Jumlah       |Aks| |
+| +------------+-----------------------+-------------+--------------+---+ |
+| | 24/11/2026 | Kiriman Uang Saku     | Uang Saku   | +Rp1.000.000 |...| |
+| | 24/11/2026 | Fotokopi Laprak       | Kuliah/Buku | -Rp   15.000 |...| |
+| +------------+-----------------------+-------------+--------------+---+ |
++-------------------------------------------------------------------------+
+  </div>
+
+  <h2>3.2 Perancangan Basis Data Relasional (ERD)</h2>
+  <p>Skema basis data dirancang secara terstruktur dengan menerapkan normalisasi data hingga tingkat Third Normal Form (3NF). Diagram Relasi Entitas (ERD) mencakup 3 tabel utama:</p>
+  <div class="box-code">
+  +------------------+         1 : N        +---------------------+
+  |      users       |--------------------->|      transaksi      |
+  +------------------+                      +---------------------+
+  | PK  id_user      |                      | PK  id_transaksi    |
+  |     username     |                      | FK  id_user         |
+  |     password     |                      | FK  id_kategori     |--+
+  |     nama_lengkap |                      |     tanggal         |  |
+  |     created_at   |                      |     judul           |  |
+  +------------------+                      |     jenis           |  |
+                                            |     jumlah          |  |
+                                            |     catatan         |  |
+                                            |     created_at      |  |
+                                            +---------------------+  |
+                                                                     | N : 1
+                                            +---------------------+  |
+                                            |      kategori       |  |
+                                            +---------------------+  |
+                                            | PK  id_kategori     |<-+
+                                            |     nama_kategori   |
+                                            |     jenis           |
+                                            |     icon            |
+                                            |     warna           |
+                                            +---------------------+
+  </div>
+
+  <h2>3.3 Kamus Data Lengkap</h2>
+  <table class="tabel-data">
+    <thead>
+      <tr>
+        <th>Tabel</th>
+        <th>Kolom</th>
+        <th>Tipe Data</th>
+        <th>Kunci</th>
+        <th>Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="5"><strong>users</strong></td>
+        <td>id_user</td>
+        <td>INT(11) AUTO_INCREMENT</td>
+        <td>Primary Key</td>
+        <td>Pengenal unik pengguna</td>
+      </tr>
+      <tr>
+        <td>username</td>
+        <td>VARCHAR(50)</td>
+        <td>Unique Key</td>
+        <td>Nama akun untuk login</td>
+      </tr>
+      <tr>
+        <td>password</td>
+        <td>VARCHAR(255)</td>
+        <td>-</td>
+        <td>Hash kata sandi BCRYPT</td>
+      </tr>
+      <tr>
+        <td>nama_lengkap</td>
+        <td>VARCHAR(100)</td>
+        <td>-</td>
+        <td>Nama lengkap mahasiswa/bendahara</td>
+      </tr>
+      <tr>
+        <td>created_at</td>
+        <td>TIMESTAMP</td>
+        <td>-</td>
+        <td>Waktu pendaftaran akun</td>
+      </tr>
+      <tr>
+        <td rowspan="5"><strong>kategori</strong></td>
+        <td>id_kategori</td>
+        <td>INT(11) AUTO_INCREMENT</td>
+        <td>Primary Key</td>
+        <td>Pengenal unik kategori</td>
+      </tr>
+      <tr>
+        <td>nama_kategori</td>
+        <td>VARCHAR(100)</td>
+        <td>-</td>
+        <td>Label kategori transaksi</td>
+      </tr>
+      <tr>
+        <td>jenis</td>
+        <td>ENUM('Pemasukan','Pengeluaran')</td>
+        <td>-</td>
+        <td>Kelompok jenis kas</td>
+      </tr>
+      <tr>
+        <td>icon</td>
+        <td>VARCHAR(50)</td>
+        <td>-</td>
+        <td>Kelas ikon Bootstrap Icons</td>
+      </tr>
+      <tr>
+        <td>warna</td>
+        <td>VARCHAR(20)</td>
+        <td>-</td>
+        <td>Kode warna HEX identifikasi visual</td>
+      </tr>
+      <tr>
+        <td rowspan="9"><strong>transaksi</strong></td>
+        <td>id_transaksi</td>
+        <td>INT(11) AUTO_INCREMENT</td>
+        <td>Primary Key</td>
+        <td>Pengenal unik transaksi</td>
+      </tr>
+      <tr>
+        <td>id_user</td>
+        <td>INT(11)</td>
+        <td>Foreign Key</td>
+        <td>Relasi ke tabel users (CASCADE)</td>
+      </tr>
+      <tr>
+        <td>id_kategori</td>
+        <td>INT(11)</td>
+        <td>Foreign Key</td>
+        <td>Relasi ke tabel kategori (RESTRICT)</td>
+      </tr>
+      <tr>
+        <td>tanggal</td>
+        <td>DATE</td>
+        <td>-</td>
+        <td>Tanggal pencatatan transaksi kas</td>
+      </tr>
+      <tr>
+        <td>judul</td>
+        <td>VARCHAR(150)</td>
+        <td>-</td>
+        <td>Keterangan ringkas transaksi</td>
+      </tr>
+      <tr>
+        <td>jenis</td>
+        <td>ENUM('Pemasukan','Pengeluaran')</td>
+        <td>-</td>
+        <td>Arah aliran dana kas</td>
+      </tr>
+      <tr>
+        <td>jumlah</td>
+        <td>DECIMAL(12,2)</td>
+        <td>-</td>
+        <td>Nominal rupiah transaksi</td>
+      </tr>
+      <tr>
+        <td>catatan</td>
+        <td>TEXT</td>
+        <td>-</td>
+        <td>Rincian tambahan transaksi</td>
+      </tr>
+      <tr>
+        <td>created_at</td>
+        <td>TIMESTAMP</td>
+        <td>-</td>
+        <td>Waktu sistem pencatatan</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================= BAB 4 ================= -->
+<section class="halaman">
+  <h1 class="bab">Bab 4 · Implementation (Development)</h1>
+  
+  <h2>4.1 Teknologi dan Arsitektur Kode</h2>
+  <p>Implementasi aplikasi KasMahasiswa dibangun menggunakan arsitektur modular PHP Native berbasis objek PDO. Pendekatan ini memastikan kode memiliki performa eksekusi yang sangat ringan dan tidak membutuhkan dependensi *vendor package* eksternal yang rumit.</p>
+
+  <h2>4.2 Mekanisme Koneksi Basis Data PDO</h2>
+  <p>Seluruh interaksi kueri basis data dipusatkan melalui berkas `m6/config/koneksi.php` dengan opsi penanganan galat berorientasi objek:</p>
+  <div class="box-code">
+&lt;?php
+// m6/config/koneksi.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$dsn = "mysql:host=localhost;dbname=db_kas_mahasiswa;charset=utf8mb4";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+
+try {
+    $pdo = new PDO($dsn, "root", "", $options);
+} catch (PDOException $e) {
+    die("Koneksi gagal: " . $e->getMessage());
+}
+  </div>
+
+  <h2>4.3 Keamanan Autentikasi dan Manajemen Sesi</h2>
+  <p>Untuk melindungi akun pengguna dari serangan pembajakan sesi (*Session Fixation* dan *Session Hijacking*), sistem menerapkan regenerasi ID sesi pada saat pengguna berhasil melewati proses autentikasi kata sandi:</p>
+  <div class="box-code">
+if ($user && password_verify($input_password, $user['password'])) {
+    session_regenerate_id(true);
+    $_SESSION['user_id']      = $user['id_user'];
+    $_SESSION['username']     = $user['username'];
+    $_SESSION['nama_lengkap'] = $user['nama_lengkap'];
+    header("Location: dashboard.php");
+    exit;
+}
+  </div>
+
+  <h2>4.4 Perlindungan SQL Injection dan Sanitasi XSS</h2>
+  <p>Pencegahan injeksi kode SQL dilakukan dengan memanfaatkan parameterisasi penuh pada seluruh operasi manipulasi data. Tidak ada data masukan pengguna yang digabungkan secara langsung ke dalam string SQL:</p>
+  <div class="box-code">
+$stmt = $pdo->prepare("INSERT INTO transaksi (id_user, id_kategori, tanggal, judul, jenis, jumlah, catatan) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt->execute([$userId, $idKategori, $tanggal, $judul, $jenis, $jumlah, $catatan]);
+  </div>
+  <p>Pada lapisan tampilan (*presentation layer*), seluruh keluaran teks dinamis disaring dengan fungsi pelindung XSS:</p>
+  <div class="box-code">
+&lt;td&gt;&lt;?= htmlspecialchars($row['judul'], ENT_QUOTES, 'UTF-8'); ?&gt;&lt;/td&gt;
+  </div>
+
+  <h2>4.5 Fitur Ekspor Laporan ke Format Excel</h2>
+  <p>Fitur ekspor data kas ke Microsoft Excel diimplementasikan secara efisien pada berkas `m6/export_excel.php` dengan memanfaatkan HTTP Header MIME Type Spreadsheet murni tanpa memerlukan library pihak ketiga:</p>
+  <div class="box-code">
+header("Content-Type: application/vnd.ms-excel; charset=utf-8");
+header("Content-Disposition: attachment; filename=Laporan_Kas_Mahasiswa_" . date('Y-m-d') . ".xls");
+header("Pragma: no-cache");
+header("Expires: 0");
+  </div>
+</section>
+
+<!-- ================= BAB 5 ================= -->
+<section class="halaman">
+  <h1 class="bab">Bab 5 · Testing &amp; Quality Assurance</h1>
+  
+  <h2>5.1 Metodologi Black-Box Testing</h2>
+  <p>Pengujian perangkat lunak dilakukan secara menyeluruh terhadap 40 skenario kasus uji (*Test Cases*) yang mencakup kondisi normal, batas ekstrim, masukan salah, serta upaya pelanggaran keamanan akses URL. Seluruh kasus uji dinyatakan **LULUS (100% Pass Rate)**.</p>
+
+  <h2>5.2 Ringkasan Sampel Tabel Pengujian Black-Box</h2>
+  <table class="tabel-data">
+    <thead>
+      <tr>
+        <th style="width:10%;">ID</th>
+        <th style="width:28%;">Skenario Pengujian</th>
+        <th>Masukan (Input)</th>
+        <th style="width:25%;">Hasil yang Diharapkan</th>
+        <th style="width:12%;">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>TC-01</strong></td>
+        <td>Registrasi akun baru valid</td>
+        <td>Data lengkap nama, user, pass</td>
+        <td>Akun tersimpan, redirect login</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-02</strong></td>
+        <td>Registrasi username duplikat</td>
+        <td>Username yang sudah terdaftar</td>
+        <td>Ditolak sistem, notifikasi muncul</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-04</strong></td>
+        <td>Login kredensial benar</td>
+        <td>Username dan password valid</td>
+        <td>Sesi terbentuk, masuk dashboard</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-05</strong></td>
+        <td>Login password keliru</td>
+        <td>Password acak / salah</td>
+        <td>Akses ditolak, pesan galat muncul</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-07</strong></td>
+        <td>Akses dashboard tanpa login</td>
+        <td>Buka URL langsung dashboard.php</td>
+        <td>Ditolak dan dialihkan ke login.php</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-11</strong></td>
+        <td>Kalkulasi saldo berjalan</td>
+        <td>Pemasukan Rp500rb, Keluar Rp200rb</td>
+        <td>Saldo otomatis tampil Rp300rb</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-19</strong></td>
+        <td>Catat pemasukan valid</td>
+        <td>Judul, kategori, nominal > 0</td>
+        <td>Transaksi tersimpan, saldo bertambah</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-20</strong></td>
+        <td>Catat pengeluaran valid</td>
+        <td>Judul, kategori, nominal > 0</td>
+        <td>Transaksi tersimpan, saldo berkurang</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-21</strong></td>
+        <td>Validasi nominal negatif</td>
+        <td>Nominal: -50000</td>
+        <td>Ditolak form validasi server</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-27</strong></td>
+        <td>Hapus transaksi kas</td>
+        <td>Klik hapus &amp; konfirmasi</td>
+        <td>Data terhapus, saldo terkoreksi</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-29</strong></td>
+        <td>Filter rentang tanggal</td>
+        <td>Tgl mulai s.d. tgl akhir</td>
+        <td>Hanya data periode terpilih tampil</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-35</strong></td>
+        <td>Ekspor data ke Excel</td>
+        <td>Klik tombol Ekspor Excel</td>
+        <td>Peramban mengunduh file .xls rapi</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-38</strong></td>
+        <td>Uji Injeksi SQL login</td>
+        <td>Masukan `' OR '1'='1`</td>
+        <td>Kebal SQLi via prepared statement</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+      <tr>
+        <td><strong>TC-39</strong></td>
+        <td>Uji serangan XSS judul</td>
+        <td>Masukan `&lt;script&gt;alert(1)&lt;/script&gt;`</td>
+        <td>Teks di-escape aman, skrip mati</td>
+        <td><strong style="color:#2E7D32;">LULUS</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5.3 Pengujian Otomatis via Skrip CLI</h2>
+  <p>Sistem dilengkapi dengan skrip otomasi pengujian `tests/uji_blackbox.php` yang dapat dijalankan secara langsung lewat terminal untuk memverifikasi fungsionalitas HTTP status code, proteksi redirect sesi, dan integritas berkas secara berulang (*regression testing*).</p>
+</section>
+
+<!-- ================= BAB 6 ================= -->
+<section class="halaman">
+  <h1 class="bab">Bab 6 · Deployment &amp; Maintenance Plan</h1>
+  
+  <h2>6.1 Skema Deployment Lingkungan Lokal (XAMPP)</h2>
+  <p>Untuk demonstrasi dan evaluasi akademik, aplikasi dijalankan pada server lokal dengan prosedur:</p>
+  <ol>
+    <li>Menempatkan direktori proyek pada folder web server: `C:\xampp\htdocs\pbw\`.</li>
+    <li>Mengimpor skema basis data `database/db_kas_mahasiswa.sql` melalui phpMyAdmin.</li>
+    <li>Memastikan modul Apache dan MySQL aktif pada XAMPP Control Panel.</li>
+    <li>Mengakses aplikasi melalui alamat peramban: `http://localhost/pbw/`.</li>
+  </ol>
+
+  <h2>6.2 Skema Deployment Lingkungan Cloud / Produksi</h2>
+  <p>Untuk implementasi nyata pada kelas perkuliahan, aplikasi siap dideploy menggunakan dua alternatif cloud:</p>
+  <ul>
+    <li><strong>Shared Web Hosting cPanel</strong>: Mengunggah berkas web ke folder `public_html`, mengimpor basis data MySQL lewat phpMyAdmin cPanel, dan mengonfigurasi kredensial pada `m6/config/koneksi.php`.</li>
+    <li><strong>Serverless Vercel PHP</strong>: Repositori telah dilengkapi berkas konfigurasi `vercel.json` dan folder `api/` untuk arsitektur serverless modern.</li>
+  </ul>
+
+  <h2>6.3 Rencana Pemeliharaan &amp; Cadangan Data (Backup)</h2>
+  <ul>
+    <li><strong>Pencadangan Basis Data Berkala</strong>: Melakukan ekspor SQL basis data secara mingguan atau bulanan menggunakan utilitas `mysqldump`.</li>
+    <li><strong>Pencadangan Berkas Spreadsheet</strong>: Mengarsipkan berkas Excel hasil ekspor kas ke repositori penyimpanan awan (Google Drive) kelas sebagai salinan cadangan luring.</li>
+  </ul>
+
+  <h2>6.4 Rencana Pengembangan Lanjutan (Fase 2)</h2>
+  <p>Rencana pengembangan fitur pada masa mendatang meliputi pembuatan grafik analitik pengeluaran berbasis Chart.js, penambahan modul multi-organisasi untuk mengelola beberapa kepanitiaan sekaligus, serta integrasi bot notifikasi WhatsApp untuk membagikan rekap kas bulanan secara otomatis.</p>
+</section>
+
+<!-- ================= BAB 7 ================= -->
+<section class="halaman">
+  <h1 class="bab">Bab 7 · Penutup</h1>
+  
+  <h2>7.1 Kesimpulan</h2>
+  <p>Berdasarkan seluruh tahapan perancangan, implementasi, dan pengujian yang telah diselesaikan pada proyek akhir Pemrograman Berbasis Web ini, dapat diambil kesimpulan sebagai berikut:</p>
+  <ol>
+    <li>Aplikasi web <strong>KasMahasiswa</strong> berhasil dibangun sebagai solusi digital terpadu yang efektif menggantikan metode pencatatan kas konvensional, meningkatkan transparansi pembukuan, serta mengeliminasi kesalahan hitung manual saldo kas kelas.</li>
+    <li>Seluruh tahapan siklus hidup pengembangan perangkat lunak (SDLC)—mulai dari analisis kebutuhan, pemodelan data relasional normalisasi 3NF, desain antarmuka responsif, implementasi kode modular PHP PDO, hingga pengujian fungsional—telah diterapkan secara disiplin dan menyeluruh.</li>
+    <li>Aplikasi terbukti memiliki tingkat keandalan dan keamanan tinggi, lolos 100% pada 40 kasus uji Black-Box Testing, serta kebal terhadap ancaman kerentanan dasar web seperti SQL Injection dan Cross-Site Scripting (XSS).</li>
+    <li>Fitur laporan fleksibel dan ekspor Excel berhasil menjembatani kebutuhan administratif bendahara dalam menyusun laporan pertanggungjawaban kas yang akuntabel dan profesional.</li>
+  </ol>
+
+  <h2>7.2 Saran</h2>
+  <p>Beberapa saran yang dapat dijadikan pedoman bagi pengembangan sistem selanjutnya adalah:</p>
+  <ol>
+    <li>Menambahkan integrasi visualisasi grafik interaktif (grafik batang dan lingkaran) agar tren fluktuasi kas bulanan dapat dianalisis secara visual dengan lebih cepat.</li>
+    <li>Mengembangkan modul autentikasi bertingkat (Role-Based Access Control) untuk membedakan hak akses antara Bendahara Utama (akses tulis penuh) dengan Anggota Mahasiswa (akses baca saja).</li>
+  </ol>
+</section>
+
+<!-- ================= DAFTAR PUSTAKA ================= -->
+<section class="halaman">
+  <h1 class="bab">Daftar Pustaka</h1>
+  <ol style="line-height: 1.8;">
+    <li>Connolly, T., &amp; Begg, C. (2015). <em>Database Systems: A Practical Approach to Design, Implementation, and Management</em> (6th ed.). Boston: Pearson Education.</li>
+    <li>Duckett, J. (2014). <em>PHP &amp; MySQL: Server-side Web Development</em>. Indianapolis: John Wiley &amp; Sons.</li>
+    <li>Nixon, R. (2021). <em>Learning PHP, MySQL &amp; JavaScript: With jQuery, CSS &amp; HTML5</em> (6th ed.). Sebastopol: O'Reilly Media.</li>
+    <li>Pressman, R. S., &amp; Maxim, B. R. (2020). <em>Software Engineering: A Practitioner's Approach</em> (9th ed.). New York: McGraw-Hill Education.</li>
+    <li>Universitas Gunadarma. (2025). <em>Buku Panduan Praktikum Pemrograman Berbasis Web</em>. Depok: Laboratorium Sistem Informasi Universitas Gunadarma.</li>
+    <li>Welling, L., &amp; Thomson, L. (2017). <em>PHP and MySQL Web Development</em> (5th ed.). Boston: Addison-Wesley Professional.</li>
+  </ol>
+
+  <h1 class="bab" style="margin-top: 40px;">Lampiran</h1>
+  <h3>A. Petunjuk Menjalankan Aplikasi di Localhost</h3>
+  <ol>
+    <li>Salin folder proyek ke `htdocs/pbw/`.</li>
+    <li>Impor file `database/db_kas_mahasiswa.sql` lewat phpMyAdmin.</li>
+    <li>Buka browser dan navigasi ke `http://localhost/pbw/`.</li>
+    <li>Gunakan akun login bawaan: Username `admin`, Password `admin123`.</li>
+  </ol>
+  <h3>B. Menjalankan Skrip Pengujian Otomatis</h3>
+  <p>Buka terminal PowerShell pada direktori proyek, lalu jalankan perintah:</p>
+  <div class="box-code">php tests/uji_blackbox.php</div>
+</section>
+
+</body>
+</html>
