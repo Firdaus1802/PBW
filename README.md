@@ -6,25 +6,30 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 
 ## Fitur Utama
 
-**Manajemen Autentikasi**
+### Manajemen Autentikasi
+
 - **Registrasi Akun**: Pendaftaran akun mahasiswa/bendahara baru dengan validasi username unik dan hashing password yang aman (`password_hash` BCRYPT).
 - **Login & Sesi Aman**: Autentikasi pengguna berbasis session PHP dengan regenerasi ID session untuk mencegah *session fixation*.
 - **Logout Aman**: Pembersihan session dan proteksi akses halaman privat.
 
-**Dashboard Finansial Interaktif**
+### Dashboard Finansial Interaktif
+
 - **Kartu Ringkasan Keuangan**: Menampilkan akumulasi Total Pemasukan, Total Pengeluaran, dan Sisa Saldo Kas saat ini secara real-time.
 - **Transaksi Terkini**: Tabel 5 transaksi kas terakhir untuk memantau aktivitas kas masuk dan keluar secara cepat.
 - **Shortcut Aksi Cepat**: Tombol pintas untuk menambah transaksi baru dan melihat laporan.
 
-**Pengelolaan Kategori Kas Dinamis**
+### Pengelolaan Kategori Kas Dinamis
+
 - **Kategori Pemasukan & Pengeluaran**: Pengelompokan jenis kas (misal: Uang Saku, Freelance, Biaya Kuliah, Konsumsi, Transportasi).
 - **Kustomisasi Visual**: Setiap kategori dapat diberi ikon Bootstrap Icons dan kode warna hex untuk mempermudah identifikasi visual pada laporan.
 
-**Pencatatan Transaksi Kas (CRUD)**
+### Pencatatan Transaksi Kas (CRUD)
+
 - **Catat Transaksi**: Formulir pencatatan kas masuk atau kas keluar dengan input tanggal, judul/keterangan, kategori, nominal (IDR), dan catatan tambahan.
 - **Edit & Hapus Transaksi**: Kemudahan merevisi kesalahan pencatatan atau menghapus transaksi dengan dialog konfirmasi keamanan.
 
-**Laporan & Ekspor Data**
+### Laporan & Ekspor Data
+
 - **Penyaringan Rentang Tanggal**: Filter transaksi kas berdasarkan tanggal mulai dan tanggal akhir.
 - **Penyaringan Jenis Transaksi**: Menampilkan Semua, Khusus Pemasukan, atau Khusus Pengeluaran.
 - **Ekspor Excel**: Ekspor rekapitulasi data kas ke file format `.xls` / Spreadsheet untuk pelaporan resmi kepada dosen, ketua kelas, atau anggota.
@@ -32,7 +37,7 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 ## Teknologi
 
 | Komponen | Spesifikasi / Teknologi |
-|---|---|
+| --- | --- |
 | Server-Side | PHP 8.x Native dengan PDO (*Prepared Statements*) |
 | Database | MariaDB 10.4 / MySQL (Engine InnoDB, Relasi Foreign Key PK-FK, 3NF) |
 | Web Server | Apache (XAMPP / Laragon) |
@@ -53,15 +58,15 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 5. **Buka Aplikasi**:
    - Buka peramban dan akses: `http://localhost/pbw/` (akan otomatis diarahkan ke antarmuka aplikasi di `/m6/index.php`).
 
-**Akun Demo Bawaan:**
+### Akun Demo Bawaan
 
 | Username | Password | Keterangan |
-|---|---|---|
+| --- | --- | --- |
 | `admin` | `admin123` | Akun demo Administrator / Bendahara Mahasiswa |
 
 ## Struktur Repositori
 
-```
+```text
 ├── database/
 │   └── db_kas_mahasiswa.sql       # Struktur skema SQL relasional + data awal dummy
 ├── docs/
