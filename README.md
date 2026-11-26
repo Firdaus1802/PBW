@@ -98,8 +98,10 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 
 - **Anti SQL Injection**: Seluruh transaksi basis data menggunakan PDO *Prepared Statements* dengan *parameterized binding*.
 - **Anti Cross-Site Scripting (XSS)**: Data masukan pengguna disanitasi sebelum ditampilkan ke peramban menggunakan `htmlspecialchars()`.
-- **Enkripsi Kredensial**: Password disimpan menggunakan algoritma standar industri BCRYPT (`password_hash` dan `password_verify`).
-- **Integritas Referensial**: Basis data menerapkan *Foreign Key Constraint* (ON UPDATE CASCADE, ON DELETE RESTRICT) agar tidak terjadi data transaksi yatim (*orphaned records*).
+- **Proteksi CSRF**: Seluruh formulir `POST` (login, registrasi, transaksi, dan kategori) dilindungi token CSRF yang diverifikasi menggunakan `hash_equals()`.
+- **Enkripsi Kredensial & Sesi Aman**: Password disimpan dengan algoritma BCRYPT (`password_hash` / `password_verify`), disertai *rate limiting* login, cookie sesi `httponly` + `SameSite=Lax`, dan *security headers* (`X-Frame-Options`, `X-Content-Type-Options`).
+- **Anti-IDOR & Integritas Referensial**: Kueri edit/hapus memverifikasi kepemilikan `id_user`, serta basis data menerapkan *Foreign Key Constraint* (`ON UPDATE CASCADE`, `ON DELETE RESTRICT`).
+- **Proteksi Direktori & Error Handling**: Akses langsung ke `database/` dan `m6/config/` diblokir lewat `.htaccess`, dan pesan galat basis data dicatat ke `error_log` tanpa diekspos ke pengguna.
 
 ## Dokumentasi & Pengujian
 
