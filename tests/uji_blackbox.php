@@ -178,13 +178,14 @@ run_test("TC-10", "Verifikasi Kelengkapan 5 Dokumen SDLC di docs/", function() {
     return true;
 });
 
-run_test("TC-11", "Verifikasi Ketersediaan Berkas Laporan HTML & PDF", function() {
-    $html = __DIR__ . '/../docs/laporan/laporan.html';
-    $pdf = __DIR__ . '/../docs/laporan/laporan.pdf';
-    $css = __DIR__ . '/../docs/laporan/laporan.css';
-    if (!file_exists($html) || filesize($html) < 2000) return "laporan.html belum lengkap";
+run_test("TC-11", "Verifikasi Ketersediaan Berkas Laporan DOCX, PDF & Gambar", function() {
+    $docx = __DIR__ . '/../docs/laporan/laporan_kas_mahasiswa.docx';
+    $pdf  = __DIR__ . '/../docs/laporan/laporan.pdf';
+    $erd  = __DIR__ . '/../docs/laporan/img/erd.png';
+    $ui   = __DIR__ . '/../docs/laporan/img/ui_dashboard.png';
+    if (!file_exists($docx) || filesize($docx) < 10000) return "laporan_kas_mahasiswa.docx belum lengkap";
     if (!file_exists($pdf) || filesize($pdf) < 50000) return "laporan.pdf belum siap";
-    if (!file_exists($css)) return "laporan.css tidak ditemukan";
+    if (!file_exists($erd) || !file_exists($ui)) return "Gambar ERD/UI di docs/laporan/img/ belum lengkap";
     return true;
 });
 

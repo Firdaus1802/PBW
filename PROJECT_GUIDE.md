@@ -56,4 +56,4 @@
 - [x] Tahap 3: Implementasi Arsitektur Kode (`docs/03_implementasi.md`)
 - [x] Tahap 4: Pengujian Black-Box Komprehensif (`docs/04_pengujian.md` & `tests/uji_blackbox.php`)
 - [x] Tahap 5: Rencana Deployment & Pemeliharaan (`docs/05_deploy_pemeliharaan.md`)
-- [x] Laporan Proyek Akhir Lengkap (`docs/laporan/laporan.html` & `docs/laporan/laporan.pdf`)
+- [x] Laporan Proyek Akhir Lengkap (`docs/laporan/laporan_kas_mahasiswa.docx` & `docs/laporan/laporan.pdf`)

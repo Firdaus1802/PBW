@@ -72,9 +72,9 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 │   ├── 04_pengujian.md            # Tahap 4: Tabel Black-Box Testing (40 Kasus Uji)
 │   ├── 05_deploy_pemeliharaan.md  # Tahap 5: Rencana Deployment & Maintenance
 │   └── laporan/
-│       ├── laporan.css            # Desain lembar cetak laporan formal A4
-│       ├── laporan.html           # Naskah laporan proyek akhir komprehensif
-│       └── laporan.pdf            # Berkas cetak laporan PDF siap kumpul
+│       ├── img/                       # Gambar ERD & tampilan antarmuka aplikasi
+│       ├── laporan_kas_mahasiswa.docx # Naskah makalah proyek akhir format Gunadarma
+│       └── laporan.pdf                # Berkas cetak laporan PDF siap kumpul
 ├── tests/
 │   └── uji_blackbox.php           # Skrip otomatis uji coba Black-Box via HTTP/CLI
 ├── m6/                            # Direktori implementasi aplikasi Kas Mahasiswa
