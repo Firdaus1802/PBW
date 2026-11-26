@@ -25,6 +25,9 @@ if (!$trx) {
 $error_msg = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) {
+    if (!verify_csrf_token()) {
+        $error_msg = 'Token keamanan tidak valid. Silakan muat ulang halaman.';
+    } else {
     $id_kategori = (int)$_POST['id_kategori'];
     $tanggal     = sanitize($_POST['tanggal']);
     $judul       = sanitize($_POST['judul']);
@@ -48,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) 
         }
     } else {
         $error_msg = 'Harap isi semua kolom wajib dengan benar.';
+    }
     }
 }
 
@@ -96,6 +100,7 @@ $kategori_list = $pdo->query("SELECT * FROM kategori ORDER BY jenis ASC, nama_ka
 
         <div class="ios-card p-4">
             <form action="" method="POST">
+    <?= csrf_field() ?>
                 
                 
                 <div class="mb-3 text-center">

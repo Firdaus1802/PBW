@@ -17,7 +17,9 @@ if ($id > 0) {
         header("Location: " . base_url("index.php?msg=deleted"));
         exit;
     } catch (PDOException $e) {
-        die("Gagal menghapus transaksi: " . $e->getMessage());
+        error_log("Gagal menghapus transaksi: " . $e->getMessage());
+        header("Location: " . base_url("index.php?msg=error"));
+        exit;
     }
 } else {
     header("Location: " . base_url("index.php"));

@@ -37,6 +37,15 @@ function csrf_token() {
     return $_SESSION['csrf_token'];
 }
 
+function csrf_field() {
+    return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') . '">';
+}
+
+function verify_csrf_token() {
+    $token = $_POST['csrf_token'] ?? '';
+    return is_string($token) && !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
+
 if (!defined('DOMPETKU_SECRET')) {
     define('DOMPETKU_SECRET', 'dompetku_pbw_secret_key_gunadarma_2026');
 }
@@ -150,7 +159,8 @@ try {
             ");
         }
     } catch (Throwable $sqle) {
-        die("Koneksi Database Gagal: " . $e->getMessage());
+        error_log("DB Connection Error: " . $e->getMessage());
+        die("Koneksi basis data gagal. Silakan periksa layanan MySQL/MariaDB.");
     }
 }
 

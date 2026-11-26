@@ -81,7 +81,11 @@ if (isset($_GET['msg'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !verify_csrf_token()) {
+    $alert_msg = '<div class="alert alert-danger rounded-4">Token keamanan tidak valid. Silakan muat ulang halaman.</div>';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['update_transaksi'])) {
     $id_trx      = (int)($_POST['id_transaksi'] ?? 0);
     $id_kategori = (int)($_POST['id_kategori'] ?? 0);
     $tanggal     = sanitize($_POST['tanggal'] ?? date('Y-m-d'));
@@ -113,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) 
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['tambah_transaksi']) || isset($_POST['judul']) || isset($_POST['jumlah']))) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && (isset($_POST['tambah_transaksi']) || isset($_POST['judul']) || isset($_POST['jumlah']))) {
     $id_kategori = (int)($_POST['id_kategori'] ?? 0);
     $tanggal     = sanitize($_POST['tanggal'] ?? date('Y-m-d'));
     if (empty($tanggal)) $tanggal = date('Y-m-d');
@@ -171,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['tambah_transaksi']) 
 
 $user_id = (int)($_SESSION['user_id'] ?? 1);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['tambah_kategori'])) {
     $nama_kategori = sanitize($_POST['nama_kategori']);
     $jenis         = sanitize($_POST['jenis']);
     $icon          = sanitize($_POST['icon']);
@@ -1065,6 +1069,7 @@ foreach ($kat_expenses as $ke) {
                 </div>
                 
                 <form action="<?= base_url('index.php') ?>" method="POST" id="formCatatTransaksi">
+    <?= csrf_field() ?>
                     <input type="hidden" name="tambah_transaksi" value="1">
                     <input type="hidden" name="view" value="mobile">
                     <div class="modal-body p-3 p-md-4">
@@ -1242,6 +1247,7 @@ foreach ($kat_expenses as $ke) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="<?= base_url('index.php') ?>" method="POST">
+    <?= csrf_field() ?>
                     <input type="hidden" name="view" value="mobile">
                     <div class="modal-body py-3">
                         <div class="mb-3 text-center">
@@ -1304,6 +1310,7 @@ foreach ($kat_expenses as $ke) {
                 </div>
 
                 <form action="<?= base_url('index.php') ?>" method="POST" id="formEditTrx">
+    <?= csrf_field() ?>
                     <input type="hidden" name="update_transaksi" value="1">
                     <input type="hidden" name="id_transaksi" id="editTrxId">
                     <input type="hidden" name="jenis" id="editTrxJenis" value="Pengeluaran">

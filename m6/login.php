@@ -59,6 +59,8 @@ $fails = $_SESSION[$fail_key] ?? ['count' => 0, 'last_time' => 0];
 if ($fails['count'] >= 5 && (time() - $fails['last_time']) < 60) {
     $remaining = 60 - (time() - $fails['last_time']);
     $error_msg = 'Terlalu banyak percobaan login gagal. Mohon tunggu ' . $remaining . ' detik demi keamanan.';
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !verify_csrf_token()) {
+    $error_msg = 'Sesi formulir kedaluwarsa. Silakan muat ulang halaman dan coba lagi.';
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = strtolower(trim(sanitize($_POST['username'] ?? '')));
     $password = trim($_POST['password'] ?? '');
@@ -833,6 +835,7 @@ if ($fails['count'] >= 5 && (time() - $fails['last_time']) < 60) {
             <?php endif; ?>
 
             <form action="login.php" method="POST" id="loginForm">
+    <?= csrf_field() ?>
                 <input type="hidden" name="client_is_mobile" id="clientIsMobile" value="0">
 
                 <div class="mb-3">

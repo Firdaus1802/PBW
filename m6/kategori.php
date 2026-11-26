@@ -9,7 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 $alert_msg = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
-    $nama_kategori = sanitize($_POST['nama_kategori']);
+    if (!verify_csrf_token()) {
+        $alert_msg = '<div class="alert alert-danger rounded-4">Token keamanan tidak valid. Silakan muat ulang halaman.</div>';
+    } else {
+        $nama_kategori = sanitize($_POST['nama_kategori']);
     $jenis         = sanitize($_POST['jenis']);
     $icon          = sanitize($_POST['icon']);
 
@@ -20,8 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
             header("Location: " . base_url("index.php?msg=kat_added#kategori"));
             exit;
         } catch (PDOException $e) {
-            $alert_msg = '<div class="alert alert-danger rounded-4">Gagal menambahkan kategori: ' . $e->getMessage() . '</div>';
+            error_log("Gagal menambah kategori: " . $e->getMessage());
+            $alert_msg = '<div class="alert alert-danger rounded-4">Gagal menambahkan kategori. Silakan coba lagi.</div>';
         }
+    }
     }
 }
 
@@ -192,6 +197,7 @@ $kategori_list = $stmt_kat->fetchAll();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="kategori.php" method="POST">
+    <?= csrf_field() ?>
                     <div class="modal-body py-3">
                         
                         <div class="mb-3 text-center">

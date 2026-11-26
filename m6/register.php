@@ -18,7 +18,9 @@ $success_msg = '';
 $val_nama = '';
 $val_user = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !verify_csrf_token()) {
+    $error_msg = 'Sesi formulir kedaluwarsa. Silakan muat ulang halaman dan coba lagi.';
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama_lengkap     = sanitize($_POST['nama_lengkap'] ?? '');
     $username         = strtolower(trim(sanitize($_POST['username'] ?? '')));
     $password         = $_POST['password'] ?? '';
@@ -729,6 +731,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <form action="register.php" method="POST" id="registerForm">
+    <?= csrf_field() ?>
                 <input type="hidden" name="client_is_mobile" id="clientIsMobile" value="0">
 
                 <div class="mb-3">

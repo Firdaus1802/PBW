@@ -69,7 +69,11 @@ if (isset($_GET['msg'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !verify_csrf_token()) {
+    $alert_msg = '<div class="alert alert-danger rounded-4">Token keamanan tidak valid. Silakan muat ulang halaman.</div>';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['tambah_transaksi'])) {
     $id_kategori = (int)$_POST['id_kategori'];
     $tanggal     = sanitize($_POST['tanggal']);
     $judul       = sanitize($_POST['judul']);
@@ -90,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_transaksi'])) 
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_transaksi'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['update_transaksi'])) {
     $id_trx      = (int)$_POST['id_transaksi'];
     $id_kategori = (int)$_POST['id_kategori'];
     $tanggal     = sanitize($_POST['tanggal']);
@@ -123,7 +127,7 @@ if (isset($_GET['hapus_trx'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_kategori'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['tambah_kategori'])) {
     $nama_kategori = sanitize($_POST['nama_kategori']);
     $jenis         = sanitize($_POST['jenis']);
     $icon          = sanitize($_POST['icon']);
@@ -1752,6 +1756,7 @@ foreach ($kat_expenses as $ke) {
             </div>
             
             <form action="dashboard.php" method="POST" id="formCatatTransaksi">
+    <?= csrf_field() ?>
                 <div class="modal-body py-3">
 
                     <div class="mb-3 text-center">
@@ -1823,6 +1828,7 @@ foreach ($kat_expenses as $ke) {
             </div>
             
             <form action="dashboard.php" method="POST" id="formEditTransaksi">
+    <?= csrf_field() ?>
                 <input type="hidden" name="id_transaksi" id="editIdTransaksi">
                 
                 <div class="modal-body py-3">
@@ -1895,6 +1901,7 @@ foreach ($kat_expenses as $ke) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="dashboard.php" method="POST">
+    <?= csrf_field() ?>
                 <div class="modal-body py-3">
                     <div class="mb-3 text-center">
                         <label class="form-label small fw-bold d-block mb-1" style="color: var(--app-text-secondary);">Jenis Kategori</label>
