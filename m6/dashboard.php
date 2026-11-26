@@ -159,6 +159,41 @@ if (isset($_GET['hapus_kat'])) {
     }
 }
 
+try {
+    $pdo->exec("CREATE TABLE IF NOT EXISTS budget_settings (id_user INT PRIMARY KEY, limit_bulanan DECIMAL(12,2) NOT NULL DEFAULT 1500000)");
+} catch (Throwable $ignore_budget_tbl) {}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['simpan_budget'])) {
+    $new_limit = (float)($_POST['limit_bulanan'] ?? 0);
+    if ($new_limit > 0) {
+        try {
+            $chk = $pdo->prepare("SELECT id_user FROM budget_settings WHERE id_user = ?");
+            $chk->execute([$user_id]);
+            if ($chk->fetch()) {
+                $upd = $pdo->prepare("UPDATE budget_settings SET limit_bulanan = ? WHERE id_user = ?");
+                $upd->execute([$new_limit, $user_id]);
+            } else {
+                $ins = $pdo->prepare("INSERT INTO budget_settings (id_user, limit_bulanan) VALUES (?, ?)");
+                $ins->execute([$user_id, $new_limit]);
+            }
+            header("Location: " . base_url("dashboard.php?msg=budget_saved#overviewSection"));
+            exit;
+        } catch (Throwable $e_b) {
+            error_log("Gagal simpan budget: " . $e_b->getMessage());
+        }
+    }
+}
+
+$limit_bulanan = 1500000.0;
+try {
+    $st_b = $pdo->prepare("SELECT limit_bulanan FROM budget_settings WHERE id_user = ?");
+    $st_b->execute([$user_id]);
+    $row_b = $st_b->fetch();
+    if ($row_b && (float)$row_b['limit_bulanan'] > 0) {
+        $limit_bulanan = (float)$row_b['limit_bulanan'];
+    }
+} catch (Throwable $ignore_b_read) {}
+
 $stmt_stat = $pdo->prepare("SELECT 
     COALESCE(SUM(CASE WHEN jenis = 'Pemasukan' THEN jumlah ELSE 0 END), 0) AS total_masuk,
     COALESCE(SUM(CASE WHEN jenis = 'Pengeluaran' THEN jumlah ELSE 0 END), 0) AS total_keluar
@@ -1429,6 +1464,47 @@ foreach ($kat_expenses as $ke) {
 
                 </div>
 
+            </div>
+
+            <?php
+            $persen_budget = $limit_bulanan > 0 ? round(($total_keluar / $limit_bulanan) * 100, 1) : 0;
+            $bar_width = min(100, $persen_budget);
+            if ($persen_budget >= 100) {
+                $b_color = '#FF3B30';
+                $b_label = 'Melewati Batas!';
+                $b_bg    = 'rgba(255, 59, 48, 0.12)';
+            } elseif ($persen_budget >= 75) {
+                $b_color = '#FF9500';
+                $b_label = 'Mendekati Batas';
+                $b_bg    = 'rgba(255, 149, 0, 0.14)';
+            } else {
+                $b_color = '#34C759';
+                $b_label = 'Aman Terkendali';
+                $b_bg    = 'rgba(52, 199, 89, 0.14)';
+            }
+            ?>
+            <div class="ios-section-card p-3 p-md-4 mb-4">
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <h6 class="fw-bold mb-0"><i class="bi bi-speedometer2 me-1"></i> Target Limit Pengeluaran</h6>
+                            <span class="badge rounded-pill px-2 py-1" style="background: <?= $b_bg ?>; color: <?= $b_color ?>; font-size: 11px;">
+                                <?= $b_label ?> (<?= $persen_budget ?>%)
+                            </span>
+                        </div>
+                        <div class="progress mb-2" style="height: 8px; border-radius: 10px; background: var(--app-border);">
+                            <div class="progress-bar" role="progressbar" style="width: <?= $bar_width ?>%; background-color: <?= $b_color ?>;" aria-valuenow="<?= $bar_width ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <small style="color: var(--app-text-muted); font-size: 12px;">
+                            Terpakai <strong><?= format_rupiah($total_keluar) ?></strong> dari batas <strong><?= format_rupiah($limit_bulanan) ?></strong>
+                        </small>
+                    </div>
+                    <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-2">
+                        <?= csrf_field() ?>
+                        <input type="number" name="limit_bulanan" class="form-control form-control-sm" style="width: 145px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
+                        <button type="submit" name="simpan_budget" class="btn btn-sm btn-primary px-3 fw-semibold">Atur Limit</button>
+                    </form>
+                </div>
             </div>
 
             

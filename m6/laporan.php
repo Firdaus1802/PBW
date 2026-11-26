@@ -249,7 +249,7 @@ $saldo = $total_masuk - $total_keluar;
                         <p class="text-secondary small mb-0">Sistem DompetKu • CashFlow Personal Mahasiswa</p>
                     </div>
                     <div class="text-sm-end small">
-                        <div class="text-secondary">Pemilik Kas: <strong style="color: var(--boss-text-primary);">Firdaus Dhuha Prabowo</strong></div>
+                        <div class="text-secondary">Pemilik Kas: <strong style="color: var(--boss-text-primary);"><?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Mahasiswa', ENT_QUOTES, 'UTF-8') ?></strong></div>
                         <div class="text-secondary">Per Tanggal: <strong style="color: var(--boss-text-primary);"><?= tgl_indo(date('Y-m-d')) ?></strong></div>
                     </div>
                 </div>
