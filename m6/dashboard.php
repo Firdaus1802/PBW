@@ -194,6 +194,44 @@ try {
     }
 } catch (Throwable $ignore_b_read) {}
 
+try {
+    $pdo->exec("CREATE TABLE IF NOT EXISTS savings_goals (id_user INT PRIMARY KEY, nama_target VARCHAR(100) NOT NULL DEFAULT 'Dana Darurat', target_nominal DECIMAL(12,2) NOT NULL DEFAULT 2000000)");
+} catch (Throwable $ignore_goal_tbl) {}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['simpan_goal'])) {
+    $nama_target    = sanitize($_POST['nama_target'] ?? 'Dana Darurat');
+    $target_nominal = (float)($_POST['target_nominal'] ?? 0);
+    if (!empty($nama_target) && $target_nominal > 0) {
+        try {
+            $chk_g = $pdo->prepare("SELECT id_user FROM savings_goals WHERE id_user = ?");
+            $chk_g->execute([$user_id]);
+            if ($chk_g->fetch()) {
+                $upd_g = $pdo->prepare("UPDATE savings_goals SET nama_target = ?, target_nominal = ? WHERE id_user = ?");
+                $upd_g->execute([$nama_target, $target_nominal, $user_id]);
+            } else {
+                $ins_g = $pdo->prepare("INSERT INTO savings_goals (id_user, nama_target, target_nominal) VALUES (?, ?, ?)");
+                $ins_g->execute([$user_id, $nama_target, $target_nominal]);
+            }
+            header("Location: " . base_url("dashboard.php?msg=goal_saved#overviewSection"));
+            exit;
+        } catch (Throwable $e_g) {
+            error_log("Gagal simpan savings goal: " . $e_g->getMessage());
+        }
+    }
+}
+
+$nama_target    = 'Dana Darurat';
+$target_nominal = 2000000.0;
+try {
+    $st_g = $pdo->prepare("SELECT nama_target, target_nominal FROM savings_goals WHERE id_user = ?");
+    $st_g->execute([$user_id]);
+    $row_g = $st_g->fetch();
+    if ($row_g && (float)$row_g['target_nominal'] > 0) {
+        $nama_target    = $row_g['nama_target'];
+        $target_nominal = (float)$row_g['target_nominal'];
+    }
+} catch (Throwable $ignore_g_read) {}
+
 $stmt_stat = $pdo->prepare("SELECT 
     COALESCE(SUM(CASE WHEN jenis = 'Pemasukan' THEN jumlah ELSE 0 END), 0) AS total_masuk,
     COALESCE(SUM(CASE WHEN jenis = 'Pengeluaran' THEN jumlah ELSE 0 END), 0) AS total_keluar
@@ -1482,11 +1520,17 @@ foreach ($kat_expenses as $ke) {
                 $b_label = 'Aman Terkendali';
                 $b_bg    = 'rgba(52, 199, 89, 0.14)';
             }
+
+            $persen_goal = $target_nominal > 0 ? max(0, round(($saldo_akhir / $target_nominal) * 100, 1)) : 0;
+            $goal_width  = min(100, $persen_goal);
+            $g_color     = $persen_goal >= 100 ? '#34C759' : '#007AFF';
+            $g_label     = $persen_goal >= 100 ? 'Target Tercapai!' : 'Dalam Progres';
+            $g_bg        = $persen_goal >= 100 ? 'rgba(52, 199, 89, 0.14)' : 'rgba(0, 122, 255, 0.12)';
             ?>
-            <div class="ios-section-card p-3 p-md-4 mb-4">
-                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-                    <div class="flex-grow-1">
-                        <div class="d-flex align-items-center gap-2 mb-2">
+            <div class="row g-4 mb-4">
+                <div class="col-12 col-lg-6">
+                    <div class="ios-section-card p-3 p-md-4 h-100 mb-0">
+                        <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
                             <h6 class="fw-bold mb-0"><i class="bi bi-speedometer2 me-1"></i> Target Limit Pengeluaran</h6>
                             <span class="badge rounded-pill px-2 py-1" style="background: <?= $b_bg ?>; color: <?= $b_color ?>; font-size: 11px;">
                                 <?= $b_label ?> (<?= $persen_budget ?>%)
@@ -1495,15 +1539,42 @@ foreach ($kat_expenses as $ke) {
                         <div class="progress mb-2" style="height: 8px; border-radius: 10px; background: var(--app-border);">
                             <div class="progress-bar" role="progressbar" style="width: <?= $bar_width ?>%; background-color: <?= $b_color ?>;" aria-valuenow="<?= $bar_width ?>" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <small style="color: var(--app-text-muted); font-size: 12px;">
-                            Terpakai <strong><?= format_rupiah($total_keluar) ?></strong> dari batas <strong><?= format_rupiah($limit_bulanan) ?></strong>
-                        </small>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2">
+                            <small style="color: var(--app-text-muted); font-size: 12px;">
+                                Terpakai <strong><?= format_rupiah($total_keluar) ?></strong> / <strong><?= format_rupiah($limit_bulanan) ?></strong>
+                            </small>
+                            <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-2">
+                                <?= csrf_field() ?>
+                                <input type="number" name="limit_bulanan" class="form-control form-control-sm" style="width: 130px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
+                                <button type="submit" name="simpan_budget" class="btn btn-sm btn-primary px-3 fw-semibold">Atur Limit</button>
+                            </form>
+                        </div>
                     </div>
-                    <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-2">
-                        <?= csrf_field() ?>
-                        <input type="number" name="limit_bulanan" class="form-control form-control-sm" style="width: 145px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
-                        <button type="submit" name="simpan_budget" class="btn btn-sm btn-primary px-3 fw-semibold">Atur Limit</button>
-                    </form>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="ios-section-card p-3 p-md-4 h-100 mb-0">
+                        <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                            <h6 class="fw-bold mb-0"><i class="bi bi-piggy-bank me-1"></i> Target Tabungan: <?= htmlspecialchars($nama_target) ?></h6>
+                            <span class="badge rounded-pill px-2 py-1" style="background: <?= $g_bg ?>; color: <?= $g_color ?>; font-size: 11px;">
+                                <?= $g_label ?> (<?= $persen_goal ?>%)
+                            </span>
+                        </div>
+                        <div class="progress mb-2" style="height: 8px; border-radius: 10px; background: var(--app-border);">
+                            <div class="progress-bar" role="progressbar" style="width: <?= $goal_width ?>%; background-color: <?= $g_color ?>;" aria-valuenow="<?= $goal_width ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2">
+                            <small style="color: var(--app-text-muted); font-size: 12px;">
+                                Saldo <strong><?= format_rupiah(max(0, $saldo_akhir)) ?></strong> / <strong><?= format_rupiah($target_nominal) ?></strong>
+                            </small>
+                            <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-1">
+                                <?= csrf_field() ?>
+                                <input type="text" name="nama_target" class="form-control form-control-sm" style="width: 110px;" value="<?= htmlspecialchars($nama_target) ?>" placeholder="Nama target" required aria-label="Nama Target">
+                                <input type="number" name="target_nominal" class="form-control form-control-sm" style="width: 115px;" min="10000" step="50000" value="<?= (int)$target_nominal ?>" required aria-label="Nominal Target">
+                                <button type="submit" name="simpan_goal" class="btn btn-sm btn-outline-primary px-2 fw-semibold">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1559,7 +1630,7 @@ foreach ($kat_expenses as $ke) {
 
             
             <div id="transaksiSection" class="ios-section-card mb-4">
-                <div class="ios-card-header">
+                <div class="ios-card-header flex-wrap gap-2">
                     <div>
                         <h6 class="fw-bold mb-0">
                             <i class="bi bi-receipt me-1"></i> Data Riwayat Transaksi Kas
@@ -1567,9 +1638,17 @@ foreach ($kat_expenses as $ke) {
                         <small style="color: var(--app-text-muted); font-size: 11.5px;">Daftar pemasukan dan pengeluaran mahasiswa</small>
                     </div>
 
-                    <button type="button" class="btn btn-ios-primary btn-sm py-1 px-3 d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalTambah">
-                        <i class="bi bi-plus-lg"></i> <span>Catat Baru</span>
-                    </button>
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <input type="text" id="searchAdminTrx" class="form-control form-control-sm" style="width: 185px;" placeholder="Cari judul / kategori..." oninput="filterAdminTrx()" aria-label="Cari transaksi">
+                        <select id="filterJenisTrx" class="form-select form-select-sm" style="width: 135px;" onchange="filterAdminTrx()" aria-label="Filter jenis transaksi">
+                            <option value="Semua">Semua Jenis</option>
+                            <option value="Pemasukan">Pemasukan</option>
+                            <option value="Pengeluaran">Pengeluaran</option>
+                        </select>
+                        <button type="button" class="btn btn-ios-primary btn-sm py-1 px-3 d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                            <i class="bi bi-plus-lg"></i> <span>Catat Baru</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="table-responsive">
@@ -1597,7 +1676,7 @@ foreach ($kat_expenses as $ke) {
                             <?php $no = 1; foreach ($daftar_transaksi as $row): 
                                 $is_masuk = ($row['jenis'] === 'Pemasukan');
                             ?>
-                            <tr class="admin-trx-row" data-search="<?= strtolower(htmlspecialchars($row['judul'] . ' ' . $row['nama_kategori'] . ' ' . $row['catatan'])) ?>">
+                            <tr class="admin-trx-row" data-jenis="<?= htmlspecialchars($row['jenis']) ?>" data-search="<?= strtolower(htmlspecialchars($row['judul'] . ' ' . $row['nama_kategori'] . ' ' . $row['catatan'])) ?>">
                                 <td class="text-center" style="color: var(--app-text-muted);"><?= $no++ ?></td>
                                 <td>
                                     <span class="table-date-text"><?= tgl_indo($row['tanggal']) ?></span>
@@ -2325,6 +2404,18 @@ foreach ($kat_expenses as $ke) {
         renderCharts();
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    function filterAdminTrx() {
+        const q = (document.getElementById('searchAdminTrx')?.value || '').toLowerCase().trim();
+        const jenis = document.getElementById('filterJenisTrx')?.value || 'Semua';
+        document.querySelectorAll('#tableAdminTrx tbody tr.admin-trx-row').forEach(tr => {
+            const txt = tr.getAttribute('data-search') || '';
+            const rowJenis = tr.getAttribute('data-jenis') || '';
+            const matchText = !q || txt.includes(q);
+            const matchJenis = jenis === 'Semua' || rowJenis === jenis;
+            tr.style.display = (matchText && matchJenis) ? '' : 'none';
+        });
+    }
 </script>
 
 </body>
