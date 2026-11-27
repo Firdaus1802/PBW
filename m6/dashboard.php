@@ -1578,6 +1578,52 @@ foreach ($kat_expenses as $ke) {
                 </div>
             </div>
 
+            <?php
+            $hari_berjalan = max(1, (int)date('j'));
+            $sisa_hari_bln = max(1, (int)date('t') - (int)date('j') + 1);
+            $rata_keluar_harian = $total_keluar / $hari_berjalan;
+            $sisa_budget = max(0, $limit_bulanan - $total_keluar);
+            $batas_aman_harian = $sisa_budget / $sisa_hari_bln;
+
+            $max_keluar_nominal = 0.0;
+            $max_keluar_judul   = 'Belum ada pengeluaran';
+            foreach ($daftar_transaksi as $t_item) {
+                if (($t_item['jenis'] ?? '') === 'Pengeluaran' && (float)$t_item['jumlah'] > $max_keluar_nominal) {
+                    $max_keluar_nominal = (float)$t_item['jumlah'];
+                    $max_keluar_judul   = $t_item['judul'];
+                }
+            }
+            ?>
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-md-4">
+                    <div class="ios-section-card p-3 h-100 mb-0">
+                        <small class="text-uppercase fw-bold d-block mb-1" style="color: var(--app-text-muted); font-size: 10.5px; letter-spacing: 0.5px;">
+                            <i class="bi bi-calendar-day me-1"></i> Rata-rata Keluar / Hari
+                        </small>
+                        <h5 class="fw-bold mb-0" style="color: var(--app-text-primary);"><?= format_rupiah($rata_keluar_harian) ?></h5>
+                        <small style="color: var(--app-text-muted); font-size: 11px;">Berdasarkan <?= $hari_berjalan ?> hari berjalan</small>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="ios-section-card p-3 h-100 mb-0">
+                        <small class="text-uppercase fw-bold d-block mb-1" style="color: var(--app-text-muted); font-size: 10.5px; letter-spacing: 0.5px;">
+                            <i class="bi bi-fire me-1 text-danger"></i> Pengeluaran Terbesar
+                        </small>
+                        <h5 class="fw-bold mb-0 text-danger"><?= format_rupiah($max_keluar_nominal) ?></h5>
+                        <small class="d-block text-truncate" style="color: var(--app-text-muted); font-size: 11px;"><?= htmlspecialchars($max_keluar_judul) ?></small>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="ios-section-card p-3 h-100 mb-0">
+                        <small class="text-uppercase fw-bold d-block mb-1" style="color: var(--app-text-muted); font-size: 10.5px; letter-spacing: 0.5px;">
+                            <i class="bi bi-shield-check me-1 text-success"></i> Saran Aman / Hari
+                        </small>
+                        <h5 class="fw-bold mb-0 text-success"><?= format_rupiah($batas_aman_harian) ?></h5>
+                        <small style="color: var(--app-text-muted); font-size: 11px;">Untuk <?= $sisa_hari_bln ?> hari tersisa bulan ini</small>
+                    </div>
+                </div>
+            </div>
+
             
             <div class="row g-4 mb-4">
 
@@ -1645,6 +1691,9 @@ foreach ($kat_expenses as $ke) {
                             <option value="Pemasukan">Pemasukan</option>
                             <option value="Pengeluaran">Pengeluaran</option>
                         </select>
+                        <a href="<?= base_url('export_json.php') ?>" class="btn btn-outline-secondary btn-sm py-1 px-2 d-flex align-items-center gap-1" title="Unduh cadangan data JSON">
+                            <i class="bi bi-filetype-json"></i> <span class="d-none d-sm-inline">Backup JSON</span>
+                        </a>
                         <button type="button" class="btn btn-ios-primary btn-sm py-1 px-3 d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalTambah">
                             <i class="bi bi-plus-lg"></i> <span>Catat Baru</span>
                         </button>

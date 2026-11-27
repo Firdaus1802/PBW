@@ -14,9 +14,11 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 
 ### Dashboard Finansial Interaktif
 
-- **Kartu Ringkasan Keuangan**: Menampilkan akumulasi Total Pemasukan, Total Pengeluaran, dan Sisa Saldo Kas saat ini secara real-time.
-- **Transaksi Terkini**: Tabel 5 transaksi kas terakhir untuk memantau aktivitas kas masuk dan keluar secara cepat.
-- **Shortcut Aksi Cepat**: Tombol pintas untuk menambah transaksi baru dan melihat laporan.
+- **Kartu Ringkasan Keuangan**: Menampilkan akumulasi Total Pemasukan, Total Pengeluaran, Sisa Saldo Kas, dan grafik interaktif *Chart.js* secara real-time.
+- **Target Limit Pengeluaran (*Budget Alert*)**: Pengaturan batas pengeluaran bulanan dengan *progress bar* dan indikator warna otomatis (`Aman`, `Mendekati Batas`, `Melewati Batas`).
+- **Target Tabungan (*Savings Goal*)**: Pelacakan progres saldo kas terhadap target tabungan yang ditentukan pengguna.
+- **Insight Keuangan Otomatis**: Menampilkan rata-rata pengeluaran per hari, pengeluaran terbesar, serta saran batas aman pengeluaran harian hingga akhir bulan.
+- ***Live Search* & Filter Instan**: Pencarian cepat judul/kategori dan penyaringan jenis transaksi langsung di tabel dashboard tanpa muat ulang halaman.
 
 ### Pengelolaan Kategori Kas Dinamis
 
@@ -32,7 +34,7 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 
 - **Penyaringan Rentang Tanggal**: Filter transaksi kas berdasarkan tanggal mulai dan tanggal akhir.
 - **Penyaringan Jenis Transaksi**: Menampilkan Semua, Khusus Pemasukan, atau Khusus Pengeluaran.
-- **Ekspor Excel**: Ekspor rekapitulasi data kas ke file format `.xls` / Spreadsheet untuk pelaporan resmi kepada dosen, ketua kelas, atau anggota.
+- **Ekspor Excel & Backup JSON**: Ekspor rekapitulasi data kas ke format `.xls` serta cadangan data lengkap ke `.json` (`export_json.php`) untuk arsip pribadi maupun pelaporan resmi.
 
 ## Teknologi
 
