@@ -145,6 +145,12 @@ run_test("TC-08", "Proteksi Akses Langsung Berkas config/koneksi.php", function(
     return (stripos($res['body'], 'db_kas_mahasiswa') === false || $res['code'] === 200);
 });
 
+run_test("TC-13", "Proteksi Akses Backup JSON Tanpa Login", function() use ($base_url, $server_online) {
+    if (!$server_online) return 'SKIPPED';
+    $res = http_request($base_url . "export_json.php", 'GET', [], false);
+    return ($res['code'] === 302 || stripos($res['headers'], 'Location: login.php') !== false);
+});
+
 // -------------------------------------------------------------
 // KASUS UJI BLOK B: BERKAS KONFIGURASI, STRUKTUR, DAN DOKUMENTASI
 // -------------------------------------------------------------
@@ -157,6 +163,8 @@ run_test("TC-09", "Verifikasi Integritas File Skema SQL Relasional", function() 
     return (stripos($content, 'CREATE TABLE `users`') !== false &&
             stripos($content, 'CREATE TABLE `transaksi`') !== false &&
             stripos($content, 'CREATE TABLE `kategori`') !== false &&
+            stripos($content, 'CREATE TABLE `budget_settings`') !== false &&
+            stripos($content, 'CREATE TABLE `savings_goals`') !== false &&
             stripos($content, 'CONSTRAINT `fk_transaksi_user`') !== false &&
             stripos($content, 'CONSTRAINT `fk_transaksi_kategori`') !== false);
 });
