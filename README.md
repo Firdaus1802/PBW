@@ -18,7 +18,7 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 - **Target Limit Pengeluaran (*Budget Alert*)**: Pengaturan batas pengeluaran bulanan dengan *progress bar* dan indikator warna otomatis (`Aman`, `Mendekati Batas`, `Melewati Batas`).
 - **Target Tabungan (*Savings Goal*)**: Pelacakan progres saldo kas terhadap target tabungan yang ditentukan pengguna.
 - **Insight Keuangan Otomatis**: Menampilkan rata-rata pengeluaran per hari, pengeluaran terbesar, serta saran batas aman pengeluaran harian hingga akhir bulan.
-- ***Live Search* & Filter Instan**: Pencarian cepat judul/kategori dan penyaringan jenis transaksi langsung di tabel dashboard tanpa muat ulang halaman.
+- **Live Search & Filter Instan**: Pencarian cepat judul/kategori dan penyaringan jenis transaksi langsung di tabel dashboard tanpa muat ulang halaman.
 
 ### Pengelolaan Kategori Kas Dinamis
 
@@ -43,7 +43,7 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 | Server-Side | PHP 8.x Native dengan PDO (*Prepared Statements*) |
 | Database | MariaDB 10.4 / MySQL (Engine InnoDB, Relasi Foreign Key PK-FK, 3NF) |
 | Web Server | Apache (XAMPP / Laragon) |
-| Front-End | HTML5, CSS3, Bootstrap 5.3, Bootstrap Icons, Apple Clean Modern Styling |
+| Front-End | HTML5, CSS3, Bootstrap 5.3, Bootstrap Icons, Minimalist Modern Styling (Light & Dark Mode) |
 | Arsitektur | Clean Modular PHP (Pemisahan koneksi, komponen antarmuka, dan logika bisnis) |
 
 ## Cara Menjalankan (XAMPP)
@@ -95,6 +95,7 @@ Pengelolaan kas kelas atau kas organisasi mahasiswa sering kali masih dilakukan 
 │   ├── transaksi_hapus.php        # Endpoint penghapusan kas dengan konfirmasi
 │   ├── laporan.php                # Rekapitulasi & filter kas per periode
 │   ├── export_excel.php           # Generator berkas Excel kas
+│   ├── export_json.php            # Cadangan data transaksi & target ke JSON
 │   └── logout.php                 # Terminasi sesi pengguna
 ├── index.php                      # Gerbang pengalihan utama
 ├── PROJECT_GUIDE.md               # Panduan teknis & standar pengerjaan proyek
