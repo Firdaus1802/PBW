@@ -1508,24 +1508,24 @@ foreach ($kat_expenses as $ke) {
             $persen_budget = $limit_bulanan > 0 ? round(($total_keluar / $limit_bulanan) * 100, 1) : 0;
             $bar_width = min(100, $persen_budget);
             if ($persen_budget >= 100) {
-                $b_color = '#FF3B30';
+                $b_color = 'var(--ios-red)';
                 $b_label = 'Melewati Batas!';
-                $b_bg    = 'rgba(255, 59, 48, 0.12)';
+                $b_bg    = 'rgba(244, 63, 94, 0.12)';
             } elseif ($persen_budget >= 75) {
-                $b_color = '#FF9500';
+                $b_color = 'var(--ios-orange)';
                 $b_label = 'Mendekati Batas';
-                $b_bg    = 'rgba(255, 149, 0, 0.14)';
+                $b_bg    = 'rgba(245, 158, 11, 0.14)';
             } else {
-                $b_color = '#34C759';
+                $b_color = 'var(--ios-green)';
                 $b_label = 'Aman Terkendali';
-                $b_bg    = 'rgba(52, 199, 89, 0.14)';
+                $b_bg    = 'rgba(16, 185, 129, 0.14)';
             }
 
             $persen_goal = $target_nominal > 0 ? max(0, round(($saldo_akhir / $target_nominal) * 100, 1)) : 0;
             $goal_width  = min(100, $persen_goal);
-            $g_color     = $persen_goal >= 100 ? '#34C759' : '#007AFF';
+            $g_color     = $persen_goal >= 100 ? 'var(--ios-green)' : 'var(--app-text-primary)';
             $g_label     = $persen_goal >= 100 ? 'Target Tercapai!' : 'Dalam Progres';
-            $g_bg        = $persen_goal >= 100 ? 'rgba(52, 199, 89, 0.14)' : 'rgba(0, 122, 255, 0.12)';
+            $g_bg        = $persen_goal >= 100 ? 'rgba(16, 185, 129, 0.14)' : 'var(--app-card-inner)';
             ?>
             <div class="row g-4 mb-4">
                 <div class="col-12 col-lg-6">
@@ -1547,10 +1547,10 @@ foreach ($kat_expenses as $ke) {
                         <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-2 pt-2" style="border-top: 1px solid var(--app-border);">
                             <?= csrf_field() ?>
                             <div class="input-group input-group-sm flex-grow-1">
-                                <span class="input-group-text" style="border-radius: 10px 0 0 10px; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-muted); font-size: 12px;">Rp</span>
-                                <input type="number" name="limit_bulanan" class="form-control" style="border-radius: 0 10px 10px 0; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-primary); font-size: 12.5px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
+                                <span class="input-group-text" style="border-radius: 12px 0 0 12px; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-muted); font-size: 12px;">Rp</span>
+                                <input type="number" name="limit_bulanan" class="form-control" style="border-radius: 0 12px 12px 0; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary); font-size: 12.5px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
                             </div>
-                            <button type="submit" name="simpan_budget" class="btn btn-ios-primary btn-sm px-3 py-1 d-flex align-items-center gap-1" style="border-radius: 10px; white-space: nowrap;">
+                            <button type="submit" name="simpan_budget" class="btn btn-ios-primary btn-sm px-3 py-1 d-flex align-items-center gap-1" style="white-space: nowrap;">
                                 <i class="bi bi-check2-circle"></i> <span>Atur Limit</span>
                             </button>
                         </form>
@@ -1562,7 +1562,7 @@ foreach ($kat_expenses as $ke) {
                         <div>
                             <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
                                 <h6 class="fw-bold mb-0"><i class="bi bi-piggy-bank me-1"></i> Target Tabungan: <?= htmlspecialchars($nama_target) ?></h6>
-                                <span class="badge rounded-pill px-2 py-1" style="background: <?= $g_bg ?>; color: <?= $g_color ?>; font-size: 11px;">
+                                <span class="badge rounded-pill px-2 py-1" style="background: <?= $g_bg ?>; color: <?= $g_color ?>; border: 1px solid var(--app-border); font-size: 11px;">
                                     <?= $g_label ?> (<?= $persen_goal ?>%)
                                 </span>
                             </div>
@@ -1575,12 +1575,12 @@ foreach ($kat_expenses as $ke) {
                         </div>
                         <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-2 pt-2" style="border-top: 1px solid var(--app-border);">
                             <?= csrf_field() ?>
-                            <input type="text" name="nama_target" class="form-control form-control-sm" style="max-width: 140px; border-radius: 10px; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-primary); font-size: 12.5px;" value="<?= htmlspecialchars($nama_target) ?>" placeholder="Nama target" required aria-label="Nama Target">
+                            <input type="text" name="nama_target" class="form-control form-control-sm" style="max-width: 140px; border-radius: 12px; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary); font-size: 12.5px;" value="<?= htmlspecialchars($nama_target) ?>" placeholder="Nama target" required aria-label="Nama Target">
                             <div class="input-group input-group-sm flex-grow-1">
-                                <span class="input-group-text" style="border-radius: 10px 0 0 10px; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-muted); font-size: 12px;">Rp</span>
-                                <input type="number" name="target_nominal" class="form-control" style="border-radius: 0 10px 10px 0; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-primary); font-size: 12.5px;" min="10000" step="50000" value="<?= (int)$target_nominal ?>" required aria-label="Nominal Target">
+                                <span class="input-group-text" style="border-radius: 12px 0 0 12px; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-muted); font-size: 12px;">Rp</span>
+                                <input type="number" name="target_nominal" class="form-control" style="border-radius: 0 12px 12px 0; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary); font-size: 12.5px;" min="10000" step="50000" value="<?= (int)$target_nominal ?>" required aria-label="Nominal Target">
                             </div>
-                            <button type="submit" name="simpan_goal" class="btn btn-ios-secondary btn-sm px-3 py-1 d-flex align-items-center gap-1" style="border-radius: 10px; white-space: nowrap;">
+                            <button type="submit" name="simpan_goal" class="btn btn-ios-secondary btn-sm px-3 py-1 d-flex align-items-center gap-1" style="white-space: nowrap;">
                                 <i class="bi bi-bookmark-check"></i> <span>Simpan</span>
                             </button>
                         </form>
@@ -1695,13 +1695,13 @@ foreach ($kat_expenses as $ke) {
                     </div>
 
                     <div class="d-flex flex-wrap align-items-center gap-2">
-                        <input type="text" id="searchAdminTrx" class="form-control form-control-sm" style="width: 185px;" placeholder="Cari judul / kategori..." oninput="filterAdminTrx()" aria-label="Cari transaksi">
-                        <select id="filterJenisTrx" class="form-select form-select-sm" style="width: 135px;" onchange="filterAdminTrx()" aria-label="Filter jenis transaksi">
+                        <input type="text" id="searchAdminTrx" class="form-control form-control-sm" style="width: 185px; border-radius: 12px; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary);" placeholder="Cari judul / kategori..." oninput="filterAdminTrx()" aria-label="Cari transaksi">
+                        <select id="filterJenisTrx" class="form-select form-select-sm" style="width: 135px; border-radius: 12px; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary);" onchange="filterAdminTrx()" aria-label="Filter jenis transaksi">
                             <option value="Semua">Semua Jenis</option>
                             <option value="Pemasukan">Pemasukan</option>
                             <option value="Pengeluaran">Pengeluaran</option>
                         </select>
-                        <a href="<?= base_url('export_json.php') ?>" class="btn btn-outline-secondary btn-sm py-1 px-2 d-flex align-items-center gap-1" title="Unduh cadangan data JSON">
+                        <a href="<?= base_url('export_json.php') ?>" class="btn btn-ios-secondary btn-sm py-1 px-3 d-flex align-items-center gap-1" title="Unduh cadangan data JSON">
                             <i class="bi bi-filetype-json"></i> <span class="d-none d-sm-inline">Backup JSON</span>
                         </a>
                         <button type="button" class="btn btn-ios-primary btn-sm py-1 px-3 d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalTambah">
