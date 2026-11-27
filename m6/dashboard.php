@@ -1529,51 +1529,61 @@ foreach ($kat_expenses as $ke) {
             ?>
             <div class="row g-4 mb-4">
                 <div class="col-12 col-lg-6">
-                    <div class="ios-section-card p-3 p-md-4 h-100 mb-0">
-                        <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-                            <h6 class="fw-bold mb-0"><i class="bi bi-speedometer2 me-1"></i> Target Limit Pengeluaran</h6>
-                            <span class="badge rounded-pill px-2 py-1" style="background: <?= $b_bg ?>; color: <?= $b_color ?>; font-size: 11px;">
-                                <?= $b_label ?> (<?= $persen_budget ?>%)
-                            </span>
-                        </div>
-                        <div class="progress mb-2" style="height: 8px; border-radius: 10px; background: var(--app-border);">
-                            <div class="progress-bar" role="progressbar" style="width: <?= $bar_width ?>%; background-color: <?= $b_color ?>;" aria-valuenow="<?= $bar_width ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2">
-                            <small style="color: var(--app-text-muted); font-size: 12px;">
-                                Terpakai <strong><?= format_rupiah($total_keluar) ?></strong> / <strong><?= format_rupiah($limit_bulanan) ?></strong>
+                    <div class="ios-section-card p-3 p-md-4 h-100 mb-0 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-speedometer2 me-1"></i> Target Limit Pengeluaran</h6>
+                                <span class="badge rounded-pill px-2 py-1" style="background: <?= $b_bg ?>; color: <?= $b_color ?>; font-size: 11px;">
+                                    <?= $b_label ?> (<?= $persen_budget ?>%)
+                                </span>
+                            </div>
+                            <div class="progress mb-2" style="height: 8px; border-radius: 10px; background: var(--app-border);">
+                                <div class="progress-bar" role="progressbar" style="width: <?= $bar_width ?>%; background-color: <?= $b_color ?>; border-radius: 10px;" aria-valuenow="<?= $bar_width ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="d-block mb-3" style="color: var(--app-text-muted); font-size: 12px;">
+                                Terpakai <strong><?= format_rupiah($total_keluar) ?></strong> dari batas <strong><?= format_rupiah($limit_bulanan) ?></strong>
                             </small>
-                            <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-2">
-                                <?= csrf_field() ?>
-                                <input type="number" name="limit_bulanan" class="form-control form-control-sm" style="width: 130px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
-                                <button type="submit" name="simpan_budget" class="btn btn-sm btn-primary px-3 fw-semibold">Atur Limit</button>
-                            </form>
                         </div>
+                        <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-2 pt-2" style="border-top: 1px solid var(--app-border);">
+                            <?= csrf_field() ?>
+                            <div class="input-group input-group-sm flex-grow-1">
+                                <span class="input-group-text" style="border-radius: 10px 0 0 10px; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-muted); font-size: 12px;">Rp</span>
+                                <input type="number" name="limit_bulanan" class="form-control" style="border-radius: 0 10px 10px 0; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-primary); font-size: 12.5px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
+                            </div>
+                            <button type="submit" name="simpan_budget" class="btn btn-ios-primary btn-sm px-3 py-1 d-flex align-items-center gap-1" style="border-radius: 10px; white-space: nowrap;">
+                                <i class="bi bi-check2-circle"></i> <span>Atur Limit</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
 
                 <div class="col-12 col-lg-6">
-                    <div class="ios-section-card p-3 p-md-4 h-100 mb-0">
-                        <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-                            <h6 class="fw-bold mb-0"><i class="bi bi-piggy-bank me-1"></i> Target Tabungan: <?= htmlspecialchars($nama_target) ?></h6>
-                            <span class="badge rounded-pill px-2 py-1" style="background: <?= $g_bg ?>; color: <?= $g_color ?>; font-size: 11px;">
-                                <?= $g_label ?> (<?= $persen_goal ?>%)
-                            </span>
-                        </div>
-                        <div class="progress mb-2" style="height: 8px; border-radius: 10px; background: var(--app-border);">
-                            <div class="progress-bar" role="progressbar" style="width: <?= $goal_width ?>%; background-color: <?= $g_color ?>;" aria-valuenow="<?= $goal_width ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2">
-                            <small style="color: var(--app-text-muted); font-size: 12px;">
-                                Saldo <strong><?= format_rupiah(max(0, $saldo_akhir)) ?></strong> / <strong><?= format_rupiah($target_nominal) ?></strong>
+                    <div class="ios-section-card p-3 p-md-4 h-100 mb-0 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-piggy-bank me-1"></i> Target Tabungan: <?= htmlspecialchars($nama_target) ?></h6>
+                                <span class="badge rounded-pill px-2 py-1" style="background: <?= $g_bg ?>; color: <?= $g_color ?>; font-size: 11px;">
+                                    <?= $g_label ?> (<?= $persen_goal ?>%)
+                                </span>
+                            </div>
+                            <div class="progress mb-2" style="height: 8px; border-radius: 10px; background: var(--app-border);">
+                                <div class="progress-bar" role="progressbar" style="width: <?= $goal_width ?>%; background-color: <?= $g_color ?>; border-radius: 10px;" aria-valuenow="<?= $goal_width ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="d-block mb-3" style="color: var(--app-text-muted); font-size: 12px;">
+                                Saldo <strong><?= format_rupiah(max(0, $saldo_akhir)) ?></strong> dari target <strong><?= format_rupiah($target_nominal) ?></strong>
                             </small>
-                            <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-1">
-                                <?= csrf_field() ?>
-                                <input type="text" name="nama_target" class="form-control form-control-sm" style="width: 110px;" value="<?= htmlspecialchars($nama_target) ?>" placeholder="Nama target" required aria-label="Nama Target">
-                                <input type="number" name="target_nominal" class="form-control form-control-sm" style="width: 115px;" min="10000" step="50000" value="<?= (int)$target_nominal ?>" required aria-label="Nominal Target">
-                                <button type="submit" name="simpan_goal" class="btn btn-sm btn-outline-primary px-2 fw-semibold">Simpan</button>
-                            </form>
                         </div>
+                        <form action="dashboard.php" method="POST" class="d-flex align-items-center gap-2 pt-2" style="border-top: 1px solid var(--app-border);">
+                            <?= csrf_field() ?>
+                            <input type="text" name="nama_target" class="form-control form-control-sm" style="max-width: 140px; border-radius: 10px; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-primary); font-size: 12.5px;" value="<?= htmlspecialchars($nama_target) ?>" placeholder="Nama target" required aria-label="Nama Target">
+                            <div class="input-group input-group-sm flex-grow-1">
+                                <span class="input-group-text" style="border-radius: 10px 0 0 10px; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-muted); font-size: 12px;">Rp</span>
+                                <input type="number" name="target_nominal" class="form-control" style="border-radius: 0 10px 10px 0; background: var(--app-card-inner); border-color: var(--app-border); color: var(--app-text-primary); font-size: 12.5px;" min="10000" step="50000" value="<?= (int)$target_nominal ?>" required aria-label="Nominal Target">
+                            </div>
+                            <button type="submit" name="simpan_goal" class="btn btn-ios-secondary btn-sm px-3 py-1 d-flex align-items-center gap-1" style="border-radius: 10px; white-space: nowrap;">
+                                <i class="bi bi-bookmark-check"></i> <span>Simpan</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
