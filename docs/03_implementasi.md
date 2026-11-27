@@ -11,7 +11,7 @@ Institusi: **Program Studi Sistem Informasi, Universitas Gunadarma**
 
 Pengembangan aplikasi KasMahasiswa menerapkan pola modular berbasis PHP native yang memisahkan tanggung jawab konfigurasi, pengelolaan sesi, penanganan basis data, dan tampilan antarmuka. Struktur direktori ditata secara teratur sebagai berikut:
 
-```
+```text
 c:\Users\HP\Downloads\PBW\
 │
 ├── m6/
@@ -79,6 +79,7 @@ function base_url($path = '') {
 ```
 
 ### Keunggulan Konfigurasi:
+
 1. `PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION`: Menjamin setiap galat sintaks atau eksekusi SQL akan memicu exception terstruktur yang dapat ditangkap oleh blok `try-catch`.
 2. `PDO::ATTR_EMULATE_PREPARES => false`: Memaksa PDO menggunakan prepared statement asli pada tingkat server database, memastikan pemisahan mutlak antara kueri SQL dengan data masukan pengguna.
 
@@ -133,6 +134,7 @@ if (!empty($judul) && $id_kategori > 0 && $jumlah > 0) {
 ```
 
 Untuk perlindungan terhadap serangan XSS pada berkas tampilan, seluruh data dinamis dienkapsulasi dengan fungsi sanitasi:
+
 ```php
 echo htmlspecialchars($transaksi['judul'], ENT_QUOTES, 'UTF-8');
 ```

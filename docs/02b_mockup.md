@@ -14,7 +14,7 @@ Desain antarmuka KasMahasiswa mengusung prinsip estetika **Clean Modern & Respon
 ### A. Palet Warna Baku
 
 | Nama Warna | Kode HEX | Peruntukan / Semantik |
-|---|---|---|
+| --- | --- | --- |
 | **Primary Blue** | `#007AFF` | Warna aksen utama sistem, tombol CTA primer, dan status aktif navigasi. |
 | **Success Green** | `#34C759` | Indikator kas masuk (pemasukan), tombol konfirmasi, dan status saldo positif. |
 | **Danger Red** | `#FF3B30` | Indikator kas keluar (pengeluaran), tombol hapus, dan pesan peringatan bahaya. |
@@ -25,6 +25,7 @@ Desain antarmuka KasMahasiswa mengusung prinsip estetika **Clean Modern & Respon
 | **Text Muted** | `#6C757D` | Teks keterangan bantuan, timestamp, dan label pendukung. |
 
 ### B. Tipografi & Ikonografi
+
 - **Font Utama**: *Plus Jakarta Sans* / *system-ui*, `-apple-system`, `Segoe UI`, `Roboto`, `sans-serif`.
 - **Ikon**: *Bootstrap Icons v1.11.3* yang ringan, konsisten secara geometris, dan mudah dipanggil via class HTML.
 
@@ -32,7 +33,7 @@ Desain antarmuka KasMahasiswa mengusung prinsip estetika **Clean Modern & Respon
 
 ## 2. Peta Halaman (Sitemap)
 
-```
+```text
 [ Gerbang Utama: index.php ]
             |
             +---> [ Belum Login ] ---> login.php <---> register.php
@@ -77,7 +78,8 @@ Desain antarmuka KasMahasiswa mengusung prinsip estetika **Clean Modern & Respon
 ## 4. Desain Mockup Antarmuka (Wireframe & Layout)
 
 ### A. Mockup Halaman Login (`login.php`)
-```
+
+```text
 +-------------------------------------------------------------+
 |                                                             |
 |                   +-----------------------+                 |
@@ -101,7 +103,8 @@ Desain antarmuka KasMahasiswa mengusung prinsip estetika **Clean Modern & Respon
 ```
 
 ### B. Mockup Halaman Dashboard (`dashboard.php`)
-```
+
+```text
 +-------------------------------------------------------------------------+
 | [Logo] KasMahasiswa        Dashboard   Kategori   Laporan   [Hai, Firdaus] [Logout] |
 +-------------------------------------------------------------------------+
@@ -129,7 +132,8 @@ Desain antarmuka KasMahasiswa mengusung prinsip estetika **Clean Modern & Respon
 ```
 
 ### C. Mockup Halaman Laporan & Ekspor (`laporan.php`)
-```
+
+```text
 +-------------------------------------------------------------------------+
 | [Logo] KasMahasiswa        Dashboard   Kategori   Laporan   [Hai, Firdaus] [Logout] |
 +-------------------------------------------------------------------------+

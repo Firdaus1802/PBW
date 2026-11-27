@@ -3,6 +3,7 @@
 > Dokumen panduan internal, keputusan arsitektur, dan pelacakan progres pengembangan proyek akhir Pemrograman Berbasis Web (PBW).
 
 ## Identitas Proyek
+
 - **Judul Proyek:** KasMahasiswa: Sistem Informasi Pengelolaan Kas Mahasiswa Berbasis Web
 - **Mata Kuliah:** Pemrograman Berbasis Web (PBW)
 - **Institusi:** Program Studi Sistem Informasi, Fakultas Ilmu Komputer dan Teknologi Informasi, Universitas Gunadarma
@@ -12,6 +13,7 @@
 - **Tujuan Utama:** Mengembangkan aplikasi web dinamis berbasis PHP dan MySQL yang memenuhi seluruh kaidah siklus hidup pengembangan perangkat lunak (*Software Development Life Cycle* - SDLC).
 
 ## Syarat Wajib Tugas Dosen
+
 1. Berjalan dengan stabil pada lingkungan localhost (XAMPP / Laragon) menggunakan PHP native dan MySQL/MariaDB.
 2. Menyediakan fungsionalitas CRUD lengkap (*Create, Read, Update, Delete*) yang terhubung aktif ke basis data.
 3. Struktur basis data relasional dengan *Primary Key* (PK) dan *Foreign Key* (FK) yang teruji serta ternormalisasi (minimal 3NF).
@@ -22,6 +24,7 @@
 ## Ruang Lingkup Sistem
 
 **Fase 1: Implementasi Utama (Selesai)**
+
 - Modul Otentikasi Pengguna: Registrasi, Login, validasi password terenkripsi, proteksi sesi.
 - Modul Dashboard Finansial: Kartu statistik akumulasi kas, saldo berjalan, dan riwayat mutasi transaksi terkini.
 - Modul Transaksi Kas: Form input dinamis (pemasukan/pengeluaran), edit transaksi, dan hapus transaksi.
@@ -31,6 +34,7 @@
 - Skrip uji otomatis Black-Box HTTP/CLI (`tests/uji_blackbox.php`).
 
 **Fase 2: Rencana Pengembangan Lanjutan**
+
 - Pembuatan grafik analitik interaktif (Chart.js / ApexCharts) untuk memvisualisasikan tren pengeluaran bulanan.
 - Fitur multi-akun organisasi (dukungan banyak kelas atau kepanitiaan dalam satu sistem).
 - Pengiriman notifikasi tagihan kas berkala via integrasi Webhook WhatsApp / Telegram Bot.
@@ -50,6 +54,7 @@
    - Tabel `transaksi`: Menyimpan log mutasi kas yang terikat ke `id_user` dan `id_kategori`.
 
 ## Progres & Ceklis SDLC
+
 - [x] Tahap 1: Analisis Kebutuhan & Perencanaan (`docs/01_analisis_kebutuhan.md`)
 - [x] Tahap 2a: Desain Basis Data & Kamus Data (`docs/02a_desain_database.md`)
 - [x] Tahap 2b: Desain Antarmuka & Mockup UI (`docs/02b_mockup.md`)

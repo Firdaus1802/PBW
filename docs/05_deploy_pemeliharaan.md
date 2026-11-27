@@ -12,15 +12,20 @@ Institusi: **Program Studi Sistem Informasi, Universitas Gunadarma**
 Untuk keperluan demonstrasi evaluasi tugas mata kuliah Pemrograman Berbasis Web, aplikasi KasMahasiswa di-deploy pada lingkungan server lokal menggunakan **XAMPP**:
 
 ### Langkah-langkah Instalasi:
+
 1. **Penyiapan Direktori**: Tempatkan seluruh folder repositori ke dalam direktori publik web server Apache:
+
    `C:\xampp\htdocs\pbw\`
+
 2. **Inisialisasi Basis Data**:
    - Buka peramban ke `http://localhost/phpmyadmin/`.
    - Buat basis data baru bernama `db_kas_mahasiswa`.
    - Lakukan impor berkas `database/db_kas_mahasiswa.sql`.
 3. **Verifikasi Konfigurasi**:
    - Pastikan berkas `m6/config/koneksi.php` memuat setelan:
+
      `$host = "localhost"; $username = "root"; $password = ""; $database = "db_kas_mahasiswa";`
+
 4. **Pengujian Akses**:
    - Buka peramban di alamat `http://localhost/pbw/` (akan otomatis mengarahkan ke dashboard KasMahasiswa).
 
@@ -31,6 +36,7 @@ Untuk keperluan demonstrasi evaluasi tugas mata kuliah Pemrograman Berbasis Web,
 Untuk implementasi publik agar dapat diakses oleh seluruh anggota kelas dari mana saja, disiapkan dua alternatif skema:
 
 ### A. Opsi 1: Shared Hosting cPanel (Rekomendasi Utama)
+
 - **Spesifikasi**: PHP 8.2+, MySQL 8.0, cPanel, SSL Aktif (Let's Encrypt).
 - **Prosedur**:
   1. Kompres seluruh berkas proyek menjadi format `.zip`.
@@ -40,6 +46,7 @@ Untuk implementasi publik agar dapat diakses oleh seluruh anggota kelas dari man
   5. Sesuaikan parameter koneksi di `m6/config/koneksi.php`.
 
 ### B. Opsi 2: Vercel Serverless PHP (Modern Jamstack)
+
 - Repositori telah dilengkapi berkas konfigurasi `vercel.json` dan perutean `api/index.php`.
 - Basis data MySQL dapat dihubungkan ke layanan cloud database gratis seperti *Aiven MySQL* atau *PlanetScale*.
 

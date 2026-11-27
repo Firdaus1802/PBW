@@ -12,6 +12,7 @@ Institusi: **Program Studi Sistem Informasi, Universitas Gunadarma**
 Pengujian perangkat lunak KasMahasiswa dilakukan dengan menggunakan metode **Black-Box Testing** (Pengujian Kotak Hitam). Fokus pengujian dititikberatkan pada pengujian fungsionalitas eksternal sistem, ketepatan penanganan masukan pengguna (*input validation*), konsistensi alur proses bisnis (*business logic*), serta integritas hasil keluaran (*output verification*) tanpa menguji kode internal secara langsung.
 
 Teknik perancangan kasus uji yang diterapkan:
+
 1. **Equivalence Partitioning**: Membagi domain masukan menjadi partisi data valid dan invalid (misal: input jumlah positif vs negatif).
 2. **Boundary Value Analysis**: Menguji batas ekstrem pada kolom formulir (misal: panjang karakter, tanggal batas).
 3. **Security Access Control Testing**: Menguji proteksi halaman terhadap upaya akses langsung tanpa melewati otentikasi login (*bypass URL*).
@@ -33,7 +34,7 @@ Teknik perancangan kasus uji yang diterapkan:
 ### A. Modul Otentikasi & Sesi (TC-01 s.d. TC-08)
 
 | ID Uji | Skenario Pengujian | Masukan (Input) | Hasil yang Diharapkan | Hasil Pengamatan | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | **TC-01** | Registrasi akun dengan data valid | Nama: "Budi Santoso", User: "budi", Pass: "rahasia123" | Akun berhasil disimpan, diarahkan ke form login | Akun tersimpan, redirect ke login | **LULUS** |
 | **TC-02** | Registrasi dengan username yang sudah terdaftar | User: "admin" (sudah ada di DB) | Sistem menolak dan menampilkan pesan error username telah dipakai | Muncul peringatan username duplikat | **LULUS** |
 | **TC-03** | Registrasi dengan field kosong | Nama: "", User: "", Pass: "" | Sistem memblokir submit form via validasi HTML5/server | Form menolak submit, field wajib diisi | **LULUS** |
@@ -46,7 +47,7 @@ Teknik perancangan kasus uji yang diterapkan:
 ### B. Modul Dashboard & Ringkasan Saldo (TC-09 s.d. TC-12)
 
 | ID Uji | Skenario Pengujian | Masukan (Input) | Hasil yang Diharapkan | Hasil Pengamatan | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | **TC-09** | Menampilkan total pemasukan | Tambah transaksi pemasukan Rp 500.000 | Angka kartu Total Pemasukan bertambah Rp 500.000 | Akumulasi pemasukan bertambah akurat | **LULUS** |
 | **TC-10** | Menampilkan total pengeluaran | Tambah transaksi pengeluaran Rp 200.000 | Angka kartu Total Pengeluaran bertambah Rp 200.000 | Akumulasi pengeluaran bertambah akurat | **LULUS** |
 | **TC-11** | Kalkulasi saldo berjalan | Pemasukan Rp 500.000 - Pengeluaran Rp 200.000 | Angka Saldo Kas menampilkan Rp 300.000 | Saldo kas terhitung otomatis Rp 300.000 | **LULUS** |
@@ -55,7 +56,7 @@ Teknik perancangan kasus uji yang diterapkan:
 ### C. Modul Manajemen Kategori (TC-13 s.d. TC-18)
 
 | ID Uji | Skenario Pengujian | Masukan (Input) | Hasil yang Diharapkan | Hasil Pengamatan | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | **TC-13** | Tambah kategori pemasukan valid | Nama: "Sponsorship Acara", Jenis: "Pemasukan", Icon: "bi-cash" | Kategori tersimpan dan muncul di daftar | Kategori baru berhasil masuk tabel | **LULUS** |
 | **TC-14** | Tambah kategori pengeluaran valid | Nama: "Konsumsi Rapat", Jenis: "Pengeluaran", Icon: "bi-cup" | Kategori tersimpan dan muncul di daftar | Kategori baru berhasil masuk tabel | **LULUS** |
 | **TC-15** | Tambah kategori nama kosong | Nama: "", Jenis: "Pemasukan" | Validasi form memblokir penyimpanan | Form menolak input kosong | **LULUS** |
@@ -66,7 +67,7 @@ Teknik perancangan kasus uji yang diterapkan:
 ### D. Modul Transaksi Kas CRUD (TC-19 s.d. TC-28)
 
 | ID Uji | Skenario Pengujian | Masukan (Input) | Hasil yang Diharapkan | Hasil Pengamatan | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | **TC-19** | Catat pemasukan dengan data valid | Judul: "Iuran Kas November", Jml: 250000, Kat: "Uang Saku" | Transaksi tersimpan, saldo bertambah | Tersimpan, saldo kas bertambah | **LULUS** |
 | **TC-20** | Catat pengeluaran dengan data valid | Judul: "Beli Kertas HVS", Jml: 55000, Kat: "Kuliah & Buku" | Transaksi tersimpan, saldo berkurang | Tersimpan, saldo kas berkurang | **LULUS** |
 | **TC-21** | Catat transaksi nominal 0 atau negatif | Judul: "Uji Saldo", Jml: -50000 | Sistem menolak input angka non-positif | Validasi memblokir nilai negatif | **LULUS** |
@@ -81,7 +82,7 @@ Teknik perancangan kasus uji yang diterapkan:
 ### E. Modul Laporan & Filter (TC-29 s.d. TC-34)
 
 | ID Uji | Skenario Pengujian | Masukan (Input) | Hasil yang Diharapkan | Hasil Pengamatan | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | **TC-29** | Filter rentang tanggal normal | Dari: 2026-11-01, Sampai: 2026-11-25 | Menampilkan hanya transaksi pada rentang tersebut | Hanya transaksi bulan berjalan tampil | **LULUS** |
 | **TC-30** | Filter rentang tanggal tanpa hasil | Dari: 2020-01-01, Sampai: 2020-01-31 | Menampilkan tabel kosong dengan pesan informatif | Muncul pesan "Tidak ada data transaksi" | **LULUS** |
 | **TC-31** | Filter jenis khusus pemasukan | Jenis: "Pemasukan" | Hanya transaksi jenis Pemasukan yang muncul | Seluruh baris adalah kas masuk (+) | **LULUS** |
@@ -92,7 +93,7 @@ Teknik perancangan kasus uji yang diterapkan:
 ### F. Modul Ekspor Data (TC-35 s.d. TC-37)
 
 | ID Uji | Skenario Pengujian | Masukan (Input) | Hasil yang Diharapkan | Hasil Pengamatan | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | **TC-35** | Ekspor seluruh transaksi ke Excel | Klik tombol "Unduh Excel" | Peramban mengunduh file `.xls` berisi semua data | Berkas terunduh, kolom lengkap | **LULUS** |
 | **TC-36** | Ekspor hasil filter tanggal | Terapkan filter lalu klik Ekspor | File Excel hanya memuat data hasil filter | Isi Excel presisi sesuai filter | **LULUS** |
 | **TC-37** | Integritas format file Excel | Buka berkas unduhan di Microsoft Excel / Calc | Tabel terbuka tanpa galat format atau teks rusak | File terbuka sempurna dan rapi | **LULUS** |
@@ -100,7 +101,7 @@ Teknik perancangan kasus uji yang diterapkan:
 ### G. Pengujian Keamanan & Hak Akses (TC-38 s.d. TC-40)
 
 | ID Uji | Skenario Pengujian | Masukan (Input) | Hasil yang Diharapkan | Hasil Pengamatan | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | **TC-38** | Uji injeksi SQL pada form login | User: `' OR '1'='1`, Pass: `' OR '1'='1` | Otentikasi ditolak, kueri aman via prepared stmt | Login gagal, kueri kebal SQLi | **LULUS** |
 | **TC-39** | Uji serangan XSS pada judul transaksi | Judul: `<script>alert('XSS')</script>` | Skrip tidak dieksekusi, teks di-escape aman | Tampil literal sebagai teks aman | **LULUS** |
 | **TC-40** | Uji akses file config langsung | Buka URL: `http://localhost/m6/config/koneksi.php` | Tidak menampilkan kredensial database | Layar putih kosong, kredensial aman | **LULUS** |

@@ -18,11 +18,12 @@ Database diberi nama: `db_kas_mahasiswa` dengan encoding karakter standar `utf8m
 ## 2. Entity Relationship Diagram (ERD)
 
 Struktur relasi antartabel dalam sistem dirancang secara efisien dengan 3 entitas inti:
+
 1. `users`: Menyimpan data profil akun pengguna / bendahara.
 2. `kategori`: Menyimpan pengelompokan pos keuangan (Pemasukan dan Pengeluaran).
 3. `transaksi`: Menyimpan catatan mutasi kas yang merujuk pada pengguna pencatat dan kategori terkait.
 
-```
+```text
 +--------------------+            +------------------------+
 |       users        |            |        transaksi       |
 +--------------------+            +------------------------+
@@ -49,6 +50,7 @@ Struktur relasi antartabel dalam sistem dirancang secara efisien dengan 3 entita
 ```
 
 ### Penjelasan Kardinalitas Relasi:
+
 - **Relasi `users` ke `transaksi` (One-to-Many / 1:N)**: Satu pengguna (bendahara) dapat mencatat banyak transaksi kas, namun satu transaksi kas dicatat secara spesifik oleh satu pengguna.
 - **Relasi `kategori` ke `transaksi` (One-to-Many / 1:N)**: Satu kategori kas dapat digunakan oleh banyak catatan transaksi kas, namun satu transaksi kas hanya terikat pada satu kategori spesifik.
 
@@ -57,10 +59,11 @@ Struktur relasi antartabel dalam sistem dirancang secara efisien dengan 3 entita
 ## 3. Kamus Data (Data Dictionary)
 
 ### A. Tabel `users`
+
 Tabel ini berfungsi untuk menyimpan kredensial otentikasi akun pengguna sistem.
 
 | Nama Kolom | Tipe Data | Null | Keterangan / Default |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `id_user` | INT(11) | NO | **Primary Key**, Auto Increment. Identifier unik setiap akun. |
 | `username` | VARCHAR(50) | NO | **Unique Key**. Nama pengguna untuk keperluan login sistem. |
 | `password` | VARCHAR(255) | NO | Hash kata sandi menggunakan algoritma BCRYPT (60-72 karakter). |
@@ -68,10 +71,11 @@ Tabel ini berfungsi untuk menyimpan kredensial otentikasi akun pengguna sistem.
 | `created_at` | TIMESTAMP | YES | Waktu pendaftaran akun (`CURRENT_TIMESTAMP`). |
 
 ### B. Tabel `kategori`
+
 Tabel master yang menyimpan daftar pos anggaran kas masuk dan kas keluar.
 
 | Nama Kolom | Tipe Data | Null | Keterangan / Default |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `id_kategori` | INT(11) | NO | **Primary Key**, Auto Increment. Identifier unik kategori. |
 | `nama_kategori` | VARCHAR(100) | NO | Nama pengelompokan kas (contoh: Uang Saku, Konsumsi). |
 | `jenis` | ENUM | NO | Nilai: `'Pemasukan'` atau `'Pengeluaran'`. |
@@ -79,10 +83,11 @@ Tabel master yang menyimpan daftar pos anggaran kas masuk dan kas keluar.
 | `warna` | VARCHAR(20) | YES | Kode warna HEX representasi visual (default: `'#007AFF'`). |
 
 ### C. Tabel `transaksi`
+
 Tabel utama yang menyimpan riwayat pembukuan transaksi kas.
 
 | Nama Kolom | Tipe Data | Null | Keterangan / Default |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `id_transaksi` | INT(11) | NO | **Primary Key**, Auto Increment. Identifier unik transaksi. |
 | `id_user` | INT(11) | NO | **Foreign Key** merujuk ke `users(id_user)`. |
 | `id_kategori` | INT(11) | NO | **Foreign Key** merujuk ke `kategori(id_kategori)`. |
@@ -119,6 +124,7 @@ CONSTRAINT `fk_transaksi_kategori` FOREIGN KEY (`id_kategori`)
 ## 5. Analisis Normalisasi Basis Data
 
 Struktur basis data `db_kas_mahasiswa` telah melalui proses normalisasi hingga tingkat **Third Normal Form (3NF)**:
+
 1. **First Normal Form (1NF)**:
    - Setiap kolom hanya memuat nilai skalar tunggal (*atomic values*).
    - Tidak ada kelompok kolom yang berulang (*repeating groups*).
