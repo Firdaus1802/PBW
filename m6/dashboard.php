@@ -1606,29 +1606,50 @@ foreach ($kat_expenses as $ke) {
             ?>
             <div class="row g-3 mb-4">
                 <div class="col-12 col-md-4">
-                    <div class="ios-section-card p-3 h-100 mb-0">
-                        <small class="text-uppercase fw-bold d-block mb-1" style="color: var(--app-text-muted); font-size: 10.5px; letter-spacing: 0.5px;">
-                            <i class="bi bi-calendar-day me-1"></i> Rata-rata Keluar / Hari
-                        </small>
-                        <h5 class="fw-bold mb-0" style="color: var(--app-text-primary);"><?= format_rupiah($rata_keluar_harian) ?></h5>
+                    <div class="ios-kpi-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
+                                    Rata-rata Keluar / Hari
+                                </span>
+                                <div class="ios-kpi-pill">
+                                    <i class="bi bi-calendar-day"></i>
+                                </div>
+                            </div>
+                            <h4 class="fw-bold mb-1" style="color: var(--app-text-primary); letter-spacing: -0.5px;"><?= format_rupiah($rata_keluar_harian) ?></h4>
+                        </div>
                         <small style="color: var(--app-text-muted); font-size: 11px;">Berdasarkan <?= $hari_berjalan ?> hari berjalan</small>
                     </div>
                 </div>
                 <div class="col-12 col-md-4">
-                    <div class="ios-section-card p-3 h-100 mb-0">
-                        <small class="text-uppercase fw-bold d-block mb-1" style="color: var(--app-text-muted); font-size: 10.5px; letter-spacing: 0.5px;">
-                            <i class="bi bi-fire me-1 text-danger"></i> Pengeluaran Terbesar
-                        </small>
-                        <h5 class="fw-bold mb-0 text-danger"><?= format_rupiah($max_keluar_nominal) ?></h5>
+                    <div class="ios-kpi-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
+                                    Pengeluaran Terbesar
+                                </span>
+                                <div class="ios-kpi-pill" style="color: var(--ios-red);">
+                                    <i class="bi bi-fire"></i>
+                                </div>
+                            </div>
+                            <h4 class="fw-bold mb-1" style="color: var(--ios-red); letter-spacing: -0.5px;"><?= format_rupiah($max_keluar_nominal) ?></h4>
+                        </div>
                         <small class="d-block text-truncate" style="color: var(--app-text-muted); font-size: 11px;"><?= htmlspecialchars($max_keluar_judul) ?></small>
                     </div>
                 </div>
                 <div class="col-12 col-md-4">
-                    <div class="ios-section-card p-3 h-100 mb-0">
-                        <small class="text-uppercase fw-bold d-block mb-1" style="color: var(--app-text-muted); font-size: 10.5px; letter-spacing: 0.5px;">
-                            <i class="bi bi-shield-check me-1 text-success"></i> Saran Aman / Hari
-                        </small>
-                        <h5 class="fw-bold mb-0 text-success"><?= format_rupiah($batas_aman_harian) ?></h5>
+                    <div class="ios-kpi-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="small fw-bold text-uppercase" style="color: var(--app-text-muted); font-size: 11px; letter-spacing: 0.6px;">
+                                    Saran Aman / Hari
+                                </span>
+                                <div class="ios-kpi-pill" style="color: var(--ios-green);">
+                                    <i class="bi bi-shield-check"></i>
+                                </div>
+                            </div>
+                            <h4 class="fw-bold mb-1" style="color: var(--ios-green); letter-spacing: -0.5px;"><?= format_rupiah($batas_aman_harian) ?></h4>
+                        </div>
                         <small style="color: var(--app-text-muted); font-size: 11px;">Untuk <?= $sisa_hari_bln ?> hari tersisa bulan ini</small>
                     </div>
                 </div>
