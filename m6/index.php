@@ -639,7 +639,7 @@ try {
                             </div>
                             <form action="<?= base_url('index.php?view=mobile') ?>" method="POST" class="d-flex gap-2 mt-2">
                                 <?= csrf_field() ?>
-                                <input type="number" name="limit_bulanan" class="ios-input form-control-sm flex-grow-1" style="padding: 5px 10px; font-size: 12px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required>
+                                <input type="number" name="limit_bulanan" class="ios-input form-control-sm flex-grow-1" style="padding: 5px 10px; font-size: 12px;" min="1000" step="1" value="<?= (int)$limit_bulanan ?>" required>
                                 <button type="submit" name="simpan_budget" class="btn btn-ios-primary btn-sm px-3" style="font-size: 11.5px; white-space: nowrap;">Atur Limit</button>
                             </form>
                         </div>
@@ -655,7 +655,7 @@ try {
                             <form action="<?= base_url('index.php?view=mobile') ?>" method="POST" class="d-flex gap-1 mt-2">
                                 <?= csrf_field() ?>
                                 <input type="text" name="nama_target" class="ios-input form-control-sm" style="width: 38%; padding: 5px 8px; font-size: 12px;" value="<?= htmlspecialchars($nama_target) ?>" required>
-                                <input type="number" name="target_nominal" class="ios-input form-control-sm flex-grow-1" style="padding: 5px 8px; font-size: 12px;" min="10000" step="50000" value="<?= (int)$target_nominal ?>" required>
+                                <input type="number" name="target_nominal" class="ios-input form-control-sm flex-grow-1" style="padding: 5px 8px; font-size: 12px;" min="1000" step="1" value="<?= (int)$target_nominal ?>" required>
                                 <button type="submit" name="simpan_goal" class="btn btn-ios-secondary btn-sm px-2" style="font-size: 11.5px; white-space: nowrap;">Simpan</button>
                             </form>
                         </div>

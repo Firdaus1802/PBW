@@ -1548,7 +1548,7 @@ foreach ($kat_expenses as $ke) {
                             <?= csrf_field() ?>
                             <div class="input-group input-group-sm flex-grow-1">
                                 <span class="input-group-text" style="border-radius: 12px 0 0 12px; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-muted); font-size: 12px;">Rp</span>
-                                <input type="number" name="limit_bulanan" class="form-control" style="border-radius: 0 12px 12px 0; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary); font-size: 12.5px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
+                                <input type="number" name="limit_bulanan" class="form-control" style="border-radius: 0 12px 12px 0; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary); font-size: 12.5px;" min="1000" step="1" value="<?= (int)$limit_bulanan ?>" required aria-label="Batas Pengeluaran">
                             </div>
                             <button type="submit" name="simpan_budget" class="btn btn-ios-primary btn-sm px-3 py-1 d-flex align-items-center gap-1" style="white-space: nowrap;">
                                 <i class="bi bi-check2-circle"></i> <span>Atur Limit</span>
@@ -1578,7 +1578,7 @@ foreach ($kat_expenses as $ke) {
                             <input type="text" name="nama_target" class="form-control form-control-sm" style="max-width: 140px; border-radius: 12px; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary); font-size: 12.5px;" value="<?= htmlspecialchars($nama_target) ?>" placeholder="Nama target" required aria-label="Nama Target">
                             <div class="input-group input-group-sm flex-grow-1">
                                 <span class="input-group-text" style="border-radius: 12px 0 0 12px; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-muted); font-size: 12px;">Rp</span>
-                                <input type="number" name="target_nominal" class="form-control" style="border-radius: 0 12px 12px 0; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary); font-size: 12.5px;" min="10000" step="50000" value="<?= (int)$target_nominal ?>" required aria-label="Nominal Target">
+                                <input type="number" name="target_nominal" class="form-control" style="border-radius: 0 12px 12px 0; background: var(--app-input-bg); border-color: var(--app-input-border); color: var(--app-text-primary); font-size: 12.5px;" min="1000" step="1" value="<?= (int)$target_nominal ?>" required aria-label="Nominal Target">
                             </div>
                             <button type="submit" name="simpan_goal" class="btn btn-ios-secondary btn-sm px-3 py-1 d-flex align-items-center gap-1" style="white-space: nowrap;">
                                 <i class="bi bi-bookmark-check"></i> <span>Simpan</span>
