@@ -235,6 +235,69 @@ foreach ($kat_expenses as $ke) {
     $chart_labels_kat[] = $ke['nama_kategori'];
     $chart_data_kat[]   = (float)$ke['total'];
 }
+
+try {
+    $pdo->exec("CREATE TABLE IF NOT EXISTS budget_settings (id_user INT PRIMARY KEY, limit_bulanan DECIMAL(12,2) NOT NULL DEFAULT 1500000)");
+    $pdo->exec("CREATE TABLE IF NOT EXISTS savings_goals (id_user INT PRIMARY KEY, nama_target VARCHAR(100) NOT NULL DEFAULT 'Dana Darurat', target_nominal DECIMAL(12,2) NOT NULL DEFAULT 2000000)");
+} catch (Throwable $ignore_mob_tbl) {}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['simpan_budget'])) {
+    $new_limit = (float)($_POST['limit_bulanan'] ?? 0);
+    if ($new_limit > 0) {
+        try {
+            $chk = $pdo->prepare("SELECT id_user FROM budget_settings WHERE id_user = ?");
+            $chk->execute([$user_id]);
+            if ($chk->fetch()) {
+                $pdo->prepare("UPDATE budget_settings SET limit_bulanan = ? WHERE id_user = ?")->execute([$new_limit, $user_id]);
+            } else {
+                $pdo->prepare("INSERT INTO budget_settings (id_user, limit_bulanan) VALUES (?, ?)")->execute([$user_id, $new_limit]);
+            }
+            header("Location: " . base_url("index.php?msg=budget_saved&view=mobile#dompet"));
+            exit;
+        } catch (Throwable $e_mb) {
+            error_log("Gagal simpan budget mobile: " . $e_mb->getMessage());
+        }
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verify_csrf_token() && isset($_POST['simpan_goal'])) {
+    $nama_target    = sanitize($_POST['nama_target'] ?? 'Dana Darurat');
+    $target_nominal = (float)($_POST['target_nominal'] ?? 0);
+    if (!empty($nama_target) && $target_nominal > 0) {
+        try {
+            $chk_g = $pdo->prepare("SELECT id_user FROM savings_goals WHERE id_user = ?");
+            $chk_g->execute([$user_id]);
+            if ($chk_g->fetch()) {
+                $pdo->prepare("UPDATE savings_goals SET nama_target = ?, target_nominal = ? WHERE id_user = ?")->execute([$nama_target, $target_nominal, $user_id]);
+            } else {
+                $pdo->prepare("INSERT INTO savings_goals (id_user, nama_target, target_nominal) VALUES (?, ?, ?)")->execute([$user_id, $nama_target, $target_nominal]);
+            }
+            header("Location: " . base_url("index.php?msg=goal_saved&view=mobile#dompet"));
+            exit;
+        } catch (Throwable $e_mg) {
+            error_log("Gagal simpan goal mobile: " . $e_mg->getMessage());
+        }
+    }
+}
+
+$limit_bulanan  = 1500000.0;
+$nama_target    = 'Dana Darurat';
+$target_nominal = 2000000.0;
+try {
+    $st_b = $pdo->prepare("SELECT limit_bulanan FROM budget_settings WHERE id_user = ?");
+    $st_b->execute([$user_id]);
+    if ($rb = $st_b->fetch()) {
+        if ((float)$rb['limit_bulanan'] > 0) $limit_bulanan = (float)$rb['limit_bulanan'];
+    }
+    $st_g = $pdo->prepare("SELECT nama_target, target_nominal FROM savings_goals WHERE id_user = ?");
+    $st_g->execute([$user_id]);
+    if ($rg = $st_g->fetch()) {
+        if ((float)$rg['target_nominal'] > 0) {
+            $nama_target    = $rg['nama_target'];
+            $target_nominal = (float)$rg['target_nominal'];
+        }
+    }
+} catch (Throwable $ignore_mob_read) {}
 ?>
 <!DOCTYPE html>
 <html lang="id" data-theme="dark" data-bs-theme="dark">
@@ -521,6 +584,83 @@ foreach ($kat_expenses as $ke) {
                 </div>
 
                 <div class="artosku-mobile-sheet">
+                    <?php
+                    $hari_berjalan = max(1, (int)date('j'));
+                    $sisa_hari_bln = max(1, (int)date('t') - (int)date('j') + 1);
+                    $rata_keluar_harian = $total_keluar / $hari_berjalan;
+                    $batas_aman_harian  = max(0, $limit_bulanan - $total_keluar) / $sisa_hari_bln;
+                    $max_keluar_nominal = 0.0;
+                    $max_keluar_judul   = 'Belum ada';
+                    foreach ($daftar_transaksi as $t_m) {
+                        if (($t_m['jenis'] ?? '') === 'Pengeluaran' && (float)$t_m['jumlah'] > $max_keluar_nominal) {
+                            $max_keluar_nominal = (float)$t_m['jumlah'];
+                            $max_keluar_judul   = $t_m['judul'];
+                        }
+                    }
+                    $persen_budget = $limit_bulanan > 0 ? round(($total_keluar / $limit_bulanan) * 100, 1) : 0;
+                    $bar_width     = min(100, $persen_budget);
+                    $b_color       = $persen_budget >= 100 ? '#F43F5E' : ($persen_budget >= 75 ? '#F59E0B' : '#10B981');
+                    $b_label       = $persen_budget >= 100 ? 'Melewati!' : ($persen_budget >= 75 ? 'Hati-hati' : 'Aman');
+
+                    $persen_goal = $target_nominal > 0 ? max(0, round(($saldo_akhir / $target_nominal) * 100, 1)) : 0;
+                    $goal_width  = min(100, $persen_goal);
+                    $g_color     = $persen_goal >= 100 ? '#10B981' : 'var(--boss-text-primary)';
+                    ?>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-4">
+                            <div class="artosku-subcard p-2 text-center d-block">
+                                <span class="artosku-subcard-title d-block" style="font-size: 9.5px;">Rata / Hari</span>
+                                <strong class="d-block text-truncate" style="font-size: 11.5px; color: var(--boss-text-primary);"><?= format_rupiah($rata_keluar_harian) ?></strong>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="artosku-subcard p-2 text-center d-block">
+                                <span class="artosku-subcard-title d-block" style="font-size: 9.5px;">Terbesar</span>
+                                <strong class="d-block text-truncate text-expense" style="font-size: 11.5px;"><?= format_rupiah($max_keluar_nominal) ?></strong>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="artosku-subcard p-2 text-center d-block">
+                                <span class="artosku-subcard-title d-block" style="font-size: 9.5px;">Aman / Hari</span>
+                                <strong class="d-block text-truncate text-income" style="font-size: 11.5px;"><?= format_rupiah($batas_aman_harian) ?></strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ios-card-group p-3 mb-3">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="fw-bold" style="font-size: 12px; color: var(--boss-text-primary);"><i class="bi bi-speedometer2 me-1"></i> Limit Bulanan</small>
+                                <small class="fw-semibold" style="font-size: 11px; color: <?= $b_color ?>;"><?= $b_label ?> (<?= $persen_budget ?>%)</small>
+                            </div>
+                            <div class="progress mb-1" style="height: 6px; background-color: rgba(120, 120, 128, 0.16); border-radius: 9999px;">
+                                <div class="progress-bar" style="width: <?= $bar_width ?>%; background-color: <?= $b_color ?>; border-radius: 9999px;"></div>
+                            </div>
+                            <form action="<?= base_url('index.php?view=mobile') ?>" method="POST" class="d-flex gap-2 mt-2">
+                                <?= csrf_field() ?>
+                                <input type="number" name="limit_bulanan" class="ios-input form-control-sm flex-grow-1" style="padding: 5px 10px; font-size: 12px;" min="10000" step="50000" value="<?= (int)$limit_bulanan ?>" required>
+                                <button type="submit" name="simpan_budget" class="btn btn-ios-primary btn-sm px-3" style="font-size: 11.5px; white-space: nowrap;">Atur Limit</button>
+                            </form>
+                        </div>
+
+                        <div class="pt-2" style="border-top: 1px solid var(--boss-border);">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <small class="fw-bold text-truncate" style="font-size: 12px; color: var(--boss-text-primary);"><i class="bi bi-piggy-bank me-1"></i> Target: <?= htmlspecialchars($nama_target) ?></small>
+                                <small class="fw-semibold" style="font-size: 11px; color: <?= $g_color ?>;"><?= $persen_goal ?>%</small>
+                            </div>
+                            <div class="progress mb-1" style="height: 6px; background-color: rgba(120, 120, 128, 0.16); border-radius: 9999px;">
+                                <div class="progress-bar" style="width: <?= $goal_width ?>%; background-color: <?= $g_color ?>; border-radius: 9999px;"></div>
+                            </div>
+                            <form action="<?= base_url('index.php?view=mobile') ?>" method="POST" class="d-flex gap-1 mt-2">
+                                <?= csrf_field() ?>
+                                <input type="text" name="nama_target" class="ios-input form-control-sm" style="width: 38%; padding: 5px 8px; font-size: 12px;" value="<?= htmlspecialchars($nama_target) ?>" required>
+                                <input type="number" name="target_nominal" class="ios-input form-control-sm flex-grow-1" style="padding: 5px 8px; font-size: 12px;" min="10000" step="50000" value="<?= (int)$target_nominal ?>" required>
+                                <button type="submit" name="simpan_goal" class="btn btn-ios-secondary btn-sm px-2" style="font-size: 11.5px; white-space: nowrap;">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+
                     <div class="row g-3">
                         <div class="col-12">
                             <div class="ios-search-wrapper mb-2">
@@ -539,7 +679,9 @@ foreach ($kat_expenses as $ke) {
                                 <h6 class="text-secondary fw-semibold text-uppercase mb-0" style="font-size: 11px; letter-spacing: 0.8px;">
                                     Catatan Transaksi (<span id="totalVisibleTrx"><?= count($daftar_transaksi) ?></span>)
                                 </h6>
-                                <small class="text-secondary" style="font-size: 11px;">Ketuk titik tiga untuk opsi</small>
+                                <a href="<?= base_url('export_json.php') ?>" class="btn btn-ios-secondary btn-sm py-0 px-2" style="font-size: 11px;">
+                                    <i class="bi bi-filetype-json me-1"></i>Backup JSON
+                                </a>
                             </div>
 
                             <div class="ios-card-group mb-4" id="transactionListContainer">
